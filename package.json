@@ -1,0 +1,22 @@
+{
+  "name": "@amazee/editor-components",
+  "version": "1.0.0",
+  "description": "Components for CKEditor 5",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "ckeditor5",
+    "lit-element",
+    "storybook"
+  ],
+  "author": "AmazeeLabs (http://www.amazeelabs.com/)",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://github.com/AmazeeLabs/editor-components",
+  "bugs": "https://github.com/AmazeeLabs/editor-components/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AmazeeLabs/editor-components.git"
+  }
+}
