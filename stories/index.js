@@ -1,12 +1,15 @@
 import { storiesOf } from '@storybook/html';
 
-// @TODO: remove demo content.
-// eslint-disable-next-line no-undef
-storiesOf( 'Demo', module )
-	.add( 'heading', () => '<h1>Hello World</h1>' )
-	.add( 'button', () => {
-		// eslint-disable-next-line no-undef
-		const button = document.createElement( 'button' );
-		button.innerText = 'Hello Button';
-		return button;
-	} );
+import '../components/example/example';
+
+storiesOf( 'Example', module )
+	.add('example', () => '<ck-example></ck-example>');
+
+storiesOf( 'Gallery', module )
+	.add( 'gallery', () => `
+	<ck-gallery>
+		<ck-gallery-item><div style="height: 200px"></div></ck-gallery-item>
+		<ck-gallery-item><div style="height: 200px"></div></ck-gallery-item>
+		<ck-gallery-item><div style="height: 200px"></div></ck-gallery-item>
+	</ck-gallery>
+	`);
