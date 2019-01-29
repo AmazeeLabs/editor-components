@@ -1,0 +1,8 @@
+{
+  "extends": "ckeditor5",
+  "globals": {
+    // Declare global variables to avoid "no-undef".
+    "module": false,
+    "customElements": false
+  }
+}

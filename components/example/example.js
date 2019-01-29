@@ -8,4 +8,4 @@ class ExampleElement extends LitElement {
 	}
 }
 
-customElements.define('ck-example', ExampleElement);
+customElements.define( 'ck-example', ExampleElement );
