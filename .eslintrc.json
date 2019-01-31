@@ -1,8 +1,17 @@
 {
-  "extends": "ckeditor5",
+  "extends": [
+    "airbnb-base",
+    "plugin:prettier/recommended"
+  ],
   "globals": {
     // Declare global variables to avoid "no-undef".
     "module": false,
-    "customElements": false
+    "customElements": false,
+    "document": false,
+    "Event": false
+  },
+  "rules": {
+    "no-unused-vars": ["warn"],
+    "class-methods-use-this": [1, { "exceptMethods": ["render"] }]
   }
 }
