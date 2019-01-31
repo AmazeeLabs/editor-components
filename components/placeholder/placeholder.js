@@ -14,10 +14,7 @@ class Placeholder extends LitElement {
     super();
     this.addSectionActive = true;
     this.showSections = true;
-    this.sections = [
-      { id: "text", label: "Text", icon: "text" },
-      { id: "formatted-text", label: "Formatted", icon: "formatted-text" }
-    ];
+    this.sections = [];
   }
 
   render() {
