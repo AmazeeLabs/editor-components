@@ -3,7 +3,6 @@ import styles from "./example.css";
 
 class ExampleElement extends LitElement {
   render() {
-    console.log(styles);
     return html`
       <style>
         ${styles}

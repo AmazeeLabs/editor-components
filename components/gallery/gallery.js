@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit-element";
-import galleryStyle from "./gallery-style";
+import styles from "./gallery.css";
 
 class Gallery extends LitElement {
   static get properties() {
@@ -37,7 +37,7 @@ class Gallery extends LitElement {
   render() {
     return html`
       <style>
-        ${galleryStyle}
+        ${styles}
       </style>
 
       <div class="ck-gallery">
@@ -93,7 +93,7 @@ class GalleryItem extends LitElement {
   render() {
     return html`
       <style>
-        ${galleryStyle}
+        ${styles}
       </style>
 
       <div class="ck-gallery__item">
