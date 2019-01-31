@@ -1,28 +1,30 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html } from "lit-element";
 
 class Placeholder extends LitElement {
-	static get properties() {
-		return {
-			addSectionActive: { type: Boolean },
-			showSections: { type: Boolean },
-			sections: { type: Array },
-			addSectionCallback: { type: Function }
-		};
-	}
-	constructor() {
-		super();
-		this.addSectionActive = true;
-		this.showSections = true;
-		this.sections = [
-			{ id: 'text', label: 'Text', icon: 'text' },
-			{ id: 'formatted-text', label: 'Formatted', icon: 'formatted-text' },
-		];
-	}
-	render() {
-		return html`
+  static get properties() {
+    return {
+      addSectionActive: { type: Boolean },
+      showSections: { type: Boolean },
+      sections: { type: Array },
+      addSectionCallback: { type: Function }
+    };
+  }
+
+  constructor() {
+    super();
+    this.addSectionActive = true;
+    this.showSections = true;
+    this.sections = [
+      { id: "text", label: "Text", icon: "text" },
+      { id: "formatted-text", label: "Formatted", icon: "formatted-text" }
+    ];
+  }
+
+  render() {
+    return html`
       <style>
         button {
-          background: rgba(0,0,0,0);
+          background: rgba(0, 0, 0, 0);
           border: none;
           cursor: pointer;
           font-family: inherit;
@@ -37,7 +39,7 @@ class Placeholder extends LitElement {
           margin: 0;
           padding: 0;
         }
-        
+
         .ck-placeholder__insert-wrapper {
           border-bottom: 1px dashed var(--color-black, #222330);
           margin-bottom: 1em;
@@ -45,7 +47,7 @@ class Placeholder extends LitElement {
         }
         .ck-placeholder__insert-button {
           background: #fff;
-          color: var(--color-blue, #004ADC);
+          color: var(--color-blue, #004adc);
           display: inline-block;
           font-size: 12px;
           font-weight: bold;
@@ -75,7 +77,7 @@ class Placeholder extends LitElement {
         }
         .ck-placeholder__add-button:hover,
         .ck-placeholder__add-button:focus {
-          color: var(--color-blue, #004ADC);
+          color: var(--color-blue, #004adc);
         }
         .ck-placeholder__section-item {
           color: var(--color-black, #222330);
@@ -86,66 +88,83 @@ class Placeholder extends LitElement {
         }
         .ck-placeholder__section-button:hover,
         .ck-placeholder__section-button:focus {
-          color: var(--color-blue, #004ADC);
+          color: var(--color-blue, #004adc);
         }
         .ck-placeholder__close-button {
           margin-left: auto;
         }
       </style>
-      ${ this.addSectionActive ?
-		html`
-          <div class="ck-placeholder__add-wrapper">
-            <button @click="${ this.clickAddHandler }" type="button" class="normalize-button ck-placeholder__add-button">Add</button>
-            ${ this.showSections ?
-		html`<ul class="normalize-list ck-placeholder__sections-list">
-              ${ this.sections.map( section => html`
-                <li class="ck-placeholder__section-item">
-                  <button 
-                    @click="${ event => this.clickSectionHandler( event, section.id ) }" 
-                    type="button" 
-                    class="normalize-button ck-placeholder__section-button"
-                  >
-                    ${ section.label }
-                  </button>
-                </li>   
-              ` ) }    
-            </ul>
-            <button @click="${ this.clickCloseHandler }" type="button" class="normalize-button ck-placeholder__close-button">Close</button>
-            ` : '' }
-          </div>
-        ` :
-		html`
-          <div class="ck-placeholder__insert-wrapper">
-            <button 
-              @click="${ this.clickInsertHandler }" 
-              type="button" 
-              class="normalize-button ck-placeholder__insert-button"
-            >
-              Insert Section
-            </button>
-          </div>
-        ` }
+      ${this.addSectionActive
+        ? html`
+            <div class="ck-placeholder__add-wrapper">
+              <button
+                @click="${this.clickAddHandler}"
+                type="button"
+                class="normalize-button ck-placeholder__add-button"
+              >
+                Add
+              </button>
+              ${this.showSections
+                ? html`
+                    <ul class="normalize-list ck-placeholder__sections-list">
+                      ${this.sections.map(
+                        section => html`
+                          <li class="ck-placeholder__section-item">
+                            <button
+                              @click="${event =>
+                                this.clickSectionHandler(event, section.id)}"
+                              type="button"
+                              class="normalize-button ck-placeholder__section-button"
+                            >
+                              ${section.label}
+                            </button>
+                          </li>
+                        `
+                      )}
+                    </ul>
+                    <button
+                      @click="${this.clickCloseHandler}"
+                      type="button"
+                      class="normalize-button ck-placeholder__close-button"
+                    >
+                      Close
+                    </button>
+                  `
+                : ""}
+            </div>
+          `
+        : html`
+            <div class="ck-placeholder__insert-wrapper">
+              <button
+                @click="${this.clickInsertHandler}"
+                type="button"
+                class="normalize-button ck-placeholder__insert-button"
+              >
+                Insert Section
+              </button>
+            </div>
+          `}
     `;
-	}
+  }
 
-	clickAddHandler() {
-		this.showSections = !this.showSections;
-	}
+  clickAddHandler() {
+    this.showSections = !this.showSections;
+  }
 
-	clickInsertHandler() {
-		this.addSectionActive = true;
-	}
+  clickInsertHandler() {
+    this.addSectionActive = true;
+  }
 
-	clickCloseHandler() {
-		this.addSectionActive = false;
-	}
+  clickCloseHandler() {
+    this.addSectionActive = false;
+  }
 
-	clickSectionHandler( event, sectionId ) {
-		// @TODO: Implement real callback.
-		// eslint-disable-next-line no-undef
-		console.log( sectionId );
-		// this.addSectionCallback(sectionId);
-	}
+  clickSectionHandler(event, sectionId) {
+    // @TODO: Implement real callback.
+    // eslint-disable-next-line no-undef
+    console.log(sectionId);
+    // this.addSectionCallback(sectionId);
+  }
 }
 
-customElements.define( 'ck-placeholder', Placeholder );
+customElements.define("ck-placeholder", Placeholder);
