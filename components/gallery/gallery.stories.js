@@ -1,7 +1,7 @@
 import { storiesOf } from "@storybook/html";
 import "./gallery";
 
-storiesOf("Gallery", module).add("gallery", () => {
+storiesOf("Gallery", module).add("Default", () => {
   let item = 1;
   const colors = ["lime", "purple", "hotpink", "yellow"];
   const gallery = document.createElement("ck-gallery");

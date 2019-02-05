@@ -1,4 +1,6 @@
 import { LitElement, html } from "lit-element";
+import styles from "./placeholder.css";
+import "./icon/icon";
 
 class Placeholder extends LitElement {
   static get properties() {
@@ -12,84 +14,15 @@ class Placeholder extends LitElement {
 
   constructor() {
     super();
-    this.addSectionActive = true;
-    this.showSections = true;
+    this.addSectionActive = false;
+    this.showSections = false;
     this.sections = [];
   }
 
   render() {
     return html`
       <style>
-        button {
-          background: rgba(0, 0, 0, 0);
-          border: none;
-          cursor: pointer;
-          font-family: inherit;
-          font-size: inherit;
-          padding: 0;
-        }
-        ul {
-          list-style-type: none;
-        }
-        ul,
-        li {
-          margin: 0;
-          padding: 0;
-        }
-
-        .ck-placeholder__insert-wrapper {
-          border-bottom: 1px dashed var(--color-black, #222330);
-          margin-bottom: 1em;
-          text-align: center;
-        }
-        .ck-placeholder__insert-button {
-          background: #fff;
-          color: var(--color-blue, #004adc);
-          display: inline-block;
-          font-size: 12px;
-          font-weight: bold;
-          letter-spacing: 0.03em;
-          margin: 0;
-          padding: 0 1em;
-          position: relative;
-          top: 0.7em;
-        }
-        .ck-placeholder__insert-button:hover,
-        .ck-placeholder__insert-button:focus {
-          color: var(--color-black, #222330);
-        }
-        .ck-placeholder__add-wrapper {
-          align-items: center;
-          border: 1px dotted var(--color-black, #222330);
-          display: flex;
-          flex-flow: row wrap;
-          font-size: 14px;
-          padding: 1.9em 1.8em 2em;
-        }
-        .ck-placeholder__add-button {
-          color: var(--color-black, #222330);
-          font-weight: bold;
-          margin-right: 40px;
-          text-transform: uppercase;
-        }
-        .ck-placeholder__add-button:hover,
-        .ck-placeholder__add-button:focus {
-          color: var(--color-blue, #004adc);
-        }
-        .ck-placeholder__section-item {
-          color: var(--color-black, #222330);
-          display: inline-block;
-          font-size: 12px;
-          margin-right: 20px;
-          text-transform: uppercase;
-        }
-        .ck-placeholder__section-button:hover,
-        .ck-placeholder__section-button:focus {
-          color: var(--color-blue, #004adc);
-        }
-        .ck-placeholder__close-button {
-          margin-left: auto;
-        }
+        ${styles}
       </style>
       ${this.addSectionActive
         ? html`
@@ -113,6 +46,11 @@ class Placeholder extends LitElement {
                               type="button"
                               class="normalize-button ck-placeholder__section-button"
                             >
+                              <div class="ck-placeholder__icon-wrapper">
+                                <ck-placeholder-icon
+                                  iconId="${section.icon}"
+                                ></ck-placeholder-icon>
+                              </div>
                               ${section.label}
                             </button>
                           </li>
@@ -124,7 +62,14 @@ class Placeholder extends LitElement {
                       type="button"
                       class="normalize-button ck-placeholder__close-button"
                     >
-                      Close
+                      <div class="ck-placeholder__icon-wrapper">
+                        <ck-placeholder-icon
+                          iconId="close"
+                        ></ck-placeholder-icon>
+                      </div>
+                      <span class="ck-placeholder__close-button-label"
+                        >Close</span
+                      >
                     </button>
                   `
                 : ""}
@@ -150,6 +95,7 @@ class Placeholder extends LitElement {
 
   clickInsertHandler() {
     this.addSectionActive = true;
+    this.showSections = true;
   }
 
   clickCloseHandler() {
@@ -157,10 +103,7 @@ class Placeholder extends LitElement {
   }
 
   clickSectionHandler(event, sectionId) {
-    // @TODO: Implement real callback.
-    // eslint-disable-next-line no-undef
-    console.log(sectionId);
-    // this.addSectionCallback(sectionId);
+    this.dispatchEvent(new CustomEvent("addSection", { detail: sectionId }));
   }
 }
 
