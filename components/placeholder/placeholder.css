@@ -2,6 +2,7 @@
   --color-blue: #004adc;
   --color-black: #222330;
   --color-grey-light: #B8B8B8;
+  --align-buttons: left;
   display: block;
   font-family: var(--font-family, sans-serif);
 }
@@ -50,14 +51,15 @@ li {
 }
 
 .ck-placeholder__add-wrapper {
-  align-items: center;
   border: 1px dashed var(--color-black, #222330);
   box-sizing: border-box;
   display: flex;
   flex-flow: row nowrap;
+  align-items: center;
   font-size: 14px;
   min-height: 80px;
-  padding: 1.1em 1.8em 1.2em;
+  padding: 0.5em 1.8em 0.6em;
+  height: 100%;
 }
 
 .ck-placeholder__add-button {
@@ -73,7 +75,7 @@ li {
 }
 
 .ck-placeholder__sections-list {
-  margin-right: 2em;
+  text-align: var(--align-buttons);
 }
 
 .ck-placeholder__section-item {
@@ -81,6 +83,8 @@ li {
   display: inline-block;
   font-size: 12px;
   margin-right: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .ck-placeholder__icon-wrapper {
