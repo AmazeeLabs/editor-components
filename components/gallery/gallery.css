@@ -8,6 +8,11 @@
   --color-white: #FFF;
   --align-buttons: left;
   font-family: var(--font-family, sans-serif);
+  --gallery-position-top: auto;
+  --gallery-position-left: 50%;
+  --gallery-position-right: auto;
+  --gallery-position-bottom: 40px;
+  --gallery-transform: translate(-50%, 0);
 }
 
 .ck-gallery {
@@ -31,9 +36,11 @@
 
 .ck-gallery__controls {
   position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translate(-50%, 0);
+  top: var(--gallery-position-top);
+  bottom: var(--gallery-position-bottom);
+  left: var(--gallery-position-left);
+  right: var(--gallery-position-right);
+  transform: var(--gallery-transform);
   background-color: var(--color-white);
   display: flex;
   min-width: 40px;
