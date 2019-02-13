@@ -20,12 +20,11 @@ class Gallery extends LitElement {
     super.connectedCallback();
 
     const slots = this.shadowRoot;
-    slots.addEventListener("slotchange", () => {
+    slots.addEventListener("slotchange", e => {
       this.items = Array.from(this.children).map((child, index) => ({
         title: index + 1,
         index
       }));
-      this.setGalleryItem(this.items.length - 1);
     });
 
     this.items = Array.from(this.children).map((child, index) => ({
@@ -95,11 +94,20 @@ class Gallery extends LitElement {
   }
 
   moveItem(position) {
-    this.dispatchEvent(new CustomEvent("moveItem", { detail: position }));
+    const item = { position, index: this.currentGallery };
+    if (position === "left" && this.currentGallery !== 0) {
+      this.dispatchEvent(new CustomEvent("moveItem", { detail: item }));
+      this.currentGallery -= 1;
+    }
+    if (position === "right" && this.currentGallery !== this.items.length - 1) {
+      this.dispatchEvent(new CustomEvent("moveItem", { detail: item }));
+      this.currentGallery += 1;
+    }
   }
 
   addItem() {
     this.dispatchEvent(new Event("addItem"));
+    this.currentGallery = this.items.length;
   }
 
   deleteItem() {
@@ -107,6 +115,9 @@ class Gallery extends LitElement {
       this.dispatchEvent(
         new CustomEvent("deleteItem", { detail: this.currentGallery })
       );
+    }
+    if (this.currentGallery === this.items.length - 1) {
+      this.currentGallery -= 1;
     }
   }
 
