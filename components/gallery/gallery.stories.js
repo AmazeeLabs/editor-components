@@ -16,7 +16,7 @@ storiesOf("Gallery", module).add("Default", () => {
   gallery.addEventListener("addItem", () => {
     const additionalGalleryItem = document.createElement("ck-gallery-item");
     additionalGalleryItem.innerHTML = `<div><div style="padding-bottom: 40%; background-color: ${
-      colors[(item += 1 % colors.length)]
+      colors[++item % colors.length]
     }"></div></div>`;
     gallery.appendChild(additionalGalleryItem);
   });
@@ -26,7 +26,18 @@ storiesOf("Gallery", module).add("Default", () => {
     gallery.removeChild(list.childNodes[e.detail]);
   });
   gallery.addEventListener("moveItem", e => {
-    console.log(e.detail);
+    const selectedGallery = document.querySelectorAll("ck-gallery")[0];
+    if (e.detail.position === "right") {
+      selectedGallery.insertBefore(
+        selectedGallery.childNodes[e.detail.index],
+        selectedGallery.childNodes[e.detail.index + 1].nextSibling
+      );
+    } else {
+      selectedGallery.insertBefore(
+        selectedGallery.childNodes[e.detail.index],
+        selectedGallery.childNodes[e.detail.index - 1]
+      );
+    }
   });
   return gallery;
 });
