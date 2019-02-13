@@ -121,6 +121,14 @@ class Gallery extends LitElement {
     }
   }
 
+  deleteItem() {
+    if (this.items.length >= 2) {
+      this.dispatchEvent(
+        new CustomEvent("deleteItem", { detail: this.currentGallery })
+      );
+    }
+  }
+
   button(item) {
     return html`
       <span

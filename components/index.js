@@ -1,1 +1,2 @@
-import './placeholder/placeholder';
+import "./placeholder/placeholder";
+import "./button/button";
