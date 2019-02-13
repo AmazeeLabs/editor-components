@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit-element";
 import styles from "./gallery.css";
+import "./icon/icon";
 
 class Gallery extends LitElement {
   static get properties() {
@@ -49,21 +50,64 @@ class Gallery extends LitElement {
         </div>
 
         <div class="ck-gallery__controls">
-          <div class="ck-gallery__dots">
-            ${this.items.map(item => this.button(item))}
+          <div class="ck-gallery__pager">
+            <div class="ck-gallery__dots">
+              ${this.items.map(item => this.button(item))}
+            </div>
+            <div class="ck-gallery__add">
+              <span
+                @click="${() => this.addItem()}"
+                class="ck-gallery__add-slide"
+              >
+                +
+              </span>
+            </div>
           </div>
-          <div class="ck-gallery__action">
-            <span @click="${() => this.addItem()}" class="ck-gallery__add-slide"
-              >+</span
-            >
+          <div class="ck-gallery__actions">
+            <span>Edit active element</span>
+            <div class="ck-gallery__icons">
+              <div
+                @click="${() => this.moveItem("left")}"
+                data-tooltip="Move element to the left"
+                class="ck-gallery__icon ck-gallery__icon--arrow-left"
+              >
+                <ck-gallery-icon iconId="iconLeftArrow"></ck-gallery-icon>
+              </div>
+              <div
+                @click="${() => this.moveItem("right")}"
+                data-tooltip="Move element to the right"
+                class="ck-gallery__icon ck-gallery__icon--arrow-right"
+              >
+                <ck-gallery-icon iconId="iconRightArrow"></ck-gallery-icon>
+              </div>
+              <div
+                @click="${() => this.deleteItem()}"
+                data-tooltip="Delete slide"
+                class="ck-gallery__icon ck-gallery__icon--arrow-trash"
+              >
+                <ck-gallery-icon iconId="iconTrash"></ck-gallery-icon>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     `;
   }
 
+  moveItem(position) {
+    this.dispatchEvent(new CustomEvent("moveItem", { detail: position }));
+  }
+
   addItem() {
     this.dispatchEvent(new Event("addItem"));
+  }
+
+  deleteItem() {
+    if (this.items.length >= 2) {
+      this.dispatchEvent(
+        new CustomEvent("deleteItem", { detail: this.currentGallery })
+      );
+    }
   }
 
   button(item) {

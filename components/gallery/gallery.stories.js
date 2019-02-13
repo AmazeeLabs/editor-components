@@ -20,5 +20,13 @@ storiesOf("Gallery", module).add("Default", () => {
     }"></div></div>`;
     gallery.appendChild(additionalGalleryItem);
   });
+
+  gallery.addEventListener("deleteItem", e => {
+    const list = document.getElementsByTagName("ck-gallery")[0];
+    gallery.removeChild(list.childNodes[e.detail]);
+  });
+  gallery.addEventListener("moveItem", e => {
+    console.log(e.detail);
+  });
   return gallery;
 });

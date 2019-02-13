@@ -1,3 +1,20 @@
+:host {
+  --color-blue: #004adc;
+  --color-black: #222330;
+  --color-black-80: rgba(0, 0, 0, 0.8);
+  --color-black-60: rgba(0, 0, 0, 0.6);
+  --color-black-30: rgba(0, 0, 0, 0.3);
+  --color-grey-light: #CCC;
+  --color-white: #FFF;
+  --align-buttons: left;
+  font-family: var(--font-family, sans-serif);
+  --gallery-position-top: auto;
+  --gallery-position-left: 50%;
+  --gallery-position-right: auto;
+  --gallery-position-bottom: 40px;
+  --gallery-transform: translate(-50%, 0);
+}
+
 .ck-gallery {
   position: relative;
   width: 100%;
@@ -7,8 +24,8 @@
 }
 
 .ck-gallery__rail {
-  display: flex;
-  transition: transform 0.70s ease;
+  display: flex; 
+  transition: transform 0.7s ease;
 }
 
 ::slotted(ck-gallery-item) {
@@ -19,19 +36,38 @@
 
 .ck-gallery__controls {
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  background-color: #FFF;
+  top: var(--gallery-position-top);
+  bottom: var(--gallery-position-bottom);
+  left: var(--gallery-position-left);
+  right: var(--gallery-position-right);
+  transform: var(--gallery-transform);
+  background-color: var(--color-white);
   display: flex;
   min-width: 40px;
+  max-height: 60px;
   justify-content: space-between;
+  align-items: flex-end;
   padding: 10px 20px;
-  border-radius: 20px;
+  border-radius: 10px;
+}
+
+.ck-gallery__actions {
+  min-width: 130px;
+  padding-left: 20px;
+  margin-left: 20px;
+  border-left: 1px solid var(--color-grey-light);
+  font-size: 14px;
+}
+
+.ck-gallery__pager {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
 }
 
 .ck-gallery__dots {
-  margin-right: 10px;
+  margin-right: 10px;  
+  display: flex;
 }
 
 .ck-gallery__dot-item {
@@ -40,17 +76,17 @@
   width: 20px;
   border-radius: 100%;
   margin-right: 5px;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: var(--color-black-30); 
   text-align: center;
   line-height: 20px;
-  color: #FFF;
+  color: var(--color-white);
   cursor: pointer;
   font-size: 12px;
-  transition: background-color 0.35s ease;
+  transition: background-color 0.35s ease;    
 }
 
 .ck-gallery__dot-item.active {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: var(--color-black-80); 
 }
 
 .ck-gallery__add-slide {
@@ -59,15 +95,128 @@
   height: 20px;
   width: 20px;
   border-radius: 100%;
-  border: 1px solid blue;
+  border: 1px solid var(--color-blue);
   text-align: center;
   line-height: 1;
-  color: blue;
+  color: var(--color-blue);
   cursor: pointer;
   transition: all 0.35s ease;
 }
 
 .ck-gallery__add-slide:hover {
-  background-color: blue;
-  color: #FFF;
+  background-color: var(--color-blue);
+  color: var(--color-white);
 }
+
+.ck-gallery__icons {
+  max-width: 110px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.ck-gallery__icon {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  transition: background-color 0.35s ease;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ck-gallery__icon:hover {
+  background-color: #f0f0f0;
+}
+
+.ck-gallery__icon > * {
+  width: 14px;
+  height: 14px;
+}
+
+[data-tooltip] {
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Base styles for the entire tooltip */
+[data-tooltip]:before,
+[data-tooltip]:after {
+  position: absolute;
+  visibility: hidden;
+  transition:         
+        opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
+}
+
+/* Show the entire tooltip on hover and focus */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Base styles for the tooltip's directional arrow */
+[data-tooltip]:before {
+  z-index: 1001;
+  border: 6px solid transparent;
+  background: transparent;
+  content: "";
+}
+
+/* Base styles for the tooltip's content area */
+[data-tooltip]:after {
+  z-index: 1000;
+  padding: 8px;
+  display: inline-block;
+  width: 160px;
+  background-color: var(--color-black-60);
+  color: var(--color-white);
+  content: attr(data-tooltip);
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* Horizontally align top/bottom tooltips */
+[data-tooltip]:after {
+  margin-left: -80px;
+}
+
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after {
+  transform: translateY(-12px); 
+}
+
+
+[data-tooltip]:before,
+[data-tooltip]:after {
+  top: 80%;
+  bottom: auto;
+  left: 50%;
+}
+
+[data-tooltip]:before {
+  margin-top: -12px;
+  margin-left: -6px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-bottom-color: var(--color-black-60);
+}
+
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after {
+  transform: translateY(12px); 
+}
+
