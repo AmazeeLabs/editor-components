@@ -16,6 +16,11 @@ storiesOf("Tabs", module).add("Default", () => {
   tabsItem.setAttribute("data-default", true);
   tabsItem.classList.add("active");
   tabs.appendChild(tabsItem);
+
+  // create ck-modal
+  const modal = document.createElement("ck-modal");
+  modal.setAttribute("data-default", true);
+
   // create button for changing attribute
   const button = document.createElement("button");
   button.innerHTML = `Change attribute`;
@@ -32,6 +37,23 @@ storiesOf("Tabs", module).add("Default", () => {
     additionalTabsItem.setAttribute("data-title", `title item ${++itemTitle}`);
     additionalTabsItem.setAttribute("data-default", false);
     tabs.appendChild(additionalTabsItem);
+  });
+  tabs.addEventListener("deleteItem", e => {
+    const list = document.getElementsByTagName("ck-tabs")[0];
+    tabs.removeChild(list.childNodes[e.detail]);
+  });
+
+  // Update item (title & default)
+  tabs.addEventListener("eventSaveModal", e => {
+    const list = document.querySelectorAll("ck-tabs-item");
+
+    if (e.detail.default) {
+      Array.from(list).map(item => {
+        item.setAttribute("data-default", false);
+      });
+      list[e.detail.index].setAttribute("data-default", e.detail.default);
+    }
+    list[e.detail.index].setAttribute("data-title", e.detail.title);
   });
 
   return tabs;
