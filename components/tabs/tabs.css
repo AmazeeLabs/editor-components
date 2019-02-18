@@ -31,11 +31,31 @@
   cursor: pointer;
 }
 
+.ck-tabs__header-icon {
+  height: 0;
+  width: 0;
+  display: inline-block;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+}
+
 .ck-tabs__header-tab-item.active {
   border-bottom: 2px solid var(--color-blue);
   color: var(--color-blue);
   font-weight: bold; 
   cursor: default;
+}
+
+.ck-tabs__header-tab-item.active .ck-tabs__header-icon {
+  margin-left: 10px;
+  width: 16px;
+  height: 16px;
+}
+
+.ck-tabs__header-tab-item.active:hover .ck-tabs__header-icon {
+  opacity: 1;
+  visibility: visible;
 }
 
 .ck-tabs__header-tab-item.default:before {

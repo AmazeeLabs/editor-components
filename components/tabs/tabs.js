@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit-element";
 import styles from "./tabs.css";
 import modalStyles from "./modal.css";
+import "./icon/icon";
 
 class Tabs extends LitElement {
   static get properties() {
@@ -135,6 +136,7 @@ class Tabs extends LitElement {
         ${item.default === "true" ? "default" : ""}"
       >
         ${item.title}
+        <span class="ck-tabs__header-icon"><ck-tabs-icon iconId="iconPencil"></ck-tabs-icon></span>
       </li>
     `;
   }
