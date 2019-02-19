@@ -119,11 +119,7 @@ class Tabs extends LitElement {
   }
 
   tabTitleAction(item) {
-    if (this.currentTab === item.index) {
-      this.openModal(item);
-    } else {
-      this.setTabsItem(item.index);
-    }
+    this.setTabsItem(item.index);
   }
 
   tabTitle(item) {
@@ -136,7 +132,12 @@ class Tabs extends LitElement {
         ${item.default === "true" ? "default" : ""}"
       >
         ${item.title}
-        <span class="ck-tabs__header-icon"><ck-tabs-icon iconId="iconPencil"></ck-tabs-icon></span>
+        <span
+          @click="${() => this.openModal(item)}"
+          class="ck-tabs__header-icon"
+        >
+          <ck-tabs-icon iconId="iconPencil"></ck-tabs-icon>
+        </span>
       </li>
     `;
   }
