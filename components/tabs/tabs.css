@@ -29,6 +29,16 @@
   border-bottom: 1px solid var(--color-grey-light);
   margin-bottom: -1px;
   cursor: pointer;
+  position: relative;
+}
+
+.ck-tabs__header-icon {
+  height: 0;
+  width: 0;
+  display: inline-block;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .ck-tabs__header-tab-item.active {
@@ -38,9 +48,25 @@
   cursor: default;
 }
 
+.ck-tabs__header-tab-item.active .ck-tabs__header-icon {
+  margin-left: 10px;
+  width: 16px;
+  height: 16px;
+}
+
+.ck-tabs__header-tab-item.active:hover .ck-tabs__header-icon {
+  opacity: 1;
+  visibility: visible;
+}
+
 .ck-tabs__header-tab-item.default:before {
   content: '*';
   margin-right: 5px;
+  font-size: 19px;
+  height: 15px;
+  position: absolute;
+  left: 5px;
+  top: 3px;
 }
 
 .ck-tabs__header-tab-add {
