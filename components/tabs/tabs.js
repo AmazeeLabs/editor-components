@@ -118,14 +118,10 @@ class Tabs extends LitElement {
     this.currentTab = index;
   }
 
-  tabTitleAction(item) {
-    this.setTabsItem(item.index);
-  }
-
   tabTitle(item) {
     return html`
       <li
-        @click="${() => this.tabTitleAction(item)}"
+        @click="${() => this.setTabsItem(item.index)}"
         class="ck-tabs__header-tab-item ${this.currentTab === item.index
           ? "active"
           : ""}
@@ -255,7 +251,7 @@ class Modal extends LitElement {
 
       <div class="modal ${this.isVisible ? "visible" : ""}">
         <div class="modal__item">
-          <h3 class="modal__title">Add variation</h3>
+          <h3 class="modal__title">Edit tab</h3>
           <div class="modal__content">
             <label class="modal__label" for="${this.icurrentIndex}">
               Variation name
