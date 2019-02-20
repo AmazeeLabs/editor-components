@@ -65,7 +65,7 @@ class TextConflict extends LitElement {
     this.isResolving = false;
     this.label = event.detail;
     this.dispatchEvent(
-      new CustomEvent("resolveTextConflict", { details: event.detail })
+      new CustomEvent("resolveTextConflict", { detail: event.detail })
     );
   }
 }
