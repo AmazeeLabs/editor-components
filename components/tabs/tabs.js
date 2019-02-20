@@ -1,7 +1,8 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html, svg } from "lit-element";
+import * as Operations from "../editor/operations";
 import styles from "./tabs.css";
 import modalStyles from "./modal.css";
-import "./icon/icon";
+import editIcon from "./icons/pencil.svg";
 
 class Tabs extends LitElement {
   static get properties() {
@@ -132,7 +133,7 @@ class Tabs extends LitElement {
           @click="${() => this.openModal(item)}"
           class="ck-tabs__header-icon"
         >
-          <ck-tabs-icon iconId="iconPencil"></ck-tabs-icon>
+          ${svg([editIcon])}
         </span>
       </li>
     `;
@@ -239,7 +240,7 @@ class Modal extends LitElement {
   }
 
   deleteTab() {
-    this.dispatchEvent(new Event("deleteTab"));
+    this.dispatchEvent(Operations.remove(this.children[this.currentIndex]))
     this.closeModal();
   }
 

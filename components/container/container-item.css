@@ -1,0 +1,39 @@
+:host {
+  --button-size: 3em;
+  --button-background-color: black;
+  --button-foreground-color: white;
+  position: relative;
+  display: block;
+}
+
+.controls {
+  position: absolute;
+  right: 0;
+  display: flex;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+:hover .controls,
+:focus controls {
+  opacity: 1;
+}
+
+.controls button {
+  border: none;
+  background: var(--button-background-color);
+  width: var(--button-size);
+  height: var(--button-size);
+  display: flex;
+}
+svg {
+  width: 100%;
+}
+svg * {
+  fill: var(--button-foreground-color);
+}
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: auto;
+}

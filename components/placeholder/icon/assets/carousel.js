@@ -1,7 +1,0 @@
-import { svg } from "lit-element/lit-element";
-
-const iconCarousel = svg`
-  <svg viewBox="0 0 18.862 15.09" xmlns="http://www.w3.org/2000/svg"><g fill="currentColor"><path d="m1.572 1.257h.943v12.575h-.943z"/><path d="m16.347 1.257h.943v12.575h-.943z"/><path d="m17.919 2.515h.943v10.06h-.943z"/><path d="m0 2.515h.943v10.06h-.943z"/><path d="m10 6v15.09h12.575v-15.09zm11 13.518h-9.428v-11.946h9.428z" transform="translate(-6.856 -6)"/></g></svg>
-`;
-
-export default iconCarousel;
