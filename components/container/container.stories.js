@@ -19,4 +19,5 @@ storiesOf("Container", module)
       ${Editor.templates.image()}
     </ck-container>
   `
-  );
+  )
+  .add("single item", () => Editor.templates.image());

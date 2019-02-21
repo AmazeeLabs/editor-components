@@ -140,7 +140,7 @@ class Gallery extends LitElement {
           this,
           "before",
           this.currentGallery,
-          this.currentGallery + 2
+          this.currentGallery + 1
         )
       );
       this.currentGallery += 1;

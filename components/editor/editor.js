@@ -12,7 +12,7 @@ export default class Editor extends LitElement {
           ? Editor.templates[name]()
           : Editor.templates[name];
     }
-    return el;
+    return el.children[0];
   }
 
   render() {
@@ -40,10 +40,10 @@ export default class Editor extends LitElement {
           parent.children[reference]
         ),
       after: () =>
-        reference < parent.children.length
+        reference < parent.children.length - 1
           ? parent.insertBefore(
               parent.children[target],
-              parent.children[reference + 1]
+              parent.children[reference + 2]
             )
           : parent.appendChild(parent.children[reference])
     }[position]());
@@ -89,11 +89,11 @@ Editor.decorator = story => `<ck-editor>${story()}</ck-editor>`;
 Editor.dummySetup = story => {
   Editor.templates = {
     text:
-      "<p>The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee.</p>",
+      "<ck-container-item><p>The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee.</p></ck-container-item>",
     image: () =>
-      `<img src="https://placekitten.com/800/${Math.ceil(
+      `<ck-container-item><img src="https://placekitten.com/800/${Math.ceil(
         300 + Math.random() * 200
-      )}" style="width: 100%; height: auto"/>`
+      )}" style="width: 100%; height: auto"/></ck-container-item>`
   };
   Placeholder.availableSections = [
     { id: "text", label: "Text", icon: "text" },

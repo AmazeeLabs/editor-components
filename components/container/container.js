@@ -1,4 +1,4 @@
-import { LitElement, html, svg, customElement } from "lit-element";
+import { LitElement, html, svg, customElement, css } from "lit-element";
 import * as Operations from "../editor/operations";
 import iconUp from "./icons/up.svg";
 import iconDown from "./icons/down.svg";
@@ -8,24 +8,33 @@ import itemStyles from "./container-item.css";
 class ContainerItem extends LitElement {
   static get properties() {
     return {
-      index: { type: Number },
-      items: { type: Number },
-      sections: { type: String }
+      inContainer: { type: Boolean },
+      containerIndex: { type: Number },
+      containerItems: { type: Number },
+      containerSections: { type: String }
     };
   }
 
-  get isFirst() {
-    return this.index === 0;
+  constructor() {
+    super();
+    this.inContainer = false;
+    this.containerIndex = 0;
+    this.containerItems = 0;
+    this.containerSections = false;
   }
 
-  get isLast() {
-    return this.index === this.items - 1;
+  get containerFirst() {
+    return this.containerIndex === 0;
+  }
+
+  get containerLast() {
+    return this.containerIndex === this.containerItems - 1;
   }
 
   render() {
     const upButton = html`
       <button
-        class="up${this.isFirst ? " disabled" : ""}"
+        class="up${this.containerFirst ? " disabled" : ""}"
         @click="${() => this.upHandler()}"
       >
         ${svg([iconUp])}
@@ -34,7 +43,7 @@ class ContainerItem extends LitElement {
 
     const downButton = html`
       <button
-        class="up${this.isLast ? " disabled" : ""}"
+        class="up${this.containerLast ? " disabled" : ""}"
         @click="${() => this.downHandler()}"
       >
         ${svg([iconDown])}
@@ -42,41 +51,61 @@ class ContainerItem extends LitElement {
     `;
 
     return html`
-      <style>${itemStyles}</style>
       <div class="item">
-        <ck-placeholder
-          collapsed="true"
-          @ckEditorOperation="${event => this.insertHandler(event)}"
-          sections="${this.sections}"
-        ></ck-placeholder>
-        <div class="controls">
-          ${upButton} ${downButton}
-          <button class="remove" @click="${() => this.removeHandler()}">
-            ${svg([iconDelete])}
-          </button>
-        </div>
+        ${this.inContainer
+          ? html`
+              <ck-placeholder
+                collapsed="true"
+                @ckEditorOperation="${event => this.insertHandler(event)}"
+                sections="${this.containerSections}"
+              ></ck-placeholder>
+              <div class="controls">
+                ${upButton} ${downButton}
+                <button class="remove" @click="${() => this.removeHandler()}">
+                  ${svg([iconDelete])}
+                </button>
+              </div>
+            `
+          : null}
         <slot></slot>
       </div>
     `;
   }
 
   upHandler() {
-    if (!this.isFirst) {
+    if (!this.containerFirst) {
+      const diff =
+        global.window.scrollY +
+        this.parentElement.children[this.containerIndex - 1].offsetTop -
+        this.offsetTop;
+      window.scrollTo(0, diff);
       this.dispatchEvent(
         Operations.move(
           this.parentElement,
           "before",
-          this.index,
-          this.index - 1
+          this.containerIndex,
+          this.containerIndex - 1
         )
       );
     }
   }
 
   downHandler() {
-    if (!this.isLast) {
+    if (!this.containerLast) {
+      const diff =
+        global.window.scrollY +
+        (this.containerIndex < this.containerItems - 2
+          ? this.parentElement.children[this.containerIndex + 2].offsetTop -
+            this.parentElement.children[this.containerIndex + 1].offsetTop
+          : this.parentElement.children[this.containerIndex + 1].offsetHeight);
+      window.scrollTo(0, diff);
       this.dispatchEvent(
-        Operations.move(this.parentElement, "after", this.index, this.index + 1)
+        Operations.move(
+          this.parentElement,
+          "after",
+          this.containerIndex,
+          this.containerIndex + 1
+        )
       );
     }
   }
@@ -91,11 +120,13 @@ class ContainerItem extends LitElement {
         event.detail.element,
         this.parentElement,
         "before",
-        this.index
+        this.containerIndex
       )
     );
   }
 }
+
+ContainerItem.styles = css([itemStyles]);
 
 export default class Container extends LitElement {
   static get properties() {
@@ -112,32 +143,20 @@ export default class Container extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.observer = new MutationObserver(() => this.processChildren());
-    this.processChildren();
-  }
-
-  processChildren() {
-    this.observer.disconnect();
-
-    Array.from(this.children).forEach(child => {
-      if (child.nodeName.toLowerCase() !== "ck-container-item") {
-        const wrapper = document.createElement("ck-container-item");
-        wrapper.setAttribute("sections", this.sections);
-        this.insertBefore(wrapper, child);
-        wrapper.appendChild(child);
-      } else if (child.childNodes.length === 0) {
-        this.removeChild(child);
-      }
-    });
-
-    Array.from(this.children).forEach((child, index) => {
-      child.setAttribute("index", index);
-      child.setAttribute("items", this.children.length);
-    });
-
     this.observer.observe(this, {
       attributes: false,
       childList: true,
       subtree: false
+    });
+    this.processChildren();
+  }
+
+  processChildren() {
+    Array.from(this.children).forEach((child, index) => {
+      child.setAttribute("inContainer", true);
+      child.setAttribute("containerSections", this.sections);
+      child.setAttribute("containerIndex", index);
+      child.setAttribute("containerItems", this.children.length);
     });
   }
 
@@ -154,10 +173,9 @@ export default class Container extends LitElement {
   }
 
   appendHandler(event) {
-    console.log(event);
     this.dispatchEvent(Operations.insert(event.detail.element, this, "end"));
   }
 }
 
 customElement("ck-container")(Container);
-customElements.define("ck-container-item", ContainerItem);
+customElement("ck-container-item")(ContainerItem);
