@@ -40,10 +40,10 @@ export default class Editor extends LitElement {
           parent.children[reference]
         ),
       after: () =>
-        reference < parent.children.length - 1
+        reference < parent.children.length
           ? parent.insertBefore(
               parent.children[target],
-              parent.children[reference + 2]
+              parent.children[reference + 1]
             )
           : parent.appendChild(parent.children[reference])
     }[position]());
