@@ -1,12 +1,14 @@
 :host{
-	--color-light-green: rgba(230, 255, 237, 0.5);
-  --color-green: #008b00;
-  --color-red: #ff0000;
+  --color-light-green: rgba(91, 200, 156, 0.5);
+  --color-green: #5bc89c;
+  --color-red: #d72222;
 }
+
 .overlay {
 	position: relative;
 	border: 2px solid var(--color-green);
 }
+
 .overlay__background {
 	position: absolute;
 	top: 0;
@@ -15,21 +17,26 @@
 	height: 100%;
   background: var(--color-light-green);
 }
+
 .actions {
   visibility: hidden;
   opacity: 0;
   position: absolute;
-  left:0; right:0;
-  top:0; bottom:0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   width: 200px;
   height: 20px;
-  margin:auto;
+  margin: auto;
 }
+
 .overlay:hover .actions {
   visibility: visible;
   opacity: 1;
-  transition: visibility .35s linear 0s, opacity .35s 0s;
+  transition: visibility .35s linear, opacity .35s;
 }
+
 button {
   border: none;
   color: white;
@@ -38,10 +45,12 @@ button {
   font-size: inherit;
   padding: 5px 10px;
 }
+
 button.accept {
   background-color: var(--color-green);
   margin-right: 20px;
 }
+
 button.decline {
   background-color: var(--color-red);
 }
