@@ -4,13 +4,26 @@ function createEvent(detail) {
   return new CustomEvent(eventType, { detail });
 }
 
-export const insert = (element, parent, position, reference) =>
+export const batch = operations =>
+  createEvent({
+    operation: "batch",
+    operations
+  });
+
+export const insert = (
+  element,
+  parent,
+  position,
+  reference = null,
+  attributes = {}
+) =>
   createEvent({
     operation: "insert",
     element,
     parent,
     position,
-    reference
+    reference,
+    attributes
   });
 
 export const move = (parent, position, target, reference) =>

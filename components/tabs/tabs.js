@@ -7,6 +7,7 @@ import editIcon from "./icons/pencil.svg";
 class Tabs extends LitElement {
   static get properties() {
     return {
+      section: String,
       items: Array,
       currentTab: Number,
       modalIsOpen: Boolean
@@ -16,34 +17,61 @@ class Tabs extends LitElement {
   constructor() {
     super();
     this.items = [];
-    this.currentTab = 0;
+    this.currentTab = -1;
     this.modalIsOpen = false;
+    this.section = null;
   }
 
   connectedCallback() {
     super.connectedCallback();
-    const self = this;
-    const slots = this.shadowRoot;
 
-    const observer = new MutationObserver(mutationsList => {
-      mutationsList.forEach(mutation => {
-        if (mutation.type === "attributes") {
-          self.updateTabDom();
-        }
-      });
-    });
-
-    observer.observe(self, {
+    const observer = new MutationObserver(() => this.processItems());
+    observer.observe(this, {
       attributes: true,
-      childList: false,
+      childList: true,
       subtree: true
     });
 
-    slots.addEventListener("slotchange", () => {
-      self.updateTabDom();
-    });
+    this.processItems();
 
-    self.updateTabDom();
+    if (this.children.length > 0) {
+      this.currentTab = 0;
+    }
+  }
+
+  processItems() {
+    this.items = Array.from(this.children).map((child, index) => {
+      return {
+        title:
+          (child.dataset.titleAttribute
+            ? child.getAttribute(child.dataset.titleAttribute)
+            : null) ||
+          child.dataset.tabTitle ||
+          "Untitled Tab",
+        default: child.dataset.defaultTab,
+        index
+      };
+    });
+    this.setTabsItem(this.currentTab);
+  }
+
+  renderModal() {
+    return html`
+      <ck-tabs-modal
+        @eventCloseModal="${() => {
+          this.closeModal();
+        }}"
+        @eventSaveModal="${e => {
+          this.updateItem(e.detail);
+        }}"
+        @deleteTab="${() => this.deleteItem()}"
+        currentTitle="${this.items[this.currentTab].title}"
+        currentDefault="${this.items[this.currentTab].default}"
+        currentIndex="${this.currentTab}"
+        data-visible="${this.modalIsOpen ? "true" : "false"}"
+      >
+      </ck-tabs-modal>
+    `;
   }
 
   render() {
@@ -62,20 +90,7 @@ class Tabs extends LitElement {
             ></li>
           </ul>
         </div>
-        <ck-modal
-          @eventCloseModal="${() => {
-            this.closeModal();
-          }}"
-          @eventSaveModal="${e => {
-            this.saveModal(e.detail);
-          }}"
-          @deleteTab="${() => this.deleteItem()}"
-          currentTitle="${this.items[this.currentTab].title}"
-          currentDefault="${this.items[this.currentTab].default}"
-          currentIndex="${this.currentTab}"
-          data-visible="${this.modalIsOpen ? "true" : "false"}"
-        >
-        </ck-modal>
+        ${this.items[this.currentTab] ? this.renderModal() : null}
         <div class="ck-tabs__content">
           <div
             class="ck-tabs__rail"
@@ -86,37 +101,6 @@ class Tabs extends LitElement {
         </div>
       </div>
     `;
-  }
-
-  deleteItem() {
-    if (this.items.length >= 2) {
-      this.dispatchEvent(
-        new CustomEvent("deleteItem", { detail: this.currentTab })
-      );
-      if (this.currentTab === this.items.length - 1) {
-        this.currentTab -= 1;
-      }
-    }
-  }
-
-  updateTabDom() {
-    this.items = Array.from(this.children).map((child, index) => {
-      return {
-        title: child.dataset.title
-          ? child.dataset.title
-          : child.dataset[child.dataset.titleAttribute],
-        default: child.dataset.default,
-        index
-      };
-    });
-    this.setTabsItem(this.currentTab);
-  }
-
-  setTabsItem(index) {
-    if (this.children.length <= index || !this.children[index]) {
-      return;
-    }
-    this.currentTab = index;
   }
 
   tabTitle(item) {
@@ -139,8 +123,22 @@ class Tabs extends LitElement {
     `;
   }
 
-  saveModal(item) {
-    this.dispatchEvent(new CustomEvent("eventSaveModal", { detail: item }));
+  deleteItem() {
+    if (this.items.length >= 2) {
+      this.dispatchEvent(
+        new CustomEvent("deleteItem", { detail: this.currentTab })
+      );
+      if (this.currentTab === this.items.length - 1) {
+        this.currentTab -= 1;
+      }
+    }
+  }
+
+  setTabsItem(index) {
+    if (this.children.length <= index || !this.children[index]) {
+      return;
+    }
+    this.currentTab = index;
   }
 
   openModal() {
@@ -152,22 +150,41 @@ class Tabs extends LitElement {
   }
 
   addItem() {
-    this.dispatchEvent(new Event("addItem"));
     this.currentTab = this.items.length;
+    this.dispatchEvent(
+      Operations.insert(this.section, this, "end", null, {
+        "data-default-tab":
+          Array.from(this.children).filter(
+            child => child.dataset.defaultTab === "true"
+          ).length === 0,
+        "data-tab-title": "Untitled Tab"
+      })
+    );
   }
-}
 
-class TabsItem extends LitElement {
-  render() {
-    return html`
-      <style>
-        ${styles}
-      </style>
-
-      <div class="ck-tabs__item">
-        <slot></slot>
-      </div>
-    `;
+  updateItem(item) {
+    this.dispatchEvent(
+      Operations.batch(
+        [
+          Operations.attributes(this.children[item.index], {
+            "data-tab-title": item.title,
+            "data-default-tab": item.default
+          })
+        ].concat(
+          item.default
+            ? Array.from(this.children)
+                .filter(
+                  child =>
+                    child.dataset.defaultTab === "true" &&
+                    child !== this.children[item.index]
+                )
+                .map(child =>
+                  Operations.attributes(child, { "data-default-tab": "false" })
+                )
+            : []
+        )
+      )
+    );
   }
 }
 
@@ -240,7 +257,7 @@ class Modal extends LitElement {
   }
 
   deleteTab() {
-    this.dispatchEvent(Operations.remove(this.children[this.currentIndex]))
+    this.dispatchEvent(Operations.remove(this.children[this.currentIndex]));
     this.closeModal();
   }
 
@@ -254,7 +271,7 @@ class Modal extends LitElement {
         <div class="modal__item">
           <h3 class="modal__title">Edit tab</h3>
           <div class="modal__content">
-            <label class="modal__label" for="${this.icurrentIndex}">
+            <label class="modal__label" for="${this.currentIndex}">
               Variation name
             </label>
             <input
@@ -300,6 +317,5 @@ class Modal extends LitElement {
   }
 }
 
-customElements.define("ck-modal", Modal);
 customElements.define("ck-tabs", Tabs);
-customElements.define("ck-tabs-item", TabsItem);
+customElements.define("ck-tabs-modal", Modal);

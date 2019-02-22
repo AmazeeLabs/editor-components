@@ -3,7 +3,7 @@ import { eventType } from "./operations";
 import Placeholder from "../placeholder/placeholder";
 
 export default class Editor extends LitElement {
-  static createElement(name) {
+  static createElement(name, attributes = {}) {
     const el = document.createElement("div");
     el.classList.add(name);
     if (Editor.templates[name]) {
@@ -12,7 +12,11 @@ export default class Editor extends LitElement {
           ? Editor.templates[name]()
           : Editor.templates[name];
     }
-    return el.children[0];
+    const element = el.children[0];
+    Object.keys(attributes).forEach(key =>
+      element.setAttribute(key, attributes[key])
+    );
+    return element;
   }
 
   render() {
@@ -21,9 +25,15 @@ export default class Editor extends LitElement {
     `;
   }
 
-  static insertElement({ detail: { element, parent, position, reference } }) {
+  static batch({ detail: { operations } }) {
+    operations.forEach(Editor.dispatchOperation);
+  }
+
+  static insertElement({
+    detail: { element, parent, position, reference, attributes }
+  }) {
     ({
-      end: () => parent.appendChild(Editor.createElement(element)),
+      end: () => parent.appendChild(Editor.createElement(element, attributes)),
       before: () =>
         parent.insertBefore(
           Editor.createElement(element),
@@ -58,27 +68,26 @@ export default class Editor extends LitElement {
     target.parentElement.removeChild(target);
   }
 
-  static setAttributes({ detail: { target, attributes } }) {
-    Object.keys(attributes).forEach(key =>
-      target.setAttribute(key, attributes[key])
-    );
+  static setAttributes({ detail: { target, attr } }) {
+    Object.keys(attr).forEach(key => target.setAttribute(key, attr[key]));
+  }
+
+  static dispatchOperation(event) {
+    ({
+      batch: () => Editor.batch(event),
+      insert: () => Editor.insertElement(event),
+      move: () => Editor.moveElement(event),
+      replace: () => Editor.replaceElement(event),
+      remove: () => Editor.removeElement(event),
+      attributes: () => Editor.setAttributes(event)
+    }[event.detail.operation]());
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener(
-      eventType,
-      event => {
-        ({
-          insert: () => Editor.insertElement(event),
-          move: () => Editor.moveElement(event),
-          replace: () => Editor.replaceElement(event),
-          remove: () => Editor.removeElement(event),
-          attributes: () => Editor.setAttributes(event)
-        }[event.detail.operation]());
-      },
-      { capture: true }
-    );
+    this.addEventListener(eventType, Editor.dispatchOperation, {
+      capture: true
+    });
   }
 }
 

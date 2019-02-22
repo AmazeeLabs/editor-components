@@ -44,7 +44,7 @@
 .ck-tabs__header-tab-item.active {
   border-bottom: 2px solid var(--color-blue);
   color: var(--color-blue);
-  font-weight: bold; 
+  font-weight: bold;
   cursor: default;
 }
 
@@ -80,6 +80,7 @@
   border-radius: 50%;
   transition: background-color 0.35s ease;
   position: relative;
+  margin-bottom: 0.9em;
 }
 
 .ck-tabs__header-tab-add::before {
@@ -95,10 +96,10 @@
 }
 
 .ck-tabs__rail {
-  display: flex; 
+  display: flex;
 }
 
-::slotted(ck-tabs-item) {
+::slotted(*) {
   display: block;
   width: 100%;
   flex-shrink: 0;
