@@ -5,8 +5,8 @@
 }
 
 .overlay {
-	position: relative;
-	border: 2px solid var(--color-green);
+  position: relative;
+  border: 2px solid var(--color-green);
 }
 
 .overlay__background {
