@@ -1,4 +1,5 @@
 import { LitElement, html, svg } from "lit-element";
+import { render } from "lit-html";
 import * as Operations from "../editor/operations";
 import styles from "./tabs.css";
 import modalStyles from "./modal.css";
@@ -24,6 +25,13 @@ class Tabs extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    if (this.ownerDocument.body.querySelector("#ck-tabs-modal")) {
+      this.modal = this.ownerDocument.body.querySelector("#ck-tabs-modal");
+    } else {
+      this.modal = this.ownerDocument.createElement("div");
+      this.modal.setAttribute("id", "ck-tabs-modal");
+      this.ownerDocument.body.appendChild(this.modal);
+    }
 
     const observer = new MutationObserver(() => this.processItems());
     observer.observe(this, {
@@ -53,6 +61,16 @@ class Tabs extends LitElement {
       };
     });
     this.setTabsItem(this.currentTab);
+  }
+
+  openModal() {
+    this.modalIsOpen = true;
+    render(this.renderModal(), this.modal);
+  }
+
+  closeModal() {
+    this.modalIsOpen = false;
+    render(this.renderModal(), this.modal);
   }
 
   renderModal() {
@@ -90,7 +108,6 @@ class Tabs extends LitElement {
             ></li>
           </ul>
         </div>
-        ${this.items[this.currentTab] ? this.renderModal() : null}
         <div class="ck-tabs__content">
           <div
             class="ck-tabs__rail"
@@ -139,14 +156,6 @@ class Tabs extends LitElement {
     this.currentTab = index;
   }
 
-  openModal() {
-    this.modalIsOpen = true;
-  }
-
-  closeModal() {
-    this.modalIsOpen = false;
-  }
-
   addItem() {
     this.currentTab = this.items.length;
     this.dispatchEvent(
@@ -189,7 +198,7 @@ class Tabs extends LitElement {
 class Modal extends LitElement {
   static get properties() {
     return {
-      isVisible: Boolean,
+      isVisible: { type: Boolean, reflect: true },
       inputText: String,
       items: Array,
       isDefault: Boolean,
