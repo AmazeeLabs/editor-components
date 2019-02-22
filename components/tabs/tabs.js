@@ -125,9 +125,7 @@ class Tabs extends LitElement {
 
   deleteItem() {
     if (this.items.length >= 2) {
-      this.dispatchEvent(
-        new CustomEvent("deleteItem", { detail: this.currentTab })
-      );
+      this.dispatchEvent(Operations.remove(this.children[this.currentTab]));
       if (this.currentTab === this.items.length - 1) {
         this.currentTab -= 1;
       }
@@ -257,7 +255,9 @@ class Modal extends LitElement {
   }
 
   deleteTab() {
-    this.dispatchEvent(Operations.remove(this.children[this.currentIndex]));
+    this.dispatchEvent(
+      new CustomEvent("deleteTab", { detail: this.currentTab })
+    );
     this.closeModal();
   }
 
