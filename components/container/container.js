@@ -21,8 +21,11 @@ class ContainerItem extends LitElement {
     this.containerIndex = 0;
     this.containerItems = 0;
     this.containerSections = false;
-    this.addEventListener("containerUpdate", this.containerUpdate, {
-      capture: true
+    this.addEventListener("containerUpdate", event => {
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+      event.preventDefault();
+      this.containerUpdate(event);
     });
   }
 

@@ -8,6 +8,9 @@
   --color-white: #FFF;
   --align-buttons: left;
   font-family: var(--font-family, sans-serif);
+  font-style: initial;
+  font-size: initial;
+  font-weight: initial;
   --gallery-position-top: auto;
   --gallery-position-left: 50%;
   --gallery-position-right: auto;
