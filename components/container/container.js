@@ -11,7 +11,8 @@ class ContainerItem extends LitElement {
       inContainer: { type: Boolean },
       containerIndex: { type: Number },
       containerItems: { type: Number },
-      containerSections: { type: String }
+      containerSections: { type: String },
+      isHovered: { type: Boolean }
     };
   }
 
@@ -26,6 +27,17 @@ class ContainerItem extends LitElement {
       event.stopPropagation();
       event.preventDefault();
       this.containerUpdate(event);
+    });
+
+    this.addEventListener("mouseover", event => {
+      this.isHovered = true;
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+      event.preventDefault();
+    });
+
+    this.addEventListener("mouseout", event => {
+      this.isHovered = false;
     });
   }
 
@@ -66,7 +78,7 @@ class ContainerItem extends LitElement {
     `;
 
     return html`
-      <div class="item">
+      <div class="${this.isHovered ? "hovered" : ""}">
         ${this.inContainer
           ? html`
               <ck-placeholder
@@ -82,7 +94,9 @@ class ContainerItem extends LitElement {
               </div>
             `
           : null}
-        <slot></slot>
+        <div class="${this.inContainer ? "item" : ""}">
+          <slot></slot>
+        </div>
       </div>
     `;
   }
