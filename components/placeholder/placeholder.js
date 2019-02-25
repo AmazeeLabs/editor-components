@@ -106,7 +106,7 @@ export default class Placeholder extends LitElement {
                         `
                       )}
                     </ul>
-                    ${this.closed && this.isOpen
+                    ${this.isOpen
                       ? html`
                           <button
                             @click="${this.clickCloseHandler}"
@@ -114,9 +114,7 @@ export default class Placeholder extends LitElement {
                             class="normalize-button ck-placeholder__close-button"
                           >
                             <div class="ck-placeholder__icon-wrapper">
-                              <ck-placeholder-icon
-                                iconId="close"
-                              ></ck-placeholder-icon>
+                              ${icon({ icon: "close" })}
                             </div>
                             <span class="ck-placeholder__close-button-label"
                               >Close</span
