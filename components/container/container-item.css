@@ -40,3 +40,7 @@ svg * {
   pointer-events: none;
   cursor: auto;
 }
+
+ck-placeholder[collapsed="true"] {
+  height: 0;
+}
