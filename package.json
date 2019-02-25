@@ -7,7 +7,8 @@
     "storybook": "start-storybook -p 9001",
     "lint": "eslint --quiet '**/*.js'",
     "lint:fix": "eslint --fix '**/*.js'",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "deploy-storybook": "storybook-to-ghpages"
   },
   "keywords": [
     "ckeditor5",
