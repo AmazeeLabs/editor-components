@@ -57,7 +57,7 @@
     }
   },
   "dependencies": {
-    "lit-element": "^2.0.0-rc.5",
+    "lit-element": "2.0.1",
     "lit-html": "^1.0.0"
   }
 }
