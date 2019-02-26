@@ -6,6 +6,9 @@
   --color-black-30: rgba(0, 0, 0, 0.3);
   --color-grey-light: #CCC;
   --color-white: #FFF;
+  font-style: initial;
+  font-size: initial;
+  font-weight: initial;
   font-family: var(--font-family, sans-serif);
 }
 

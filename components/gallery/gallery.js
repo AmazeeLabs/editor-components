@@ -57,12 +57,7 @@ class Gallery extends LitElement {
           <div class="ck-gallery__pager">
             <div class="ck-gallery__dots">
               ${this.items.map(item => this.button(item))}
-            </div>
-            <div class="ck-gallery__add">
-              <span
-                @click="${() => this.addItem()}"
-                class="ck-gallery__add-slide"
-              >
+              <span @click="${() => this.addItem()}" class="ck-gallery__add">
                 +
               </span>
             </div>
