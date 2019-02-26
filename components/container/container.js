@@ -1,11 +1,12 @@
 import { LitElement, html, svg, customElement, css } from "lit-element";
+import DiffElement from "../diffelement/diffelement";
 import * as Operations from "../editor/operations";
 import iconUp from "./icons/up.svg";
 import iconDown from "./icons/down.svg";
 import iconDelete from "./icons/delete.svg";
 import itemStyles from "./container-item.css";
 
-class ContainerItem extends LitElement {
+class ContainerItem extends DiffElement {
   static get properties() {
     return {
       inContainer: { type: Boolean },
@@ -77,7 +78,7 @@ class ContainerItem extends LitElement {
       </button>
     `;
 
-    return html`
+    return super.render(html`
       <div class="${this.isHovered ? "hovered" : ""}">
         ${this.inContainer
           ? html`
@@ -98,7 +99,7 @@ class ContainerItem extends LitElement {
           <slot></slot>
         </div>
       </div>
-    `;
+    `);
   }
 
   upHandler() {
