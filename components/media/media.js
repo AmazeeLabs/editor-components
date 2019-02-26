@@ -100,7 +100,7 @@ class MediaLoader extends LitElement {
 Media.previewCallback = (uuid, callback) =>
   callback(
     html`
-      <img src="https://i0.wp.com/grapevine.is/wp-content/uploads/${uuid}" />
+      <img src="https://placekitten.com/500/${uuid}" />
     `
   );
 
