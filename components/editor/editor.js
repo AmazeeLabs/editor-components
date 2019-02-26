@@ -64,11 +64,6 @@ export default class Editor extends LitElement {
     );
   }
 
-  static replaceElementWithHtml({ detail: { element, target } }) {
-    target.parentElement.insertBefore(element, target);
-    target.parentElement.removeChild(target);
-  }
-
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener(
@@ -79,8 +74,7 @@ export default class Editor extends LitElement {
           move: () => Editor.moveElement(event),
           replace: () => Editor.replaceElement(event),
           remove: () => Editor.removeElement(event),
-          attributes: () => Editor.setAttributes(event),
-          replaceWithHtml: () => Editor.replaceElementWithHtml(event)
+          attributes: () => Editor.setAttributes(event)
         }[event.detail.operation]());
       },
       { capture: true }

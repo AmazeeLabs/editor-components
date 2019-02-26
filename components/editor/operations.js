@@ -41,10 +41,3 @@ export const attributes = (target, attr) =>
     target,
     attr
   });
-
-export const replaceWithHtml = (element, target) =>
-  createEvent({
-    operation: "replaceWithHtml",
-    element,
-    target
-  });
