@@ -1,27 +1,27 @@
 :host {
-	--color-grey-light: #ccc;
-	--color-grey-dark: #515151;
+  --color-grey-light: #ccc;
+  --color-grey-dark: #515151;
 }
 .option {
-	display: flex;
-	border-bottom: 1px solid var(--color-grey-light);
+  display: flex;
+  border-bottom: 1px solid var(--color-grey-light);
   cursor: pointer;
 }
 
 .option:hover {
-  background-color: #f6f6f6;
-  transition: background-color .35s linear 0s;
+    background-color: #f6f6f6;
+    transition: background-color .35s linear 0s;
 }
 
 .option > span {
-	padding: 5px;
-	display: inline-block;
+  padding: 5px;
+  display: inline-block;
 }
 
 .option > span.option__label {
-	width: 150px;
-	color: var(--color-grey-dark);
-	padding: 25px 10px;
+  width: 150px;
+  color: var(--color-grey-dark);
+  padding: 25px 10px;
   font-size: 14px;
 }
 .option > span.option__content {
