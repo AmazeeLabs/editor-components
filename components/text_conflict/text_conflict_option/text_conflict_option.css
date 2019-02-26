@@ -9,8 +9,8 @@
 }
 
 .option:hover {
-    background-color: #f6f6f6;
-    transition: background-color .35s linear 0s;
+  background-color: #f6f6f6;
+  transition: background-color .35s linear 0s;
 }
 
 .option > span {
