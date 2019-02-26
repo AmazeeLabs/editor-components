@@ -1,9 +1,14 @@
 import { LitElement, html } from "lit-element";
 import { eventType } from "./operations";
 import Placeholder from "../placeholder/placeholder";
+import text from "!raw-loader!./templates/text.html";
+import gallery from "!raw-loader!./templates/gallery.html";
+import image from "!raw-loader!./templates/image.html";
+import page from "!raw-loader!./templates/page.html";
+import columns from "!raw-loader!./templates/columns.html";
 
 export default class Editor extends LitElement {
-  static createElement(name) {
+  static createElement(name, attributes = {}) {
     const el = document.createElement("div");
     el.classList.add(name);
     if (Editor.templates[name]) {
@@ -12,7 +17,11 @@ export default class Editor extends LitElement {
           ? Editor.templates[name]()
           : Editor.templates[name];
     }
-    return el.children[0];
+    const element = el.children[0];
+    Object.keys(attributes).forEach(key =>
+      element.setAttribute(key, attributes[key])
+    );
+    return element;
   }
 
   render() {
@@ -21,9 +30,15 @@ export default class Editor extends LitElement {
     `;
   }
 
-  static insertElement({ detail: { element, parent, position, reference } }) {
+  static batch({ detail: { operations } }) {
+    operations.forEach(Editor.dispatchOperation);
+  }
+
+  static insertElement({
+    detail: { element, parent, position, reference, attributes }
+  }) {
     ({
-      end: () => parent.appendChild(Editor.createElement(element)),
+      end: () => parent.appendChild(Editor.createElement(element, attributes)),
       before: () =>
         parent.insertBefore(
           Editor.createElement(element),
@@ -40,10 +55,10 @@ export default class Editor extends LitElement {
           parent.children[reference]
         ),
       after: () =>
-        reference < parent.children.length - 1
+        reference < parent.children.length
           ? parent.insertBefore(
               parent.children[target],
-              parent.children[reference + 2]
+              parent.children[reference + 1]
             )
           : parent.appendChild(parent.children[reference])
     }[position]());
@@ -58,27 +73,26 @@ export default class Editor extends LitElement {
     target.parentElement.removeChild(target);
   }
 
-  static setAttributes({ detail: { target, attributes } }) {
-    Object.keys(attributes).forEach(key =>
-      target.setAttribute(key, attributes[key])
-    );
+  static setAttributes({ detail: { target, attr } }) {
+    Object.keys(attr).forEach(key => target.setAttribute(key, attr[key]));
+  }
+
+  static dispatchOperation(event) {
+    ({
+      batch: () => Editor.batch(event),
+      insert: () => Editor.insertElement(event),
+      move: () => Editor.moveElement(event),
+      replace: () => Editor.replaceElement(event),
+      remove: () => Editor.removeElement(event),
+      attributes: () => Editor.setAttributes(event)
+    }[event.detail.operation]());
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener(
-      eventType,
-      event => {
-        ({
-          insert: () => Editor.insertElement(event),
-          move: () => Editor.moveElement(event),
-          replace: () => Editor.replaceElement(event),
-          remove: () => Editor.removeElement(event),
-          attributes: () => Editor.setAttributes(event)
-        }[event.detail.operation]());
-      },
-      { capture: true }
-    );
+    this.addEventListener(eventType, Editor.dispatchOperation, {
+      capture: true
+    });
   }
 }
 
@@ -88,16 +102,19 @@ Editor.decorator = story => `<ck-editor>${story()}</ck-editor>`;
 
 Editor.dummySetup = story => {
   Editor.templates = {
-    text:
-      "<ck-container-item><p>The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee.</p></ck-container-item>",
+    text,
     image: () =>
-      `<ck-container-item><img src="https://placekitten.com/800/${Math.ceil(
-        300 + Math.random() * 200
-      )}" style="width: 100%; height: auto"/></ck-container-item>`
+      image
+        .replace("%width", 800)
+        .replace("%height", Math.ceil(200 + Math.random() * 200)),
+    gallery: () => gallery.replace("%content", Editor.templates.image()),
+    columns: () => columns
   };
   Placeholder.availableSections = [
     { id: "text", label: "Text", icon: "text" },
-    { id: "image", label: "Image", icon: "stage-image" }
+    { id: "image", label: "Image", icon: "image" },
+    { id: "gallery", label: "Gallery", icon: "carousel" },
+    { id: "columns", label: "Columns", icon: "misc" }
   ];
   return story();
 };

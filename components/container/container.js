@@ -12,7 +12,8 @@ class ContainerItem extends DiffElement {
       inContainer: { type: Boolean },
       containerIndex: { type: Number },
       containerItems: { type: Number },
-      containerSections: { type: String }
+      containerSections: { type: String },
+      isHovered: { type: Boolean }
     };
   }
 
@@ -22,6 +23,23 @@ class ContainerItem extends DiffElement {
     this.containerIndex = 0;
     this.containerItems = 0;
     this.containerSections = false;
+    this.addEventListener("containerUpdate", event => {
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+      event.preventDefault();
+      this.containerUpdate(event);
+    });
+
+    this.addEventListener("mouseover", event => {
+      this.isHovered = true;
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+      event.preventDefault();
+    });
+
+    this.addEventListener("mouseout", event => {
+      this.isHovered = false;
+    });
   }
 
   get containerFirst() {
@@ -30,6 +48,15 @@ class ContainerItem extends DiffElement {
 
   get containerLast() {
     return this.containerIndex === this.containerItems - 1;
+  }
+
+  containerUpdate({
+    detail: { inContainer, containerSections, containerIndex, containerItems }
+  }) {
+    this.inContainer = inContainer;
+    this.containerSections = containerSections;
+    this.containerIndex = containerIndex;
+    this.containerItems = containerItems;
   }
 
   render() {
@@ -52,7 +79,7 @@ class ContainerItem extends DiffElement {
     `;
 
     return super.render(html`
-      <div class="item">
+      <div class="${this.isHovered ? "hovered" : ""}">
         ${this.inContainer
           ? html`
               <ck-placeholder
@@ -68,7 +95,9 @@ class ContainerItem extends DiffElement {
               </div>
             `
           : null}
-        <slot></slot>
+        <div class="${this.inContainer ? "item" : ""}">
+          <slot></slot>
+        </div>
       </div>
     `);
   }
@@ -139,25 +168,30 @@ export default class Container extends LitElement {
   constructor() {
     super();
     this.observer = null;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
     this.observer = new MutationObserver(() => this.processChildren());
     this.observer.observe(this, {
       attributes: false,
       childList: true,
       subtree: false
     });
+  }
+
+  firstUpdated() {
     this.processChildren();
   }
 
   processChildren() {
     Array.from(this.children).forEach((child, index) => {
-      child.setAttribute("inContainer", true);
-      child.setAttribute("containerSections", this.sections);
-      child.setAttribute("containerIndex", index);
-      child.setAttribute("containerItems", this.children.length);
+      child.dispatchEvent(
+        new CustomEvent("containerUpdate", {
+          detail: {
+            inContainer: true,
+            containerSections: this.sections,
+            containerIndex: index,
+            containerItems: this.children.length
+          }
+        })
+      );
     });
   }
 

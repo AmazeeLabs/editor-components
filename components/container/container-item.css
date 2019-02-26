@@ -2,8 +2,15 @@
   --button-size: 3em;
   --button-background-color: black;
   --button-foreground-color: white;
+  --outline-color: #004adc;
   position: relative;
   display: block;
+}
+
+.hovered .item {
+  outline-style: solid;
+  outline-width: 2px;
+  outline-color: var(--outline-color);
 }
 
 .controls {
@@ -15,8 +22,7 @@
   transition: opacity 0.2s ease;
 }
 
-:hover .controls,
-:focus controls {
+.hovered .controls {
   opacity: 1;
 }
 
