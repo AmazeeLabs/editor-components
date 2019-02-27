@@ -8,6 +8,8 @@
   --color-white: #FFF;
   --align-buttons: left;
   font-family: var(--font-family, sans-serif);
+  font-style: initial;
+  font-weight: initial;
   --gallery-position-top: auto;
   --gallery-position-left: 50%;
   --gallery-position-right: auto;
@@ -23,12 +25,16 @@
   overflow: hidden;
 }
 
+.disabled {
+  opacity: 0.3;
+}
+
 .ck-gallery__rail {
-  display: flex; 
+  display: flex;
   transition: transform 0.7s ease;
 }
 
-::slotted(ck-gallery-item) {
+::slotted(*) {
   display: block;
   width: 100%;
   flex-shrink: 0;
@@ -66,7 +72,7 @@
 }
 
 .ck-gallery__dots {
-  margin-right: 10px;  
+  margin-right: 10px;
   display: flex;
 }
 
@@ -76,32 +82,37 @@
   width: 20px;
   border-radius: 100%;
   margin-right: 5px;
-  background-color: var(--color-black-30); 
+  background-color: var(--color-black-30);
   text-align: center;
   line-height: 20px;
   color: var(--color-white);
   cursor: pointer;
   font-size: 12px;
-  transition: background-color 0.35s ease;    
+  transition: background-color 0.35s ease;
 }
 
-.ck-gallery__dot-item.active {
-  background-color: var(--color-black-80); 
-}
-
-.ck-gallery__add-slide {
-  box-sizing: border-box;
+.ck-gallery__add {
   display: inline-block;
+  box-sizing: border-box;
   height: 20px;
   width: 20px;
   border-radius: 100%;
-  border: 1px solid var(--color-blue);
+  margin-right: 5px;
+  margin-left: 10px;
+  background-color: var(--color-white);
   text-align: center;
-  line-height: 1;
   color: var(--color-blue);
+  line-height: 16px;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.35s ease;
+  transition: background-color 0.35s ease;
+  border: 1px solid var(--color-blue);
 }
+
+.ck-gallery__dot-item.active {
+  background-color: var(--color-black-80);
+}
+
 
 .ck-gallery__add-slide:hover {
   background-color: var(--color-blue);
@@ -147,12 +158,17 @@
 [data-tooltip]:after {
   position: absolute;
   visibility: hidden;
-  transition:         
+  transition:
         opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transform: translate3d(0, 0, 0);
   pointer-events: none;
+}
+
+.disabled[data-tooltip]:before,
+.disabled[data-tooltip]:after {
+  display: none;
 }
 
 /* Show the entire tooltip on hover and focus */
@@ -194,7 +210,7 @@
 [data-tooltip]:hover:after,
 [data-tooltip]:focus:before,
 [data-tooltip]:focus:after {
-  transform: translateY(-12px); 
+  transform: translateY(-12px);
 }
 
 
@@ -217,6 +233,6 @@
 [data-tooltip]:hover:after,
 [data-tooltip]:focus:before,
 [data-tooltip]:focus:after {
-  transform: translateY(12px); 
+  transform: translateY(12px);
 }
 
