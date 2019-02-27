@@ -18,6 +18,7 @@ button {
 
 ul {
   list-style-type: none;
+  width: 100%;
 }
 
 ul,
@@ -30,11 +31,18 @@ li {
   border-bottom: 1px dashed var(--color-black, #222330);
   margin-bottom: 1em;
   text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.ck-placeholder__insert-wrapper:hover,
+.ck-placeholder__insert-wrapper:focus {
+  opacity: 1;
 }
 
 .ck-placeholder__insert-button {
   background: #fff;
-  color: var(--color-blue, #004adc);
+  color: var(--color-black, #222330);
   display: inline-block;
   font-size: 12px;
   font-weight: bold;
@@ -47,7 +55,7 @@ li {
 
 .ck-placeholder__insert-button:hover,
 .ck-placeholder__insert-button:focus {
-  color: var(--color-black, #222330);
+  color: var(--color-blue, #004adc);
 }
 
 .ck-placeholder__add-wrapper {

@@ -1,113 +1,62 @@
 import { storiesOf } from "@storybook/html";
 import placeholderNotes from "./placeholder.md";
+
 import "./placeholder";
-
-const createPlaceholder = () => {
-  const sections = `[
-    {"id":"text", "label":"Text", "icon":"text"},
-    {"id":"formatted-text", "label":"Formatted", "icon":"formatted-text"},
-    {"id":"text-media", "label":"Text/Media", "icon":"text-media"},
-    {"id":"stage-image", "label":"Stage media", "icon":"stage-image"},
-    {"id":"stage-video", "label":"Stage video", "icon":"stage-video"},
-    {"id":"carousel", "label":"Carousel", "icon":"carousel"},
-    {"id":"configurator", "label":"Configurator", "icon":"configurator"},
-    {"id":"visualizer", "label":"Visualizer", "icon":"visualizer"}
-  ]`;
-
-  const placeholder = document.createElement("ck-placeholder");
-
-  placeholder.addEventListener("addSection", event => {
-    const section = document.createElement("p");
-    const sectionContent = document.createTextNode(`${event.detail}`);
-    section.appendChild(sectionContent);
-    placeholder.insertAdjacentElement("afterend", section);
-    placeholder.remove();
-  });
-
-  placeholder.setAttribute("sections", sections);
-
-  return placeholder;
-};
+import Editor from "../editor/editor";
 
 storiesOf("Placeholder", module)
+  .addDecorator(Editor.dummySetup)
+  .addDecorator(Editor.decorator)
+  .addDecorator(story => `<div>${story()}</div>`)
   .add(
     "Default",
-    () => {
-      return createPlaceholder();
-    },
+    () => `<ck-placeholder sections="text image"></ck-placeholder>`,
     {
       notes: { markdown: placeholderNotes }
     }
   )
   .add(
     "Collapsed",
-    () => {
-      const placeholder = createPlaceholder();
-      placeholder.setAttribute("collapsed", "true");
-      return placeholder;
-    },
+    () =>
+      `<ck-placeholder sections="text image" collapsed="true"></ck-placeholder>`,
     {
       notes: { markdown: placeholderNotes }
     }
   )
   .add(
     "Closed",
-    () => {
-      const placeholder = createPlaceholder();
-      placeholder.setAttribute("closed", "true");
-      return placeholder;
-    },
+    () =>
+      `<ck-placeholder sections="text image" closed="true"></ck-placeholder>`,
     {
       notes: { markdown: placeholderNotes }
     }
   )
   .add(
     "Collapsed & Closed",
-    () => {
-      const placeholder = createPlaceholder();
-      placeholder.setAttribute("collapsed", "true");
-      placeholder.setAttribute("closed", "true");
-      return placeholder;
-    },
+    () =>
+      `<ck-placeholder sections="text image" collapsed="true" closed="true"></ck-placeholder>`,
     {
       notes: { markdown: placeholderNotes }
     }
   )
   .add(
     "Single item collapsed",
-    () => {
-      const placeholder = createPlaceholder();
-      const sections = `[{"id":"text", "label":"Text", "icon":"text"}]`;
-      placeholder.setAttribute("collapsed", "true");
-      placeholder.setAttribute("sections", sections);
-      return placeholder;
-    },
+    () => `<ck-placeholder sections="text" collapsed="true"></ck-placeholder>`,
     {
       notes: { markdown: placeholderNotes }
     }
   )
   .add(
     "Single item closed",
-    () => {
-      const placeholder = createPlaceholder();
-      const sections = `[{"id":"text", "label":"Text", "icon":"text"}]`;
-      placeholder.setAttribute("closed", "true");
-      placeholder.setAttribute("sections", sections);
-      return placeholder;
-    },
+    () => `<ck-placeholder sections="text" closed="true"></ck-placeholder>`,
     {
       notes: { markdown: placeholderNotes }
     }
   )
   .add(
     "Fixed layout",
-    () => {
-      const placeholder = createPlaceholder();
-      placeholder.style.width = "600px";
-      placeholder.style.height = "400px";
-      placeholder.style.setProperty("--align-buttons", "center");
-      return placeholder;
-    },
+    () =>
+      `<ck-placeholder sections="text image" style=" width: 600px; height: 400px; --align-buttons: center"></ck-placeholder>`,
     {
       notes: { markdown: placeholderNotes }
     }
