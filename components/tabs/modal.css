@@ -7,6 +7,13 @@
   --color-black-30: rgba(0, 0, 0, 0.3);
   --color-grey-light: #CCC;
   --color-white: #FFF;
+  --font-size-small: 12px;
+  --font-size-text: 16px;
+  --baseline: 8px;
+  --baseline2: 16px;
+  --baseline3: 24px;
+  --baseline4: 32px;
+  --baseline5: 40px;
   font-family: var(--font-family, sans-serif);
 }
 
@@ -41,8 +48,8 @@
   box-shadow: 0px 5px 40px 1px rgba(0,0,0,0.35);
 }
 
-.modal__content, .modal__actions {
-  padding: 15px;
+.modal__content, .modal__actions, .modal__title {
+  padding: var(--baseline2);
 }
 
 .modal__actions {
@@ -54,7 +61,7 @@
   text-transform: uppercase;
   cursor: pointer;
   margin-left: 20px;
-  font-size: 12px;
+  font-size: var(--font-size-small);
 }
 
 .modal__action--primary {
@@ -75,11 +82,10 @@
 }
 
 .modal__title {
-  font-size: 18px;
+  font-size: var(--font-size-text);
   background-color: var(--color-blue);
   color: var(--color-white);
   margin: 0;
-  padding: 15px;
   border-top-left-radius: 4px; 
   border-top-right-radius: 4px; 
 }
@@ -89,7 +95,7 @@
 }
 
 .modal__label {
-  font-size: 12px;
+  font-size: var(--font-size-small);
   color: var(--color-black-30);
 }
 
@@ -102,7 +108,7 @@
   outline: none;
   width: 100%;
   transition: border-color 0.35s;
-  font-size: 14px;
+  font-size: var(--font-size-text);
 }
 
 .modal__input:focus {
@@ -116,7 +122,7 @@
 
 .modal__toggle-label {
   margin-left: 15px;
-  font-size: 12px;
+  font-size: var(--font-size-small);
 }
 
 /* The switch - the box around the slider */
