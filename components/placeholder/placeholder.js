@@ -1,14 +1,45 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html, svg } from "lit-element";
+import * as Operations from "../editor/operations";
 import styles from "./placeholder.css";
-import "./icon/icon";
 
-class Placeholder extends LitElement {
+import closeIcon from "./icons/close.svg";
+import carouselIcon from "./icons/carousel.svg";
+import formattedTextIcon from "./icons/formatted-text.svg";
+import imageIcon from "./icons/image.svg";
+import miscIcon from "./icons/misc.svg";
+import textIcon from "./icons/text.svg";
+import textMediaIcon from "./icons/text-media.svg";
+import videoIcon from "./icons/video.svg";
+
+const icons = {
+  close: closeIcon,
+  formatted_text: formattedTextIcon,
+  carousel: carouselIcon,
+  image: imageIcon,
+  misc: miscIcon,
+  text: textIcon,
+  text_media: textMediaIcon,
+  video: videoIcon
+};
+
+function icon(section) {
+  if (section.svgIcon) {
+    return svg([section.svgIcon]);
+  }
+  if (icons[section.icon]) {
+    return svg([icons[section.icon]]);
+  }
+  return svg([icons.misc]);
+}
+
+export default class Placeholder extends LitElement {
   static get properties() {
     return {
       collapsed: { type: Boolean },
       closed: { type: Boolean },
       isOpen: { type: Boolean },
-      sections: { type: Array },
+      isExpanded: { type: Boolean },
+      sections: { type: String },
       labelOpen: { type: String },
       labelExpand: { type: String }
     };
@@ -18,10 +49,21 @@ class Placeholder extends LitElement {
     super();
     this.closed = false;
     this.collapsed = false;
-    this.isOpen = false;
     this.labelOpen = "Add";
     this.labelExpand = "Insert";
     this.sections = [];
+    this.isOpen = false;
+    this.isExpanded = false;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
+  getSections() {
+    return Placeholder.availableSections.filter(section =>
+      this.sections.split(" ").includes(section.id)
+    );
   }
 
   render() {
@@ -29,7 +71,7 @@ class Placeholder extends LitElement {
       <style>
         ${styles}
       </style>
-      ${!this.collapsed
+      ${!this.collapsed || this.isExpanded
         ? html`
             <div class="ck-placeholder__add-wrapper">
               ${this.closed
@@ -46,7 +88,7 @@ class Placeholder extends LitElement {
               ${!this.closed || this.isOpen
                 ? html`
                     <ul class="normalize-list ck-placeholder__sections-list">
-                      ${this.sections.map(
+                      ${this.getSections().map(
                         section => html`
                           <li class="ck-placeholder__section-item">
                             <button
@@ -56,9 +98,7 @@ class Placeholder extends LitElement {
                               class="normalize-button ck-placeholder__section-button"
                             >
                               <div class="ck-placeholder__icon-wrapper">
-                                <ck-placeholder-icon
-                                  iconId="${section.icon}"
-                                ></ck-placeholder-icon>
+                                ${icon(section)}
                               </div>
                               ${section.label}
                             </button>
@@ -66,7 +106,7 @@ class Placeholder extends LitElement {
                         `
                       )}
                     </ul>
-                    ${this.closed
+                    ${this.isOpen
                       ? html`
                           <button
                             @click="${this.clickCloseHandler}"
@@ -74,9 +114,7 @@ class Placeholder extends LitElement {
                             class="normalize-button ck-placeholder__close-button"
                           >
                             <div class="ck-placeholder__icon-wrapper">
-                              <ck-placeholder-icon
-                                iconId="close"
-                              ></ck-placeholder-icon>
+                              ${icon({ icon: "close" })}
                             </div>
                             <span class="ck-placeholder__close-button-label"
                               >Close</span
@@ -103,19 +141,11 @@ class Placeholder extends LitElement {
   }
 
   clickOpenHandler() {
-    if (this.sections.length === 1) {
-      this.clickSectionHandler(null, this.sections[0].id);
-    } else {
-      this.isOpen = !this.isOpen;
-    }
+    this.isOpen = !this.isOpen;
   }
 
   clickExpandHandler() {
-    if (this.sections.length === 1) {
-      this.clickSectionHandler(null, this.sections[0].id);
-    } else {
-      this.collapsed = false;
-    }
+    this.isExpanded = !this.isExpanded;
   }
 
   clickCloseHandler() {
@@ -123,7 +153,8 @@ class Placeholder extends LitElement {
   }
 
   clickSectionHandler(event, sectionId) {
-    this.dispatchEvent(new CustomEvent("addSection", { detail: sectionId }));
+    this.dispatchEvent(Operations.replace(sectionId, this));
+    this.isExpanded = false;
   }
 }
 

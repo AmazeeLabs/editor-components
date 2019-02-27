@@ -10,7 +10,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.css|\.svg$/,
         use: ["raw-loader"]
       }
     ]

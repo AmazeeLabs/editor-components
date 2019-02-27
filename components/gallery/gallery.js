@@ -1,12 +1,17 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html, svg } from "lit-element";
+import * as Operations from "../editor/operations";
 import styles from "./gallery.css";
-import "./icon/icon";
+
+import leftIcon from "./icons/leftArrow.svg";
+import rightIcon from "./icons/rightArrow.svg";
+import trashIcon from "./icons/trash.svg";
 
 class Gallery extends LitElement {
   static get properties() {
     return {
       items: Array,
-      currentGallery: Number
+      currentGallery: Number,
+      section: String
     };
   }
 
@@ -52,12 +57,7 @@ class Gallery extends LitElement {
           <div class="ck-gallery__pager">
             <div class="ck-gallery__dots">
               ${this.items.map(item => this.button(item))}
-            </div>
-            <div class="ck-gallery__add">
-              <span
-                @click="${() => this.addItem()}"
-                class="ck-gallery__add-slide"
-              >
+              <span @click="${() => this.addItem()}" class="ck-gallery__add">
                 +
               </span>
             </div>
@@ -68,23 +68,33 @@ class Gallery extends LitElement {
               <div
                 @click="${() => this.moveItem("left")}"
                 data-tooltip="Move element to the left"
-                class="ck-gallery__icon ck-gallery__icon--arrow-left"
+                class="ck-gallery__icon ck-gallery__icon--arrow-left ${this
+                  .currentGallery === 0
+                  ? "disabled"
+                  : ""}"
               >
-                <ck-gallery-icon iconId="iconLeftArrow"></ck-gallery-icon>
+                ${svg([leftIcon])}
               </div>
               <div
                 @click="${() => this.moveItem("right")}"
                 data-tooltip="Move element to the right"
-                class="ck-gallery__icon ck-gallery__icon--arrow-right"
+                class="ck-gallery__icon ck-gallery__icon--arrow-right ${this
+                  .currentGallery ===
+                this.items.length - 1
+                  ? "disabled"
+                  : ""}"
               >
-                <ck-gallery-icon iconId="iconRightArrow"></ck-gallery-icon>
+                ${svg([rightIcon])}
               </div>
               <div
                 @click="${() => this.deleteItem()}"
                 data-tooltip="Delete slide"
-                class="ck-gallery__icon ck-gallery__icon--arrow-trash"
+                class="ck-gallery__icon ck-gallery__icon--arrow-trash ${this
+                  .items.length < 2
+                  ? "disabled"
+                  : ""}"
               >
-                <ck-gallery-icon iconId="iconTrash"></ck-gallery-icon>
+                ${svg([trashIcon])}
               </div>
             </div>
           </div>
@@ -93,39 +103,42 @@ class Gallery extends LitElement {
     `;
   }
 
-  moveItem(position) {
-    const item = { position, index: this.currentGallery };
-    if (position === "left" && this.currentGallery !== 0) {
-      this.dispatchEvent(new CustomEvent("moveItem", { detail: item }));
-      this.currentGallery -= 1;
-    }
-    if (position === "right" && this.currentGallery !== this.items.length - 1) {
-      this.dispatchEvent(new CustomEvent("moveItem", { detail: item }));
-      this.currentGallery += 1;
-    }
-  }
-
   addItem() {
-    this.dispatchEvent(new Event("addItem"));
+    this.dispatchEvent(Operations.insert(this.section, this, "end"));
     this.currentGallery = this.items.length;
   }
 
   deleteItem() {
     if (this.items.length >= 2) {
-      this.dispatchEvent(
-        new CustomEvent("deleteItem", { detail: this.currentGallery })
-      );
-    }
-    if (this.currentGallery === this.items.length - 1) {
-      this.currentGallery -= 1;
+      this.dispatchEvent(Operations.remove(this.children[this.currentGallery]));
+      if (this.currentGallery === this.items.length - 1) {
+        this.currentGallery -= 1;
+      }
     }
   }
 
-  deleteItem() {
-    if (this.items.length >= 2) {
+  moveItem(position) {
+    if (position === "left" && this.currentGallery !== 0) {
       this.dispatchEvent(
-        new CustomEvent("deleteItem", { detail: this.currentGallery })
+        Operations.move(
+          this,
+          "before",
+          this.currentGallery,
+          this.currentGallery - 1
+        )
       );
+      this.currentGallery -= 1;
+    }
+    if (position === "right" && this.currentGallery !== this.items.length - 1) {
+      this.dispatchEvent(
+        Operations.move(
+          this,
+          "before",
+          this.currentGallery,
+          this.currentGallery + 1
+        )
+      );
+      this.currentGallery += 1;
     }
   }
 
@@ -147,24 +160,8 @@ class Gallery extends LitElement {
     }
 
     // Update image slide
-
     this.currentGallery = index;
   }
 }
 
-class GalleryItem extends LitElement {
-  render() {
-    return html`
-      <style>
-        ${styles}
-      </style>
-
-      <div class="ck-gallery__item">
-        <slot></slot>
-      </div>
-    `;
-  }
-}
-
 customElements.define("ck-gallery", Gallery);
-customElements.define("ck-gallery-item", GalleryItem);

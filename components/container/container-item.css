@@ -1,0 +1,52 @@
+:host {
+  --button-size: 3em;
+  --button-background-color: black;
+  --button-foreground-color: white;
+  --outline-color: #004adc;
+  position: relative;
+  display: block;
+}
+
+.hovered .item {
+  outline-style: solid;
+  outline-width: 2px;
+  outline-color: var(--outline-color);
+}
+
+.controls {
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  display: flex;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.hovered .controls {
+  opacity: 1;
+}
+
+.controls button {
+  border: none;
+  background: var(--button-background-color);
+  width: var(--button-size);
+  height: var(--button-size);
+  display: flex;
+  cursor: pointer;
+}
+
+svg {
+  width: 100%;
+}
+svg * {
+  fill: var(--button-foreground-color);
+}
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: auto;
+}
+
+ck-placeholder[collapsed="true"] {
+  height: 0;
+}
