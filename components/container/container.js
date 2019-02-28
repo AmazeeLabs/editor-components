@@ -78,7 +78,7 @@ class ContainerItem extends DiffElement {
       </button>
     `;
 
-    return super.render(html`
+    return html`
       <div class="${this.isHovered ? "hovered" : ""}">
         ${this.inContainer
           ? html`
@@ -96,10 +96,14 @@ class ContainerItem extends DiffElement {
             `
           : null}
         <div class="${this.inContainer ? "item" : ""}">
-          <slot></slot>
+          ${super.render(
+            html`
+              <slot></slot>
+            `
+          )}
         </div>
       </div>
-    `);
+    `;
   }
 
   upHandler() {

@@ -1,31 +1,33 @@
 :host{
-  --color-light-green: rgba(91, 200, 156, 0.5);
-  --color-light-red: rgba(215, 34, 34, 0.5);
+  --color-light-green: rgba(91, 200, 156, 0.3);
+  --color-light-red: rgba(215, 34, 34, 0.3);
   --color-green: #5bc89c;
   --color-red: #d72222;
+  --highlight-padding: 5px;
 }
 
 .overlay {
   position: relative;
-  border: 2px solid var(--color-green);
 }
 
 .overlay.removed {
-  border: 2px solid var(--color-red);
 }
 
 .overlay__background {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  border: 2px solid var(--color-green);
+  top: calc(var(--highlight-padding) * -1);
+  left: calc(var(--highlight-padding) * -1);
+  bottom: calc(var(--highlight-padding) * -1);
+  right: calc(var(--highlight-padding) * -1);
   background: var(--color-light-green);
+  transform: scale(1.02);
   z-index: 5;
 }
 
 .removed .overlay__background {
   background: var(--color-light-red);
+  border: 2px solid var(--color-red);
 }
 
 .actions {
