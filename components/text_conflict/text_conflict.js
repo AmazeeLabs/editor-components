@@ -1,4 +1,5 @@
 import { LitElement, html } from "lit-element";
+import * as Operations from "../editor/operations";
 import styles from "./text_conflict.css";
 
 class TextConflict extends LitElement {
@@ -64,9 +65,7 @@ class TextConflict extends LitElement {
     this.resolved = true;
     this.isResolving = false;
     this.label = event.detail;
-    this.dispatchEvent(
-      new CustomEvent("resolveTextConflict", { detail: event.detail })
-    );
+    this.dispatchEvent(Operations.swap(event.detail, this));
   }
 }
 

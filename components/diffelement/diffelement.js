@@ -22,7 +22,7 @@ export default class DiffElement extends LitElement {
 
   handleAccept() {
     if (this.added) {
-      this.removeAttribute("added");
+      this.dispatchEvent(Operations.removeAttribute(this, "added"));
     } else {
       this.dispatchEvent(Operations.remove(this));
     }
@@ -30,7 +30,7 @@ export default class DiffElement extends LitElement {
 
   handleDecline() {
     if (this.removed) {
-      this.removeAttribute("removed");
+      this.dispatchEvent(Operations.removeAttribute(this, "removed"));
     } else {
       this.dispatchEvent(Operations.remove(this));
     }

@@ -54,3 +54,17 @@ export const attributes = (target, attr) =>
     target,
     attr
   });
+
+export const removeAttribute = (target, key) =>
+  createEvent({
+    operation: "removeAttribute",
+    target,
+    key
+  });
+
+export const swap = (source, target) =>
+  createEvent({
+    operation: "wap",
+    source,
+    target
+  });
