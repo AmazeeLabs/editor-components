@@ -77,14 +77,25 @@ export default class Editor extends LitElement {
     Object.keys(attr).forEach(key => target.setAttribute(key, attr[key]));
   }
 
+  static removeAttributeKey({ detail: { target, key } }) {
+    target.removeAttribute(key);
+  }
+
+  static swap({ detail: { source, target } }) {
+    target.parent.insertBefore(source, target);
+    target.parent.removeChild(target);
+  }
+
   static dispatchOperation(event) {
     ({
       batch: () => Editor.batch(event),
       insert: () => Editor.insertElement(event),
       move: () => Editor.moveElement(event),
       replace: () => Editor.replaceElement(event),
+      swap: () => Editor.swap(event),
       remove: () => Editor.removeElement(event),
-      attributes: () => Editor.setAttributes(event)
+      attributes: () => Editor.setAttributes(event),
+      removeAttribute: () => Editor.removeAttributeKey(event)
     }[event.detail.operation]());
   }
 

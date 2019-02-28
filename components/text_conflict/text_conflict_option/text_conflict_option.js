@@ -28,7 +28,7 @@ class TextConflictOption extends LitElement {
   optionSelected() {
     this.dispatchEvent(
       new CustomEvent("optionSelected", {
-        detail: this.children.item(0).cloneNode(true)
+        detail: this.children.item(0)
       })
     );
   }
