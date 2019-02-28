@@ -64,7 +64,7 @@ export const removeAttribute = (target, key) =>
 
 export const swap = (source, target) =>
   createEvent({
-    operation: "wap",
+    operation: "swap",
     source,
     target
   });
