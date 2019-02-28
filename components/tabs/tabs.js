@@ -97,7 +97,6 @@ class Tabs extends LitElement {
       <style>
         ${styles}
       </style>
-
       <div class="ck-tabs">
         <div class="ck-tabs__header">
           <ul class="ck-tabs__header-tab-list">
@@ -275,7 +274,6 @@ class Modal extends LitElement {
       <style>
         ${modalStyles}
       </style>
-
       <div class="modal ${this.isVisible ? "visible" : ""}">
         <div class="modal__item">
           <h3 class="modal__title">Edit tab</h3>
