@@ -6,6 +6,12 @@
   --color-black-30: rgba(0, 0, 0, 0.3);
   --color-grey-light: #CCC;
   --color-white: #FFF;
+  --font-size-text: 16px;
+  --baseline: 8px;
+  --baseline2: 16px;
+  --baseline3: 24px;
+  --baseline4: 32px;
+  --baseline5: 40px;
   font-style: initial;
   font-weight: initial;
   font-family: var(--font-family, sans-serif);
@@ -27,20 +33,24 @@
 
 
 .ck-tabs__header-tab-item {
-  padding: 0 20px 10px 20px;
+  padding: 0 var(--baseline3) var(--baseline2) var(--baseline3);
   border-bottom: 1px solid var(--color-grey-light);
   margin-bottom: -1px;
   cursor: pointer;
+  position: relative;
+  font-size: var(--font-size-text);
   position: relative;
 }
 
 .ck-tabs__header-icon {
   height: 0;
   width: 0;
-  display: inline-block;
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .ck-tabs__header-tab-item.active {
@@ -51,9 +61,8 @@
 }
 
 .ck-tabs__header-tab-item.active .ck-tabs__header-icon {
-  margin-left: 10px;
-  width: 16px;
-  height: 16px;
+  width: var(--baseline2);
+  height: var(--baseline2);
 }
 
 .ck-tabs__header-tab-item.active:hover .ck-tabs__header-icon {
@@ -65,14 +74,14 @@
   content: '*';
   margin-right: 5px;
   font-size: 19px;
-  height: 15px;
+  height: var(--baseline2);
   position: absolute;
   left: 5px;
-  top: 3px;
+  top: 0;
 }
 
 .ck-tabs__header-tab-add {
-  margin-left: 20px;
+  margin-left: var(--baseline3);
   cursor: pointer;
   height: 20px;
   width: 20px;
