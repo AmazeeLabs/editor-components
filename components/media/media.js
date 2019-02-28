@@ -25,16 +25,20 @@ class Media extends LitElement {
     const observer = new MutationObserver(mutationsList => {
       mutationsList.forEach(mutation => {
         if (mutation.attributeName === "media-uuid") {
-          self.loaderIsVisible = true;
           self.mediaUuid = self.getAttribute(mutation.attributeName);
-          // here I call the external callback (too quick to show the loader)
-          // to test it just wrap the function below into a setTimout()
           Media.previewCallback(
             self.mediaUuid,
             preview => (self.preview = preview)
           );
           self.loaderIsVisible = false;
           this.previewIsVisible = true;
+          self.dispatchEvent(new Event('removeLoader'));
+        }
+        if (mutation.attributeName === "media-loader") {
+          self.mediaLoader = self.getAttribute(mutation.attributeName);
+          if (self.getAttribute(mutation.attributeName) === "active") {
+            self.loaderIsVisible = true;
+          }
         }
       });
     });
@@ -69,17 +73,6 @@ class Media extends LitElement {
 }
 
 class MediaLoader extends LitElement {
-  static get properties() {
-    return {
-      isVisible: Boolean
-    };
-  }
-
-  constructor() {
-    super();
-    this.isVisible = false;
-  }
-
   render() {
     return html`
       <style>
@@ -100,7 +93,7 @@ class MediaLoader extends LitElement {
 Media.previewCallback = (uuid, callback) =>
   callback(
     html`
-      <img src="https://i0.wp.com/grapevine.is/wp-content/uploads/${uuid}" />
+      <img src="https://placekitten.com/500/${uuid}" />
     `
   );
 

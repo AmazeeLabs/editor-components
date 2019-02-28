@@ -7,17 +7,15 @@ storiesOf("Media", module).add("Default", () => {
   media.style.height = "300px";
   media.style.display = "block";
   media.setAttribute("media-uuid", ``);
-  // create button for changing attribute
-  const button = document.createElement("button");
-  button.innerHTML = `Upload Image`;
-  button.style.display = "block";
-  button.onclick = () => {
-    media.setAttribute(
-      "media-uuid",
-      `Screen-Shot-2016-04-25-at-15.34.461.png?quality=95&resize=500,300`
-    );
+  media.setAttribute("media-loader", ``);
+  media.onclick = () => {
+    media.setAttribute("media-loader", `active`);
+    window.setTimeout(() => {
+      media.setAttribute("media-uuid", 200 + Math.ceil(Math.random() * 200));
+    }, 3000);
   };
-  const body = document.querySelectorAll("body");
-  body[0].appendChild(button);
+  media.addEventListener('removeLoader', () => {
+    media.setAttribute("media-loader", ``);
+  });
   return media;
 });
