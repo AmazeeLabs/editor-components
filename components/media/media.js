@@ -11,7 +11,7 @@ const mediaLoader = html`
   </div>
 `;
 
-class Media extends LitElement {
+export default class Media extends LitElement {
   static get properties() {
     return {
       loaderIsVisible: Boolean,
