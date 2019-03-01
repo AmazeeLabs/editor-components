@@ -24,7 +24,7 @@ class Media extends LitElement {
 
     const observer = new MutationObserver(mutationsList => {
       mutationsList.forEach(mutation => {
-        if (mutation.attributeName === "media-uuid") {
+        if (mutation.attributeName === "data-media-uuid") {
           self.mediaUuid = self.getAttribute(mutation.attributeName);
           Media.previewCallback(
             self.mediaUuid,

@@ -6,12 +6,12 @@ storiesOf("Media", module).add("Default", () => {
   media.style.width = "500px";
   media.style.height = "300px";
   media.style.display = "block";
-  media.setAttribute("media-uuid", ``);
+  media.setAttribute("data-media-uuid", ``);
   media.setAttribute("media-loader", ``);
   media.onclick = () => {
     media.setAttribute("media-loader", `active`);
     window.setTimeout(() => {
-      media.setAttribute("media-uuid", 200 + Math.ceil(Math.random() * 200));
+      media.setAttribute("data-media-uuid", 200 + Math.ceil(Math.random() * 200));
     }, 3000);
   };
   media.addEventListener('removeLoader', () => {
