@@ -91,7 +91,7 @@
   border-radius: 50%;
   transition: background-color 0.35s ease;
   position: relative;
-  margin-bottom: 0.9em;
+  margin-bottom: 15px;
 }
 
 .ck-tabs__header-tab-add::before {
