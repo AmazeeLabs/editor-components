@@ -10,6 +10,7 @@
   --color-grey-light: #CCC;
   --color-white: #FFF;
   --align-buttons: left;
+  --height-ratio: 50%;
   font-family: var(--font-family, sans-serif);
 }
 
@@ -22,7 +23,7 @@
 
 .ck-media__placeholder {
   width: 100%;
-  padding-bottom: 50%;
+  padding-bottom: var(--height-ratio);
   background: repeating-linear-gradient(
   45deg,
   var(--color-white),
