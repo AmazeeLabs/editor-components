@@ -1,53 +1,34 @@
 import { LitElement, html } from "lit-element";
 import styles from "./media.css";
 
+const mediaLoader = html`
+  <div class="ck-media__loader">
+    <div class="ck-media__spinner">
+      <div class="ck-media__bounce ck-media__bounce--1"></div>
+      <div class="ck-media__bounce ck-media__bounce--2"></div>
+      <div class="ck-media__bounce ck-media__bounce--3"></div>
+    </div>
+  </div>
+`;
+
 class Media extends LitElement {
   static get properties() {
     return {
-      previewIsVisible: Boolean,
       loaderIsVisible: Boolean,
-      mediaUuid: String,
+      mediaUuid: { attribute: "data-media-uuid", type: String },
+      mediaDisplay: { attribute: "data-media-display", type: String },
       preview: String
     };
   }
 
-  constructor() {
-    super();
-    this.previewIsVisible = false;
-    this.loaderIsVisible = false;
-    this.preview = null;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    const self = this;
-
-    const observer = new MutationObserver(mutationsList => {
-      mutationsList.forEach(mutation => {
-        if (mutation.attributeName === "data-media-uuid") {
-          self.mediaUuid = self.getAttribute(mutation.attributeName);
-          Media.previewCallback(
-            self.mediaUuid,
-            preview => (self.preview = preview)
-          );
-          self.loaderIsVisible = false;
-          this.previewIsVisible = true;
-          self.dispatchEvent(new Event('removeLoader'));
-        }
-        if (mutation.attributeName === "media-loader") {
-          self.mediaLoader = self.getAttribute(mutation.attributeName);
-          if (self.getAttribute(mutation.attributeName) === "active") {
-            self.loaderIsVisible = true;
-          }
-        }
+  updated(properties) {
+    if (properties.has("mediaUuid") && this.mediaUuid) {
+      this.loaderIsVisible = true;
+      Media.previewCallback(this.mediaUuid, this.mediaDisplay, preview => {
+        this.preview = preview;
+        this.loaderIsVisible = false;
       });
-    });
-
-    observer.observe(self, {
-      attributes: true,
-      childList: false,
-      subtree: false
-    });
+    }
   }
 
   render() {
@@ -57,7 +38,7 @@ class Media extends LitElement {
       </style>
 
       <div class="ck-media">
-        ${this.previewIsVisible
+        ${this.preview
           ? html`
               <div class="ck-media__preview">
                 ${this.preview}
@@ -66,36 +47,19 @@ class Media extends LitElement {
           : html`
               <div class="ck-media__placeholder"></div>
             `}
-        <ck-media-loader class="${this.loaderIsVisible ? "active" : ""}" />
+        ${this.loaderIsVisible ? mediaLoader : null}
       </div>
     `;
   }
 }
 
-class MediaLoader extends LitElement {
-  render() {
-    return html`
-      <style>
-        ${styles}
-      </style>
-
-      <div class="ck-media__loader">
-        <div class="ck-media__spinner">
-          <div class="ck-media__bounce ck-media__bounce--1"></div>
-          <div class="ck-media__bounce ck-media__bounce--2"></div>
-          <div class="ck-media__bounce ck-media__bounce--3"></div>
-        </div>
-      </div>
-    `;
-  }
-}
-
-Media.previewCallback = (uuid, callback) =>
-  callback(
-    html`
-      <img src="https://placekitten.com/500/${uuid}" />
-    `
-  );
+Media.previewCallback = (uuid, display, callback) =>
+  window.setTimeout(() => {
+    callback(
+      html`
+        <img src="https://placekitten.com/500/${uuid}" />
+      `
+    );
+  }, 3000);
 
 customElements.define("ck-media", Media);
-customElements.define("ck-media-loader", MediaLoader);

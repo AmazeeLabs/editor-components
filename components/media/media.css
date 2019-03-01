@@ -50,16 +50,10 @@
 
 
 ck-media-loader {
-  opacity: 0;
-  visibility: hidden;
+  opacity: 1;
+  visibility: visible;
   transition: all 0.2s ease;
   pointer-events: none;
-}
-
-ck-media-loader.active {
-  visibility: visible;
-  opacity: 1;
-  pointer-events: auto;
 }
 
 .ck-media__spinner {
@@ -94,10 +88,10 @@ ck-media-loader.active {
 }
 
 @keyframes ck-bounce {
-  0%, 80%, 100% { 
+  0%, 80%, 100% {
     -webkit-transform: scale(0);
     transform: scale(0);
-  } 40% { 
+  } 40% {
     -webkit-transform: scale(1.0);
     transform: scale(1.0);
   }
