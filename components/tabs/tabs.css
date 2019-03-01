@@ -33,7 +33,7 @@
 
 
 .ck-tabs__header-tab-item {
-  padding: 0 var(--baseline3) var(--baseline2) var(--baseline3);
+  padding: 0 var(--baseline3) 0 var(--baseline3);
   border-bottom: 1px solid var(--color-grey-light);
   margin-bottom: -1px;
   cursor: pointer;
