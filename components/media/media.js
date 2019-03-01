@@ -21,13 +21,22 @@ export default class Media extends LitElement {
     };
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
   updated(properties) {
+    this.previewPane = this.shadowRoot.querySelector(".ck-media__preview");
     if (properties.has("mediaUuid") && this.mediaUuid) {
       this.loaderIsVisible = true;
       Media.previewCallback(this.mediaUuid, this.mediaDisplay, preview => {
         this.preview = preview;
         this.loaderIsVisible = false;
       });
+    }
+
+    if (properties.has("preview") && this.preview) {
+      this.previewPane.innerHTML = this.preview;
     }
   }
 
@@ -36,17 +45,13 @@ export default class Media extends LitElement {
       <style>
         ${styles}
       </style>
-
       <div class="ck-media">
-        ${this.preview
-          ? html`
-              <div class="ck-media__preview">
-                ${this.preview}
-              </div>
-            `
-          : html`
-              <div class="ck-media__placeholder"></div>
-            `}
+        <div
+          class="ck-media__preview ${this.preview ? "visible" : "hidden"}"
+        ></div>
+        <div
+          class="ck-media__placeholder ${this.preview ? "hidden" : "visible"}"
+        ></div>
         ${this.loaderIsVisible ? mediaLoader : null}
       </div>
     `;
@@ -55,11 +60,7 @@ export default class Media extends LitElement {
 
 Media.previewCallback = (uuid, display, callback) =>
   window.setTimeout(() => {
-    callback(
-      html`
-        <img src="https://placekitten.com/500/${uuid}" />
-      `
-    );
+    callback(`<img src="https://placekitten.com/500/${uuid}" />`);
   }, 3000);
 
 customElements.define("ck-media", Media);
