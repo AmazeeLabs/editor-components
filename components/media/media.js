@@ -36,7 +36,7 @@ export default class Media extends LitElement {
     }
 
     if (properties.has("preview") && this.preview) {
-      this.previewPane.innerHTML = this.preview;
+      this.innerHTML = this.preview;
     }
   }
 
@@ -46,9 +46,9 @@ export default class Media extends LitElement {
         ${styles}
       </style>
       <div class="ck-media">
-        <div
-          class="ck-media__preview ${this.preview ? "visible" : "hidden"}"
-        ></div>
+        <div class="ck-media__preview ${this.preview ? "visible" : "hidden"}">
+          <slot></slot>
+        </div>
         <div
           class="ck-media__placeholder ${this.preview ? "hidden" : "visible"}"
         ></div>
