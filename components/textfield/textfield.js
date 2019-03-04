@@ -5,7 +5,7 @@ export default class TextField extends LitElement {
     return {
       pattern: { attribute: "ck-pattern", type: String },
       hasPatternError: { type: Boolean },
-      errorMessage: { attribute: "ck-message-error", type: String },
+      patternErrorMessage: { attribute: "ck-message-error", type: String },
       minLength: { attribute: "ck-min", type: Number },
       maxLength: { attribute: "ck-max", type: Number },
       hasLengthError: { type: Boolean },
@@ -15,45 +15,40 @@ export default class TextField extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    new MutationObserver(this.validate).observe(this, {
+      childList: true,
+      subtree: true
+    });
     this.addEventListener("input", this.validate);
   }
 
   validate() {
     console.log(this.innerText);
-    // TODO: Check error against pattern and min/max length.
   }
 
   render() {
     // language=HTML
     return html`
-      ${
-        this.helper
-          ? html`
-              <div class="helper">${this.helper}</div>
-            `
-          : null
-      }
-      ${
-        this.hasLengthError
-          ? html`
-              <div class="error">${"Length error"}</div>
-            `
-          : null
-      }
-      ${
-        this.hasPatternError
-          ? html`
-              <div class="error">${"Pattern error"}</div>
-            `
-          : null
-      }
+      ${this.helper
+        ? html`
+            <div class="helper">${this.helper}</div>
+          `
+        : null}
+      ${this.hasLengthError
+        ? html`
+            <div class="error">${"Length error"}</div>
+          `
+        : null}
+      ${this.hasPatternError
+        ? html`
+            <div class="error">${"Pattern error"}</div>
+          `
+        : null}
       <div
-        class="${
-          this.hasPatternError || this.hasLengthError
-            ? "is-valid"
-            : "is-invalid"
-        }"
-        }">
+        class="${this.hasPatternError || this.hasLengthError
+          ? "is-valid"
+          : "is-invalid"}"
+      >
         <slot></slot>
       </div>
     `;
