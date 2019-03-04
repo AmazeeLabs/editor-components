@@ -2,9 +2,10 @@ import { LitElement, html } from "lit-element";
 import { eventType } from "./operations";
 import Placeholder from "../placeholder/placeholder";
 import text from "!raw-loader!./templates/text.html";
+import added from "!raw-loader!./templates/added.html";
+import removed from "!raw-loader!./templates/removed.html";
 import gallery from "!raw-loader!./templates/gallery.html";
 import image from "!raw-loader!./templates/image.html";
-import page from "!raw-loader!./templates/page.html";
 import columns from "!raw-loader!./templates/columns.html";
 
 export default class Editor extends LitElement {
@@ -119,7 +120,9 @@ Editor.dummySetup = story => {
         .replace("%width", 800)
         .replace("%height", Math.ceil(200 + Math.random() * 200)),
     gallery: () => gallery.replace("%content", Editor.templates.image()),
-    columns: () => columns
+    columns: () => columns,
+    added: () => added,
+    removed: () => removed
   };
   Placeholder.availableSections = [
     { id: "text", label: "Text", icon: "text" },

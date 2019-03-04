@@ -20,4 +20,13 @@ storiesOf("Container", module)
     </ck-container>
   `
   )
-  .add("single item", () => Editor.templates.image());
+  .add("single item", () => Editor.templates.image())
+  .add(
+    "merged",
+    () => `
+    <ck-container sections="text image">
+      ${Editor.templates.added()}
+      ${Editor.templates.removed()}
+    </ck-container>
+  `
+  );

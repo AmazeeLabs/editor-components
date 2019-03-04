@@ -87,12 +87,19 @@ class ContainerItem extends DiffElement {
                 @ckEditorOperation="${event => this.insertHandler(event)}"
                 sections="${this.containerSections}"
               ></ck-placeholder>
-              <div class="controls">
-                ${upButton} ${downButton}
-                <button class="remove" @click="${() => this.removeHandler()}">
-                  ${svg([iconDelete])}
-                </button>
-              </div>
+              ${this.added || this.removed
+                ? null
+                : html`
+                    <div class="controls">
+                      ${upButton} ${downButton}
+                      <button
+                        class="remove"
+                        @click="${() => this.removeHandler()}"
+                      >
+                        ${svg([iconDelete])}
+                      </button>
+                    </div>
+                  `}
             `
           : null}
         <div class="${this.inContainer ? "item" : ""}">
