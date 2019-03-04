@@ -7,15 +7,15 @@ storiesOf("Text Conflict", module).add("Default", () => {
   textConflict.setAttribute("label", "Conflict needs resolving");
 
   const options = [
-    { label: "HQ Version", content: "<p>HQ version text</p>" },
-    { label: "Market A Version", content: "<p>Market A text</p>" },
-    { label: "Market B Version", content: "<p>Market B text</p>" },
-    { label: "Empty", content: "" }
+    { from: "source", content: "<p>HQ version text</p>" },
+    { from: "left", content: "<p>Market A text</p>" },
+    { from: "right", content: "<p>Market B text</p>" },
+    { from: "empty", content: "" }
   ];
 
   options.forEach(option => {
     const textOption = document.createElement("ck-conflict-option");
-    textOption.setAttribute("label", option.label);
+    textOption.setAttribute("from", option.from);
 
     const optionContent = document.createElement("div");
     optionContent.innerHTML = option.content;

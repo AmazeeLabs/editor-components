@@ -13,7 +13,7 @@ class TextConflict extends LitElement {
 
   constructor() {
     super();
-    this.label = "Conflict needs resolving";
+    this.label = TextConflict.label;
     this.resolved = false;
     this.isResolving = false;
   }
@@ -64,9 +64,10 @@ class TextConflict extends LitElement {
   selectOptionHandler(event) {
     this.resolved = true;
     this.isResolving = false;
-    this.label = event.detail;
     this.dispatchEvent(Operations.swap(event.detail, this));
   }
 }
+
+TextConflict.label = "Conflict needs resolving";
 
 customElements.define("ck-conflict-text", TextConflict);

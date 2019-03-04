@@ -4,13 +4,12 @@ import styles from "./text_conflict_option.css";
 class TextConflictOption extends LitElement {
   static get properties() {
     return {
-      label: { type: String }
+      from: { type: String }
     };
   }
 
   constructor() {
     super();
-    this.label = "Empty";
   }
 
   render() {
@@ -19,7 +18,9 @@ class TextConflictOption extends LitElement {
         ${styles}
       </style>
       <div class="option" @click="${this.optionSelected}">
-        <span class="option__label">${this.label}</span>
+        <span class="option__label"
+          >${TextConflictOption.labels[this.from]}</span
+        >
         <span class="option__content"><slot></slot></span>
       </div>
     `;
@@ -33,5 +34,12 @@ class TextConflictOption extends LitElement {
     );
   }
 }
+
+TextConflictOption.labels = {
+  left: "Left version",
+  right: "Right version",
+  source: "Source version",
+  empty: "Clear"
+};
 
 customElements.define("ck-conflict-option", TextConflictOption);
