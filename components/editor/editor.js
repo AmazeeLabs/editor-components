@@ -83,8 +83,8 @@ export default class Editor extends LitElement {
   }
 
   static swap({ detail: { source, target } }) {
-    target.parent.insertBefore(source, target);
-    target.parent.removeChild(target);
+    target.parentElement.insertBefore(source, target);
+    target.parentElement.removeChild(target);
   }
 
   static dispatchOperation(event) {

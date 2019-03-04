@@ -4,12 +4,15 @@ import styles from "./text_conflict_option.css";
 class TextConflictOption extends LitElement {
   static get properties() {
     return {
-      from: { type: String }
+      from: { type: String },
+      content: { type: String }
     };
   }
 
-  constructor() {
-    super();
+  connectedCallback() {
+    super.connectedCallback();
+    // TODO: Keep span markup, but drop block elements.
+    this.content = this.innerText;
   }
 
   render() {
@@ -21,7 +24,7 @@ class TextConflictOption extends LitElement {
         <span class="option__label"
           >${TextConflictOption.labels[this.from]}</span
         >
-        <span class="option__content"><slot></slot></span>
+        <span class="option__content">${this.content}</span>
       </div>
     `;
   }

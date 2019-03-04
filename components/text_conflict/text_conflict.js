@@ -64,6 +64,7 @@ class TextConflict extends LitElement {
   selectOptionHandler(event) {
     this.resolved = true;
     this.isResolving = false;
+    console.log(this, event.detail);
     this.dispatchEvent(Operations.swap(event.detail, this));
   }
 }
