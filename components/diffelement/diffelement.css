@@ -21,7 +21,6 @@
   bottom: calc(var(--highlight-padding) * -1);
   right: calc(var(--highlight-padding) * -1);
   background: var(--color-light-green);
-  transform: scale(1.02);
   z-index: 5;
 }
 
