@@ -3,7 +3,7 @@
   --color-light-red: rgba(215, 34, 34, 0.3);
   --color-green: #5bc89c;
   --color-red: #d72222;
-  --highlight-padding: 5px;
+  --highlight-padding: 0;
 }
 
 .overlay {
