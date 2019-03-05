@@ -3,7 +3,7 @@ import "./media";
 
 storiesOf("Media", module).add("Default", () => {
   const media = document.createElement("ck-media");
-  media.style.maxWidth = "400px";
+  media.style.maxWidth = "500px";
   media.style.display = "block";
   media.setAttribute("data-media-uuid", ``);
   media.setAttribute("data-media-display", `default`);
@@ -11,5 +11,8 @@ storiesOf("Media", module).add("Default", () => {
   media.onclick = () => {
     media.setAttribute("data-media-uuid", 200 + Math.ceil(Math.random() * 200));
   };
+  media.addEventListener("removeLoader", () => {
+    media.setAttribute("media-loader", ``);
+  });
   return media;
 });
