@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit-element";
+import styles from "./textfield.css";
 
 export default class TextField extends LitElement {
   static get properties() {
@@ -23,33 +24,46 @@ export default class TextField extends LitElement {
   }
 
   validate() {
-    console.log(this.innerText);
+    if (this.hasAttribute("ck-max")) {
+      this.helper = true;
+    }
+    console.log(this.getAttribute('ck-max'), this.innerText);
   }
 
   render() {
     // language=HTML
     return html`
-      ${this.helper
-        ? html`
-            <div class="helper">${this.helper}</div>
-          `
-        : null}
-      ${this.hasLengthError
-        ? html`
-            <div class="error">${"Length error"}</div>
-          `
-        : null}
-      ${this.hasPatternError
-        ? html`
-            <div class="error">${"Pattern error"}</div>
-          `
-        : null}
+      <style>
+        ${styles}
+      </style>
+
       <div
-        class="${this.hasPatternError || this.hasLengthError
-          ? "is-valid"
-          : "is-invalid"}"
+        class="ck-textfield ${this.hasPatternError || this.hasLengthError
+          ? "error"
+          : null}"
       >
-        <slot></slot>
+        ${this.helper
+          ? html`
+              <div class="ck-tooltip ck-tooltip--helper">${this.helper}</div>
+            `
+          : null}
+        ${this.hasLengthError
+          ? html`
+              <div class="ck-tooltip ck-tooltip--error">${"Length error"}</div>
+            `
+          : null}
+        ${this.hasPatternError
+          ? html`
+              <div class="ck-tooltip ck-tooltip--error">${"Pattern error"}</div>
+            `
+          : null}
+        <div
+          class="${this.hasPatternError || this.hasLengthError
+            ? "is-valid"
+            : "is-invalid"}"
+        >
+          <slot></slot>
+        </div>
       </div>
     `;
   }
