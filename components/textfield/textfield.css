@@ -11,6 +11,8 @@
   font-style: initial;
   font-weight: initial;
   position: relative;
+  display: block;
+  outline: none;
 }
 
 .ck-textfield {
