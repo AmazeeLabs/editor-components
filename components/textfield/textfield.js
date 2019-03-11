@@ -30,8 +30,12 @@ export default class TextField extends LitElement {
       this.hasHelper = false;
     });
 
-    if (this.maxLength && !this.minLength) {
-      this.addEventListener("input", this.validate);
+    if (this.maxLength) {
+      this.addEventListener("input", this.maxValidation);
+    }
+
+    if (TextField.initializeWithErrors) {
+      this.validate();
     }
   }
 
