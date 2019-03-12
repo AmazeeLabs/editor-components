@@ -28,7 +28,6 @@ class Button extends LitElement {
   }
 
   render() {
-    console.log(this);
     return html`
       <style>
         ${styles}
