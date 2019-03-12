@@ -13,12 +13,13 @@ storiesOf("Button", module).add(
     button.style.color = "white";
     button.style.setProperty("--icon-color", "white");
     button.style.borderRadius = "1.5em";
-    button.setAttribute("target", "http://drupal.org");
+    button.setAttribute("link-target", "http://drupal.org");
+    button.setAttribute("contenteditable", true);
     button.addEventListener("selectLink", event => {
       if (event.detail) {
-        button.removeAttribute("target");
+        button.removeAttribute("link-target");
       } else {
-        button.setAttribute("target", "http://drupal.org");
+        button.setAttribute("link-target", "http://drupal.org");
       }
     });
     return button;
