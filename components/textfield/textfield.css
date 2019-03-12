@@ -7,6 +7,10 @@
   --color-grey-light: #CCC;
   --color-white: #FFF;
   --align-buttons: left;
+  --font-size-small: 14px;
+  --font-size-text: 16px;
+  --baseline: 8px;
+  --baseline2: 16px;
   font-family: var(--font-family, sans-serif);
   font-style: initial;
   font-weight: initial;
@@ -17,7 +21,7 @@
 
 .ck-textfield {
   position: relative;
-  padding: 8px;
+  padding: var(--baseline);
 }
 
 .ck-textfield.error {
@@ -29,10 +33,10 @@
   top: 0;
   left: 0;
   transform: translate(-1px, -100%);
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: var(--baseline) var(--baseline2);
+  border-radius: var(--baseline);
   border-bottom-left-radius: 0;
-  font-size: 14px;
+  font-size: var(--font-size-small);
 }
 
 .ck-tooltip--error {
