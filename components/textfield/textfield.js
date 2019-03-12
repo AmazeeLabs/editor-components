@@ -6,7 +6,7 @@ export default class TextField extends LitElement {
     return {
       pattern: { attribute: "ck-pattern", type: String },
       hasPatternError: { type: Boolean },
-      patternErrorMessage: { attribute: "ck-error-message", type: String },
+      errorMessage: { attribute: "ck-error-message", type: String },
       minLength: { attribute: "ck-min", type: Number },
       maxLength: { attribute: "ck-max", type: Number },
       hasLengthError: { type: Boolean },
@@ -31,8 +31,17 @@ export default class TextField extends LitElement {
     });
 
     if (this.maxLength && !this.minLength) {
-      this.addEventListener("input", this.validate);
+      this.addEventListener("input", this.handleMax);
     }
+
+    // textfield errors immediately highlighted
+    if (TextField.initializeWithErrors) this.validate();
+  }
+
+  handleMax() {
+    this.helper = `${this.maxLength - this.innerText.length} characters remaining`;
+    this.setHelper();
+    this.maxValidation();
   }
 
   validate() {
@@ -48,7 +57,11 @@ export default class TextField extends LitElement {
   }
 
   maxValidation() {
-    if (this.innerText.length > this.maxLength) {
+    if (this.innerText.length > this.maxLength && !this.minLength) {
+      if (!this.errorMessage) {
+        this.errorMessage = `Please enter no more than 
+          ${this.maxLength} letters.`;
+      }
       this.hasLengthError = true;
     } else {
       this.hasLengthError = false;
@@ -58,6 +71,10 @@ export default class TextField extends LitElement {
 
   minValidation() {
     if (this.innerText.length < this.minLength) {
+      if (!this.errorMessage) {
+        this.errorMessage = `Please enter at least 
+          ${this.minLength} letters.`;
+      }
       this.hasLengthError = true;
     } else {
       this.hasLengthError = false;
@@ -71,11 +88,16 @@ export default class TextField extends LitElement {
     ) {
       this.hasLengthError = false;
     } else {
+      if (!this.errorMessage) {
+        this.errorMessage = `Please enter letters between 
+        ${this.minLength} and ${this.maxLength}.`;
+      }
       this.hasLengthError = true;
     }
   }
 
   patternValidation() {
+    console.log(this.errorMessage)
     const pattern = new RegExp(this.pattern);
     if (pattern.test(this.innerText)) {
       this.hasPatternError = false;
@@ -95,7 +117,6 @@ export default class TextField extends LitElement {
   }
 
   render() {
-    // language=HTML
     return html`
       <style>
         ${styles}
@@ -113,13 +134,15 @@ export default class TextField extends LitElement {
           : null}
         ${this.hasLengthError
           ? html`
-              <div class="ck-tooltip ck-tooltip--error">${"Length error"}</div>
+              <div class="ck-tooltip ck-tooltip--error">
+                ${this.errorMessage ? this.errorMessage : "Length error"}
+              </div>
             `
           : null}
         ${this.hasPatternError
           ? html`
               <div class="ck-tooltip ck-tooltip--error">
-                ${this.patternErrorMessage ? this.patternErrorMessage : "Pattern error"}
+                ${this.errorMessage ? this.errorMessage : "Pattern error"}
               </div>
             `
           : null}

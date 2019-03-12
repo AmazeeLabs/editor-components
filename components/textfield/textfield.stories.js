@@ -18,7 +18,7 @@ storiesOf("Textfield", module)
   .add(
     "Max",
     () =>
-      `<ck-textfield style="margin-top: 40px" ck-max="5" ck-message-helper="here to help you" contenteditable="true">This is editable</ck-textfield>`
+      `<ck-textfield style="margin-top: 40px" ck-max="5" contenteditable="true">This is editable</ck-textfield>`
   )
   .add(
     "Range",
