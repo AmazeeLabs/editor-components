@@ -39,7 +39,7 @@ export default class TextField extends LitElement {
   }
 
   handleMax() {
-    this.helper = `${this.maxLength - this.innerText.length} characters remaining`;
+    this.helper = `${this.maxLength - this.innerText.length} letters remaining.`;
     this.setHelper();
     this.maxValidation();
   }
@@ -89,8 +89,9 @@ export default class TextField extends LitElement {
       this.hasLengthError = false;
     } else {
       if (!this.errorMessage) {
-        this.errorMessage = `Please enter letters between 
-        ${this.minLength} and ${this.maxLength}.`;
+        this.errorMessage = `Please enter ${this.minLength} to ${
+          this.maxLength
+        } letters.`;
       }
       this.hasLengthError = true;
     }
