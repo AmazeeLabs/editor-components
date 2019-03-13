@@ -16,15 +16,13 @@ const iconLinkOff = svg`
 class Button extends LitElement {
   static get properties() {
     return {
-      target: { type: String, attribute: "link-target" },
-      attributes: { type: Object, attribute: "link-attributes" }
+      target: { type: String, attribute: "link-target" }
     };
   }
 
   constructor() {
     super();
     this.target = null;
-    this.attributes = {};
   }
 
   render() {
