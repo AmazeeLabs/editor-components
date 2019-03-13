@@ -23,7 +23,8 @@ export default class TextField extends LitElement {
       const observer = new MutationObserver(this.validate);
       observer.observe(el, {
         childList: true,
-        subtree: true
+        subtree: true,
+        characterData: true
       });
 
       el.addEventListener("focus", this.setHelper.bind(this));
