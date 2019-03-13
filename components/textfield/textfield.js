@@ -18,28 +18,35 @@ export default class TextField extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    new MutationObserver(this.validate).observe(this, {
-      childList: true,
-      subtree: true
+
+    this.querySelectorAll(["[contenteditable]"]).forEach(el => {
+      const observer = new MutationObserver(this.validate);
+      observer.observe(el, {
+        childList: true,
+        subtree: true
+      });
+
+      el.addEventListener("focus", this.setHelper.bind(this));
+      el.addEventListener("blur", () => {
+        this.validate();
+        this.hasHelper = false;
+      });
+
+      if (this.maxLength && !this.minLength) {
+        el.addEventListener("input", this.handleMax.bind(this));
+      }
+      if (this.maxLength && this.minLength) {
+        el.addEventListener("input", this.rangeValidation.bind(this));
+      }
     });
-
-    this.addEventListener("focus", this.setHelper);
-
-    this.addEventListener("blur", () => {
-      this.validate();
-      this.hasHelper = false;
-    });
-
-    if (this.maxLength && !this.minLength) {
-      this.addEventListener("input", this.handleMax);
-    }
 
     // textfield errors immediately highlighted
     if (TextField.initializeWithErrors) this.validate();
   }
 
   handleMax() {
-    this.helper = `${this.maxLength - this.innerText.length} letters remaining.`;
+    this.helper = `${this.maxLength -
+      this.innerText.length} letters remaining.`;
     this.setHelper();
     this.maxValidation();
   }
@@ -51,7 +58,8 @@ export default class TextField extends LitElement {
     // MIN
     if (this.hasAttribute("ck-min")) this.minValidation();
     // Range
-    if (this.hasAttribute("ck-max") && this.hasAttribute("ck-min")) this.rangeValidation();
+    if (this.hasAttribute("ck-max") && this.hasAttribute("ck-min"))
+      this.rangeValidation();
     // Pattern
     if (this.hasAttribute("ck-pattern")) this.patternValidation();
   }
@@ -98,7 +106,6 @@ export default class TextField extends LitElement {
   }
 
   patternValidation() {
-    console.log(this.errorMessage)
     const pattern = new RegExp(this.pattern);
     if (pattern.test(this.innerText)) {
       this.hasPatternError = false;
