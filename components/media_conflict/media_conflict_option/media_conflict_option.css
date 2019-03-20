@@ -1,0 +1,27 @@
+:host {
+}
+
+button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  display: block;
+  pointer-events: auto;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  width: 150px;
+}
+
+button.left {
+  left: 0;
+}
+
+::slotted {
+  min-width: 100%;
+}
