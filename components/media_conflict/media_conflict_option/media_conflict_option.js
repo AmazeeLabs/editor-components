@@ -19,16 +19,18 @@ class MediaConflictOption extends LitElement {
         ${styles}
       </style>
       <div class="media-conflict-option">
-        <button class="${this.position}" @click=${this.optionSelected}>${this.from}</button>
+        <button class="${this.position}" @click=${this.optionSelected}>
+          ${this.from}
+        </button>
         <slot></slot>
       </div>
     `;
   }
 
   firstUpdated() {
-    this.children.item(0).style.width = this.offsetWidth + 'px';
-    if (this.position == 'left') {
-      this.style.width = '50%';
+    this.children.item(0).style.width = `${this.offsetWidth}px`;
+    if (this.position === "left") {
+      this.style.width = "50%";
     }
   }
 
