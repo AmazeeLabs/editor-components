@@ -16,7 +16,7 @@ const iconLinkOff = svg`
 class Button extends LitElement {
   static get properties() {
     return {
-      target: { type: String }
+      target: { type: String, attribute: "link-target" }
     };
   }
 

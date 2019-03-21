@@ -20,10 +20,6 @@
   transition: transform 0.5s ease;
 }
 
-.button button:hover {
-  transform: scale(1.5);
-}
-
 .button svg {
   fill: var(--icon-color);
   width: var(--icon-size);

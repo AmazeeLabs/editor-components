@@ -1,0 +1,51 @@
+:host {
+  --color-red: #d32323;
+  --color-black: #222330;
+  --color-black-80: rgba(0, 0, 0, 0.8);
+  --color-black-60: rgba(0, 0, 0, 0.6);
+  --color-black-15: rgba(0, 0, 0, 0.15);
+  --color-grey-light: #CCC;
+  --color-white: #FFF;
+  --align-buttons: left;
+  --font-size-small: 14px;
+  --font-size-text: 16px;
+  --baseline: 8px;
+  --baseline2: 16px;
+  font-family: var(--font-family, sans-serif);
+  font-style: initial;
+  font-weight: initial;
+  position: relative;
+  display: block;
+  outline: none;
+}
+
+.ck-textfield {
+  position: relative;
+  padding: var(--baseline);
+}
+
+.ck-textfield.error {
+  outline: 1px solid var(--color-red);
+}
+
+.ck-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-1px, -100%);
+  padding: var(--baseline) var(--baseline2);
+  border-radius: var(--baseline);
+  border-bottom-left-radius: 0;
+  font-size: var(--font-size-small);
+}
+
+.ck-tooltip--error {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+.ck-tooltip--helper {
+  transform: translate(0, -100%);
+  background-color: var(--color-white);
+  box-shadow: 0px 0px 3px 1px var(--color-black-15);
+}

@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.media-conflict {
+  position: relative;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.media-conflict ::slotted(ck-conflict-media-option) {
+  line-height: 0;
+  display: block;
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.media-conflict ::slotted(ck-conflict-media-option ::slotted) {
+  line-height: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.media-conflict ::slotted(ck-conflict-media-option:first-child) {
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+  border-right: 3px solid rgb(255, 255, 255);
+}
+
+.media-conflict ::slotted(ck-conflict-media-option:last-child) {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  z-index: 1;
+  width: 100%;
+}
