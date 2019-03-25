@@ -60,7 +60,7 @@ export default class Media extends LitElement {
 
 Media.previewCallback = (uuid, display, callback) =>
   window.setTimeout(() => {
-    callback(`<img src="https://placekitten.com/500/${uuid}" />`);
+    callback(`<img width="100%" src="https://placekitten.com/500/${uuid}" />`);
   }, 3000);
 
 customElements.define("ck-media", Media);
