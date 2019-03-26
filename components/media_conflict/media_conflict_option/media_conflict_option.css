@@ -1,6 +1,3 @@
-:host {
-}
-
 button {
   position: absolute;
   top: 0;
@@ -22,6 +19,6 @@ button.left {
   left: 0;
 }
 
-::slotted {
-  min-width: 100%;
+.media-conflict-option {
+  height: 100%;
 }
