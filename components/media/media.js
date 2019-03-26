@@ -17,7 +17,9 @@ export default class Media extends LitElement {
       loaderIsVisible: Boolean,
       mediaUuid: { attribute: "data-media-uuid", type: String },
       mediaDisplay: { attribute: "data-media-display", type: String },
-      preview: String
+      entityUuid: { attribute: "data-entity-uuid", type: String, reflect: true },
+      entityDisplay: { attribute: "data-entity-display", type: String },
+      preview: String,
     };
   }
 
@@ -30,6 +32,14 @@ export default class Media extends LitElement {
     if (properties.has("mediaUuid") && this.mediaUuid) {
       this.loaderIsVisible = true;
       Media.previewCallback(this.mediaUuid, this.mediaDisplay, preview => {
+        this.preview = preview;
+        this.loaderIsVisible = false;
+      });
+    }
+
+    if (properties.has("entityUuid") && this.entityUuid) {
+      this.loaderIsVisible = true;
+      Media.previewEntityCallback(this.entityUuid, this.entityDisplay, preview => {
         this.preview = preview;
         this.loaderIsVisible = false;
       });
@@ -61,6 +71,11 @@ export default class Media extends LitElement {
 Media.previewCallback = (uuid, display, callback) =>
   window.setTimeout(() => {
     callback(`<img src="https://placekitten.com/500/${uuid}" />`);
+  }, 3000);
+
+Media.previewEntityCallback = (uuid, display, callback) =>
+  window.setTimeout(() => {
+    callback(`<img src="https://placekitten.com/800/500" />`);
   }, 3000);
 
 customElements.define("ck-media", Media);
