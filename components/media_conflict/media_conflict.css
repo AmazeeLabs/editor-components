@@ -13,28 +13,19 @@
   line-height: 0;
   display: block;
   pointer-events: none;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.media-conflict ::slotted(ck-conflict-media-option ::slotted) {
-  line-height: 0;
-  display: block;
-  pointer-events: none;
 }
 
 .media-conflict ::slotted(ck-conflict-media-option:first-child) {
-  position: relative;
+  position: absolute;
+  left: 0;
+  top: 0;
   overflow: hidden;
   z-index: 2;
+  height: 100%;
   border-right: 3px solid rgb(255, 255, 255);
 }
 
 .media-conflict ::slotted(ck-conflict-media-option:last-child) {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  z-index: 1;
+  float: right;
   width: 100%;
 }
