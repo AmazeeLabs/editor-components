@@ -28,9 +28,13 @@ export default class MediaConflictOption extends LitElement {
   }
 
   firstUpdated() {
-    this.children.item(0).style.width = `${this.offsetWidth}px`;
     if (this.position === "left") {
       this.style.width = "50%";
+      setTimeout(() => {
+        this.shadowRoot.querySelector(
+          ".media-conflict-option"
+        ).style.minWidth = `${this.offsetWidth*2}px`;
+      }, 100);
     }
   }
 
