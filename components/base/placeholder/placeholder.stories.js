@@ -1,13 +1,12 @@
 import { storiesOf } from "@storybook/html";
 import placeholderNotes from "./placeholder.md";
 
-import "./placeholder";
+import "./index";
 import Editor from "../editor/editor";
 
-storiesOf("Placeholder", module)
+storiesOf("Base/Placeholder", module)
   .addDecorator(Editor.dummySetup)
   .addDecorator(Editor.decorator)
-  .addDecorator(story => `<div>${story()}</div>`)
   .add(
     "Default",
     () => `<ck-placeholder sections="text image"></ck-placeholder>`,

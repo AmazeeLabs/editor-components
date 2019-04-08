@@ -1,6 +1,8 @@
+import global from "global";
 import { LitElement, html } from "lit-element";
 import { eventType } from "./operations";
 import Placeholder from "../placeholder/placeholder";
+
 import text from "!raw-loader!./templates/text.html";
 import added from "!raw-loader!./templates/added.html";
 import removed from "!raw-loader!./templates/removed.html";
@@ -19,9 +21,11 @@ export default class Editor extends LitElement {
           : Editor.templates[name];
     }
     const element = el.children[0];
-    Object.keys(attributes).forEach(key =>
-      element.setAttribute(key, attributes[key])
-    );
+    if (attributes) {
+      Object.keys(attributes).forEach(key =>
+        element.setAttribute(key, attributes[key])
+      );
+    }
     return element;
   }
 
@@ -36,13 +40,13 @@ export default class Editor extends LitElement {
   }
 
   static insertElement({
-    detail: { element, parent, position, reference, attributes }
+    detail: { section, parent, position, reference, attributes }
   }) {
     ({
-      end: () => parent.appendChild(Editor.createElement(element, attributes)),
+      end: () => parent.appendChild(Editor.createElement(section, attributes)),
       before: () =>
         parent.insertBefore(
-          Editor.createElement(element),
+          Editor.createElement(section),
           parent.children[reference]
         )
     }[position]());
@@ -65,8 +69,8 @@ export default class Editor extends LitElement {
     }[position]());
   }
 
-  static replaceElement({ detail: { element, target } }) {
-    target.parentElement.insertBefore(Editor.createElement(element), target);
+  static replaceElement({ detail: { section, target } }) {
+    target.parentElement.insertBefore(Editor.createElement(section), target);
     target.parentElement.removeChild(target);
   }
 
@@ -82,8 +86,8 @@ export default class Editor extends LitElement {
     target.removeAttribute(key);
   }
 
-  static swap({ detail: { source, target } }) {
-    target.parentElement.insertBefore(source, target);
+  static swap({ detail: { element, target } }) {
+    target.parentElement.insertBefore(element, target);
     target.parentElement.removeChild(target);
   }
 
@@ -110,7 +114,17 @@ export default class Editor extends LitElement {
 
 Editor.templates = {};
 
-Editor.decorator = story => `<ck-editor>${story()}</ck-editor>`;
+Editor.decorator = story => {
+  const editor = document.createElement("ck-editor");
+  editor.classList.add("ck");
+  const content = story();
+  if (content instanceof Object) {
+    editor.appendChild(content);
+  } else {
+    editor.innerHTML = content;
+  }
+  return editor;
+};
 
 Editor.dummySetup = story => {
   Editor.templates = {
@@ -118,7 +132,7 @@ Editor.dummySetup = story => {
     image: () =>
       image
         .replace("%width", 800)
-        .replace("%height", Math.ceil(200 + Math.random() * 200)),
+        .replace("%height", Math.ceil(300 + Math.random() * 200)),
     gallery: () => gallery.replace("%content", Editor.templates.image()),
     columns: () => columns,
     added: () => added,
@@ -133,4 +147,4 @@ Editor.dummySetup = story => {
   return story();
 };
 
-customElements.define("ck-editor", Editor);
+global.customElements.define("ck-editor", Editor);

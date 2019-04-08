@@ -1,42 +1,47 @@
-import { LitElement, html, svg } from "lit-element";
-import * as Operations from "../editor/operations";
+import { html, svg } from "lit-element";
 import styles from "./gallery.css";
 
 import leftIcon from "./icons/leftArrow.svg";
 import rightIcon from "./icons/rightArrow.svg";
 import trashIcon from "./icons/trash.svg";
+import EditorElement from "../base/editor-element/editor-element";
 
-class Gallery extends LitElement {
+export default class Gallery extends EditorElement {
   static get properties() {
     return {
       items: Array,
-      currentGallery: Number,
-      section: String
+      currentItem: { type: Number, attribute: "ck-current-item" },
+      numberOfChildren: { type: Number },
+      maxItems: { type: Number, attribute: "ck-max" },
+      sections: { type: String, attribute: "ck-contains" }
     };
   }
 
   constructor() {
     super();
     this.items = [];
-    this.currentGallery = 0;
+    this.currentItem = 0;
   }
 
   connectedCallback() {
     super.connectedCallback();
 
     const slots = this.shadowRoot;
-    slots.addEventListener("slotchange", e => {
+    slots.addEventListener("slotchange", () => {
+      this.numberOfChildren = this.children.length;
       this.items = Array.from(this.children).map((child, index) => ({
         title: index + 1,
         index
       }));
     });
 
+    this.numberOfChildren = this.children.length;
+    this.maxItems = this.maxItems || 0;
     this.items = Array.from(this.children).map((child, index) => ({
       title: index + 1,
       index
     }));
-    this.setGalleryItem(this.currentGallery);
+    this.setGalleryItem(this.currentItem);
   }
 
   render() {
@@ -48,18 +53,36 @@ class Gallery extends LitElement {
       <div class="ck-gallery">
         <div
           class="ck-gallery__rail"
-          style="transform: translateX(${this.currentGallery * -100}%)"
+          style="transform: translateX(${this.currentItem * -100}%)"
         >
           <slot></slot>
+          ${this.numberOfChildren < this.maxItems || this.maxItems === 0
+            ? html`
+                <ck-placeholder
+                  @ckEditorOperation="${this.appendHandler}"
+                  sections=${this.sections}
+                ></ck-placeholder>
+              `
+            : null}
         </div>
 
         <div class="ck-gallery__controls">
           <div class="ck-gallery__pager">
             <div class="ck-gallery__dots">
               ${this.items.map(item => this.button(item))}
-              <span @click="${() => this.addItem()}" class="ck-gallery__add">
-                +
-              </span>
+              ${this.numberOfChildren < this.maxItems || this.maxItems === 0
+                ? html`
+                    <span
+                      @click="${() => this.addItem()}"
+                      class="ck-gallery__add ${this.currentItem ===
+                      this.numberOfChildren
+                        ? "active"
+                        : "inactive"}"
+                    >
+                      +
+                    </span>
+                  `
+                : null}
             </div>
           </div>
           <div class="ck-gallery__actions">
@@ -69,7 +92,7 @@ class Gallery extends LitElement {
                 @click="${() => this.moveItem("left")}"
                 data-tooltip="Move element to the left"
                 class="ck-gallery__icon ck-gallery__icon--arrow-left ${this
-                  .currentGallery === 0
+                  .currentItem === 0 || this.currentItem === this.items.length
                   ? "disabled"
                   : ""}"
               >
@@ -79,7 +102,7 @@ class Gallery extends LitElement {
                 @click="${() => this.moveItem("right")}"
                 data-tooltip="Move element to the right"
                 class="ck-gallery__icon ck-gallery__icon--arrow-right ${this
-                  .currentGallery ===
+                  .currentItem >=
                 this.items.length - 1
                   ? "disabled"
                   : ""}"
@@ -90,7 +113,8 @@ class Gallery extends LitElement {
                 @click="${() => this.deleteItem()}"
                 data-tooltip="Delete slide"
                 class="ck-gallery__icon ck-gallery__icon--arrow-trash ${this
-                  .items.length < 2
+                  .items.length === 0 ||
+                this.currentItem === this.numberOfChildren
                   ? "disabled"
                   : ""}"
               >
@@ -103,42 +127,44 @@ class Gallery extends LitElement {
     `;
   }
 
+  appendHandler(event) {
+    this.editor.insert(event.detail.section, this, "end");
+  }
+
   addItem() {
-    this.dispatchEvent(Operations.insert(this.section, this, "end"));
-    this.currentGallery = this.items.length;
+    this.currentItem = this.items.length;
   }
 
   deleteItem() {
-    if (this.items.length >= 2) {
-      this.dispatchEvent(Operations.remove(this.children[this.currentGallery]));
-      if (this.currentGallery === this.items.length - 1) {
-        this.currentGallery -= 1;
-      }
+    if (this.currentItem !== this.numberOfChildren) {
+      this.editor.remove(this.children[this.currentItem]);
     }
   }
 
   moveItem(position) {
-    if (position === "left" && this.currentGallery !== 0) {
-      this.dispatchEvent(
-        Operations.move(
-          this,
-          "before",
-          this.currentGallery,
-          this.currentGallery - 1
-        )
-      );
-      this.currentGallery -= 1;
+    if (
+      position === "left" &&
+      this.currentItem > 0 &&
+      this.currentItem < this.numberOfChildren
+    ) {
+      this.editor.move(this, "before", this.currentItem, this.currentItem - 1);
+      this.currentItem -= 1;
     }
-    if (position === "right" && this.currentGallery !== this.items.length - 1) {
-      this.dispatchEvent(
-        Operations.move(
+    if (
+      position === "right" &&
+      this.currentItem !== this.numberOfChildren - 1
+    ) {
+      if (this.currentItem < this.numberOfChildren - 1) {
+        this.editor.move(
           this,
           "before",
-          this.currentGallery,
-          this.currentGallery + 1
-        )
-      );
-      this.currentGallery += 1;
+          this.currentItem,
+          this.currentItem + 2
+        );
+      } else {
+        this.editor.move(this, "end", this.currentItem);
+      }
+      this.currentItem += 1;
     }
   }
 
@@ -146,7 +172,7 @@ class Gallery extends LitElement {
     return html`
       <span
         @click="${() => this.setGalleryItem(item.index)}"
-        class="ck-gallery__dot-item ${this.currentGallery === item.index
+        class="ck-gallery__dot-item ${this.currentItem === item.index
           ? "active"
           : ""}"
         >${item.title}</span
@@ -160,8 +186,7 @@ class Gallery extends LitElement {
     }
 
     // Update image slide
-    this.currentGallery = index;
+    this.currentItem = index;
   }
 }
 
-customElements.define("ck-gallery", Gallery);

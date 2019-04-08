@@ -1,8 +1,8 @@
 import { storiesOf } from "@storybook/html";
-import "./media_conflict";
+import "./index";
 import createMediaElement from "../media/media.element";
 
-import Editor from "../editor/editor";
+import Editor from "../base/editor/editor";
 
 storiesOf("Media Conflict", module)
   .addDecorator(Editor.dummySetup)

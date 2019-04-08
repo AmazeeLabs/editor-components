@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit-element";
 import styles from "./media_conflict_option.css";
 
-class MediaConflictOption extends LitElement {
+export default class MediaConflictOption extends LitElement {
   static get properties() {
     return {
       from: { type: String },
@@ -49,5 +49,3 @@ MediaConflictOption.labels = {
   source: "Source version",
   empty: "Clear"
 };
-
-customElements.define("ck-conflict-media-option", MediaConflictOption);

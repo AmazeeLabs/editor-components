@@ -1,7 +1,7 @@
 import { storiesOf } from "@storybook/html";
-import "./gallery";
+import "./index";
 
-import Editor from "../editor/editor";
+import Editor from "../base/editor/editor";
 
 storiesOf("Gallery", module)
   .addDecorator(Editor.dummySetup)
@@ -9,5 +9,10 @@ storiesOf("Gallery", module)
   .add(
     "Default",
     () =>
-      `<ck-gallery section="image" style="width: 500px">${Editor.templates.image()}</ck-gallery>`
+      `<ck-gallery ck-contains="image text" style="width: 500px">${Editor.templates.image()}</ck-gallery>`
+  )
+  .add(
+    "Max items",
+    () =>
+      `<ck-gallery ck-contains="image text" ck-max="3" style="width: 500px">${Editor.templates.image()}</ck-gallery>`
   );

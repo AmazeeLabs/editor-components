@@ -21,7 +21,6 @@
 
 .ck-textfield {
   position: relative;
-  padding: var(--baseline);
 }
 
 .ck-textfield.error {

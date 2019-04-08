@@ -1,8 +1,8 @@
-import { LitElement, html } from "lit-element";
-import * as Operations from "../editor/operations";
+import { html } from "lit-element";
 import styles from "./text_conflict.css";
+import EditorElement from "../base/editor-element/editor-element";
 
-class TextConflict extends LitElement {
+export default class TextConflict extends EditorElement {
   static get properties() {
     return {
       label: { type: String },
@@ -64,11 +64,8 @@ class TextConflict extends LitElement {
   selectOptionHandler(event) {
     this.resolved = true;
     this.isResolving = false;
-    console.log(this, event.detail);
-    this.dispatchEvent(Operations.swap(event.detail, this));
+    this.editor.swap(event.detail, this);
   }
 }
 
 TextConflict.label = "Conflict needs resolving";
-
-customElements.define("ck-conflict-text", TextConflict);

@@ -1,15 +1,11 @@
 import { storiesOf } from "@storybook/html";
-import Editor from "../editor/editor";
-import "./tabs";
+import Editor from "../base/editor/editor";
+import "./index";
 
 storiesOf("Tabs", module)
   .addDecorator(Editor.dummySetup)
   .addDecorator(Editor.decorator)
-  .add("Empty", () => `<ck-tabs section="image"></ck-tabs>`)
   .add(
-    "Filled",
-    () =>
-      `<ck-tabs section="image"><ck-container-item data-tab-title="Kitties" data-default-tab="true"><img src="https://placekitten.com/800/${Math.ceil(
-        300 + Math.random() * 200
-      )}" style="width: 100%; height: auto"/></ck-container-item></ck-tabs>`
+    "Empty",
+    () => `<ck-tabs ck-contains="text image" ck-max="3"></ck-tabs>`
   );

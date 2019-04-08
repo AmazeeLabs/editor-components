@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit-element";
 import styles from "./text_conflict_option.css";
 
-class TextConflictOption extends LitElement {
+export default class TextConflictOption extends LitElement {
   static get properties() {
     return {
       from: { type: String },
@@ -45,4 +45,3 @@ TextConflictOption.labels = {
   empty: "Clear"
 };
 
-customElements.define("ck-conflict-option", TextConflictOption);

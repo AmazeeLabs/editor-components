@@ -19,9 +19,8 @@
 
 .ck-tabs {
   width: 100%;
-  display: inline-block;
+  display: block;
   margin: auto;
-  overflow: hidden;
 }
 
 .ck-tabs__header-tab-list {
@@ -104,10 +103,6 @@
 
 .ck-tabs__header-tab-add:hover {
   background-color: var(--color-blue);
-}
-
-.ck-tabs__rail {
-  display: flex;
 }
 
 ::slotted(*) {

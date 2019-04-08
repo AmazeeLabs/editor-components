@@ -171,4 +171,3 @@ export default class TextField extends LitElement {
 // If set to false, errors are highlighted after focus is lost for the first time.
 TextField.initializeWithErrors = false;
 
-window.customElements.define("ck-textfield", TextField);

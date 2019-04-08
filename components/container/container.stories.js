@@ -1,20 +1,25 @@
 import { storiesOf } from "@storybook/html";
 
 // Import the container and define a custom element.
-import "./container";
-import Editor from "../editor/editor";
+import "./index";
+import "../section/index";
+import Editor from "../base/editor/editor";
 import notes from "./container.md";
 
 storiesOf("Container", module)
   .addDecorator(Editor.dummySetup)
   .addDecorator(Editor.decorator)
-  .add("simple", () => `<ck-container sections="text image"></ck-container>`, {
-    notes: { markdown: notes }
-  })
+  .add(
+    "simple",
+    () => `<ck-container ck-contains="text image"></ck-container>`,
+    {
+      notes: { markdown: notes }
+    }
+  )
   .add(
     "prefilled",
     () => `
-    <ck-container sections="text image">
+    <ck-container ck-contains="text image">
       ${Editor.templates.text}
       ${Editor.templates.image()}
     </ck-container>
@@ -24,9 +29,23 @@ storiesOf("Container", module)
   .add(
     "merged",
     () => `
-    <ck-container sections="text image">
+    <ck-container ck-contains="text image">
       ${Editor.templates.added()}
       ${Editor.templates.removed()}
     </ck-container>
   `
+  )
+  .add(
+    "maximum items",
+    () => `
+    <ck-container ck-max="3" ck-contains="text image"></ck-container>
+    `
+  )
+  .add(
+    "maximum items reached",
+    () => `
+    <ck-container ck-max="1" ck-contains="text image">
+      ${Editor.templates.text}
+    </ck-container>
+    `
   );

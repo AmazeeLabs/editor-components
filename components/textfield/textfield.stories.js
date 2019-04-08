@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/html";
-import Editor from "../editor/editor";
-import "./textfield";
+import Editor from "../base/editor/editor";
+import "./index";
 
 storiesOf("Textfield", module)
   .addDecorator(Editor.dummySetup)

@@ -1,5 +1,5 @@
-import { LitElement, html, svg } from "lit-element";
-import styles from "./button.css";
+import { html, svg, css } from "lit-element";
+import EditorElement from "../base/editor-element/editor-element";
 
 const iconLink = svg`
 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
@@ -7,13 +7,7 @@ const iconLink = svg`
 </svg>
 `;
 
-const iconLinkOff = svg`
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-  <path fill="none" d="M0 0h24v24H0V0z"/><path d="M17 7h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1 0 1.43-.98 2.63-2.31 2.98l1.46 1.46C20.88 15.61 22 13.95 22 12c0-2.76-2.24-5-5-5zm-1 4h-2.19l2 2H16zM2 4.27l3.11 3.11C3.29 8.12 2 9.91 2 12c0 2.76 2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1 0-1.59 1.21-2.9 2.76-3.07L8.73 11H8v2h2.73L13 15.27V17h1.73l4.01 4L20 19.74 3.27 3 2 4.27z"/><path fill="none" d="M0 24V0"/>
-</svg>
-`;
-
-class Button extends LitElement {
+export default class Button extends EditorElement {
   static get properties() {
     return {
       target: { type: String, attribute: "link-target" }
@@ -27,23 +21,61 @@ class Button extends LitElement {
 
   render() {
     return html`
-      <style>
-        ${styles}
-      </style>
-      <div class="button">
+      <div class="button ${this.target ? "linked" : "not-linked"}">
         <div class="button__content">
           <slot></slot>
         </div>
-        <button @click="${this.selectLink}">
-          ${this.target ? iconLink : iconLinkOff}
+        <button @click="${this.inEditor ? this.selectLink : () => {}}">
+          ${iconLink}
         </button>
       </div>
     `;
   }
 
   selectLink() {
-    this.dispatchEvent(new CustomEvent("selectLink", { detail: this.target }));
+    this.dispatchUIEvent("select-link", { target: this.target }, target => {
+      if (target !== null) {
+        this.editor.attributes(this, {
+          "link-target": target
+        });
+      } else {
+        this.editor.removeAttribute(this, "link-target");
+      }
+    });
   }
 }
 
-customElements.define("ck-button", Button);
+Button.styles = css`
+  :host {
+    --icon-size: 2em;
+    --icon-color: black;
+    --background-color: #ffbb15;
+  }
+
+  .button {
+    display: flex;
+  }
+
+  .button__content {
+    width: 100%;
+  }
+
+  .button button {
+    width: var(--icon-size);
+    border: none;
+    background: none;
+    flex-grow: 0;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+    outline: none;
+  }
+
+  .button svg {
+    fill: var(--icon-color);
+    width: var(--icon-size);
+  }
+
+  .button.not-linked svg {
+    opacity: 0.5;
+  }
+`;

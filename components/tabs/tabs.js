@@ -1,15 +1,16 @@
 import { LitElement, html, svg } from "lit-element";
 import { render } from "lit-html";
-import * as Operations from "../editor/operations";
 import styles from "./tabs.css";
 import modalStyles from "./modal.css";
 import editIcon from "./icons/pencil.svg";
+import EditorElement from "../base/editor-element/editor-element";
 
-class Tabs extends LitElement {
+export default class Tabs extends EditorElement {
   static get properties() {
     return {
-      section: String,
+      sections: { type: String, attribute: "ck-contains" },
       items: Array,
+      numberOfChildren: Number,
       currentTab: Number,
       modalIsOpen: Boolean
     };
@@ -18,7 +19,7 @@ class Tabs extends LitElement {
   constructor() {
     super();
     this.items = [];
-    this.currentTab = -1;
+    this.currentTab = 0;
     this.modalIsOpen = false;
     this.section = null;
   }
@@ -42,6 +43,7 @@ class Tabs extends LitElement {
 
     this.processItems();
 
+    this.numberOfChildren = this.children.length;
     if (this.children.length > 0) {
       this.currentTab = 0;
     }
@@ -61,6 +63,7 @@ class Tabs extends LitElement {
       };
     });
     this.setTabsItem(this.currentTab);
+    this.numberOfChildren = this.children.length;
   }
 
   openModal() {
@@ -92,9 +95,19 @@ class Tabs extends LitElement {
     `;
   }
 
+  appendHandler(event) {
+    this.editor.insert(event.detail.section, this, "end");
+  }
+
   render() {
     return html`
       <style>
+        ::slotted(*) {
+          display: none !important;
+        }
+        ::slotted(:nth-child(${this.currentTab + 1})) {
+          display: block !important;
+        }
         ${styles}
       </style>
       <div class="ck-tabs">
@@ -108,12 +121,16 @@ class Tabs extends LitElement {
           </ul>
         </div>
         <div class="ck-tabs__content">
-          <div
-            class="ck-tabs__rail"
-            style="transform: translateX(${this.currentTab * -100}%)"
-          >
-            <slot></slot>
-          </div>
+          <slot></slot>
+          ${this.inEditor && this.currentTab === this.numberOfChildren
+            ? html`
+                <ck-placeholder
+                  @ckEditorOperation="${this.appendHandler}"
+                  sections="${this.sections}"
+                >
+                </ck-placeholder>
+              `
+            : null}
         </div>
       </div>
     `;
@@ -141,7 +158,7 @@ class Tabs extends LitElement {
 
   deleteItem() {
     if (this.items.length >= 2) {
-      this.dispatchEvent(Operations.remove(this.children[this.currentTab]));
+      this.editor.remove(this.children[this.currentTab]);
       if (this.currentTab === this.items.length - 1) {
         this.currentTab -= 1;
       }
@@ -157,44 +174,28 @@ class Tabs extends LitElement {
 
   addItem() {
     this.currentTab = this.items.length;
-    this.dispatchEvent(
-      Operations.insert(this.section, this, "end", null, {
-        "data-default-tab":
-          Array.from(this.children).filter(
-            child => child.dataset.defaultTab === "true"
-          ).length === 0,
-        "data-tab-title": "Untitled Tab"
-      })
-    );
   }
 
   updateItem(item) {
-    this.dispatchEvent(
-      Operations.batch(
-        [
-          Operations.attributes(this.children[item.index], {
-            "data-tab-title": item.title,
-            "data-default-tab": item.default
-          })
-        ].concat(
-          item.default
-            ? Array.from(this.children)
-                .filter(
-                  child =>
-                    child.dataset.defaultTab === "true" &&
-                    child !== this.children[item.index]
-                )
-                .map(child =>
-                  Operations.attributes(child, { "data-default-tab": "false" })
-                )
-            : []
+    this.editor.attributes(this.children[item.index], {
+      "data-tab-title": item.title,
+      "data-default-tab": item.default
+    });
+    if (item.default) {
+      Array.from(this.children)
+        .filter(
+          child =>
+            child.dataset.defaultTab === "true" &&
+            child !== this.children[item.index]
         )
-      )
-    );
+        .forEach(child =>
+          this.editor.attributes(child, { "data-default-tab": "false" })
+        );
+    }
   }
 }
 
-class Modal extends LitElement {
+export class Modal extends LitElement {
   static get properties() {
     return {
       isVisible: { type: Boolean, reflect: true },
@@ -323,6 +324,3 @@ class Modal extends LitElement {
     `;
   }
 }
-
-customElements.define("ck-tabs", Tabs);
-customElements.define("ck-tabs-modal", Modal);

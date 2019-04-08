@@ -9,7 +9,8 @@
     "customElements": false,
     "document": false,
     "Event": false,
-    "CustomEvent": false
+    "CustomEvent": false,
+    "MutationObverser": false
   },
   "rules": {
     "no-unused-vars": ["warn"],

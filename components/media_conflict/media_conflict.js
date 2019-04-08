@@ -1,9 +1,8 @@
-import { LitElement, html } from "lit-element";
-import "./media_conflict_option/media_conflict_option";
-import * as Operations from "../editor/operations";
+import { html } from "lit-element";
 import styles from "./media_conflict.css";
+import EditorElement from "../base/editor-element/editor-element";
 
-class MediaConflict extends LitElement {
+export default class MediaConflict extends EditorElement {
   static get properties() {
     return {
       from: { type: String }
@@ -45,7 +44,7 @@ class MediaConflict extends LitElement {
   }
 
   selectOptionHandler(event) {
-    this.dispatchEvent(Operations.swap(event.detail, this));
+    this.editor.swap(event.detail, this);
   }
 
   touchStartHandler(e) {
@@ -93,5 +92,3 @@ MediaConflict.labels = {
   source: "Source version",
   empty: "Clear"
 };
-
-customElements.define("ck-conflict-media", MediaConflict);

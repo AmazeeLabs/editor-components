@@ -12,6 +12,7 @@
   --align-buttons: left;
   --height-ratio: 50%;
   font-family: var(--font-family, sans-serif);
+  --button-padding: 5px;
 }
 
 img {
@@ -108,4 +109,86 @@ ck-media-loader {
     -webkit-transform: scale(1.0);
     transform: scale(1.0);
   }
+}
+
+.ck-media {
+  position: relative;
+}
+
+.ck-media__buttons {
+  position: absolute;
+  display: flex;
+}
+
+.ck-media__buttons button {
+  display: block;
+  outline: none;
+  border: none;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.ck-media__buttons button:not(:last-child) {
+  margin-right: 5px;
+}
+
+.ck-media__buttons svg {
+  margin-top: -1px;
+  display: block;
+}
+
+.top-left {
+  top: var(--button-padding);
+  left: 5px;
+}
+
+.top {
+  top: var(--button-padding);
+  width: 100%;
+  justify-content: center;
+}
+
+.top-right {
+  top: var(--button-padding);
+  right: var(--button-padding);
+}
+
+.right {
+  top: 0;
+  right: var(--button-padding);
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bottom-right {
+  bottom: var(--button-padding);
+  right: var(--button-padding);
+}
+
+.bottom {
+  bottom: var(--button-padding);
+  width: 100%;
+  justify-content: center;
+}
+
+.bottom-left {
+  bottom: var(--button-padding);
+  left: var(--button-padding);
+}
+
+.left {
+  top: 0;
+  left: var(--button-padding);
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.ck-media__buttons button {
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
 }

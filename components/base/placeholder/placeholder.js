@@ -1,5 +1,4 @@
-import { LitElement, html, svg } from "lit-element";
-import * as Operations from "../editor/operations";
+import { html, svg } from "lit-element";
 import styles from "./placeholder.css";
 
 import closeIcon from "./icons/close.svg";
@@ -10,6 +9,7 @@ import miscIcon from "./icons/misc.svg";
 import textIcon from "./icons/text.svg";
 import textMediaIcon from "./icons/text-media.svg";
 import videoIcon from "./icons/video.svg";
+import EditorElement from "../editor-element/editor-element";
 
 const icons = {
   close: closeIcon,
@@ -32,7 +32,7 @@ function icon(section) {
   return svg([icons.misc]);
 }
 
-export default class Placeholder extends LitElement {
+export default class Placeholder extends EditorElement {
   static get properties() {
     return {
       collapsed: { type: Boolean },
@@ -153,9 +153,7 @@ export default class Placeholder extends LitElement {
   }
 
   clickSectionHandler(event, sectionId) {
-    this.dispatchEvent(Operations.replace(sectionId, this));
+    this.editor.replace(sectionId, this);
     this.isExpanded = false;
   }
 }
-
-customElements.define("ck-placeholder", Placeholder);
