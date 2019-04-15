@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit-element";
-import styles from "./textfield.css";
+import styles from "!raw-loader!./textfield.css";
 
 export default class TextField extends LitElement {
   static get properties() {

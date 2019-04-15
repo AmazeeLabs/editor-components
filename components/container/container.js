@@ -1,4 +1,4 @@
-import { html, customElement } from "lit-element";
+import { html } from "lit-element";
 import EditorElement from "../base/editor-element/editor-element";
 
 export default class Container extends EditorElement {
@@ -6,7 +6,8 @@ export default class Container extends EditorElement {
     return {
       sections: { type: String, attribute: "ck-contains" },
       numberOfChildren: { type: Number },
-      max: { type: Number, attribute: "ck-max" }
+      max: { type: Number, attribute: "ck-max" },
+      min: { type: Number, attribute: "ck-min" },
     };
   }
 
@@ -25,24 +26,44 @@ export default class Container extends EditorElement {
     this.processChildren();
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.processChildren();
+  }
+
   processChildren() {
     this.numberOfChildren = this.children.length;
+
     if (!this.max) {
       this.max = 0;
     }
-    Array.from(this.children).forEach((child, index) => {
-      child.dispatchEvent(
-        new CustomEvent("containerUpdate", {
-          detail: {
-            inContainer: true,
-            containerSections: this.sections,
-            containerIndex: index,
-            containerMax: this.max,
-            containerItems: this.children.length || 0
-          }
-        })
-      );
-    });
+
+    if (!this.min) {
+      this.min = 0;
+    }
+
+    if (this.numberOfChildren >= this.min) {
+      Array.from(this.children).forEach((child, index) => {
+        child.dispatchEvent(
+          new CustomEvent("containerUpdate", {
+            detail: {
+              inContainer: true,
+              containerSections: this.sections,
+              containerIndex: index,
+              containerMax: this.max,
+              containerItems: this.children.length || 0
+            }
+          })
+        );
+      });
+    } else {
+      const element = this.sections.split(" ").pop();
+      this.modifyDocument(editor => {
+        for (let i = this.numberOfChildren; i < this.min; i += 1) {
+          editor.insert(element, this, "end");
+        }
+      });
+    }
   }
 
   render() {
@@ -65,6 +86,8 @@ export default class Container extends EditorElement {
   }
 
   appendHandler(event) {
-    this.editor.insert(event.detail.section, this, "end");
+    this.modifyDocument(editor =>
+      editor.insert(event.detail.section, this, "end")
+    );
   }
 }

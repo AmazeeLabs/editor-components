@@ -1,9 +1,9 @@
 import { html, svg } from "lit-element";
-import styles from "./gallery.css";
+import styles from "!raw-loader!./gallery.css";
 
-import leftIcon from "./icons/leftArrow.svg";
-import rightIcon from "./icons/rightArrow.svg";
-import trashIcon from "./icons/trash.svg";
+import leftIcon from "!raw-loader!./icons/leftArrow.svg";
+import rightIcon from "!raw-loader!./icons/rightArrow.svg";
+import trashIcon from "!raw-loader!./icons/trash.svg";
 import EditorElement from "../base/editor-element/editor-element";
 
 export default class Gallery extends EditorElement {
@@ -128,7 +128,9 @@ export default class Gallery extends EditorElement {
   }
 
   appendHandler(event) {
-    this.editor.insert(event.detail.section, this, "end");
+    this.modifyDocument(editor =>
+      editor.insert(event.detail.section, this, "end")
+    );
   }
 
   addItem() {
@@ -137,7 +139,9 @@ export default class Gallery extends EditorElement {
 
   deleteItem() {
     if (this.currentItem !== this.numberOfChildren) {
-      this.editor.remove(this.children[this.currentItem]);
+      this.modifyDocument(editor =>
+        editor.remove(this.children[this.currentItem])
+      );
     }
   }
 
@@ -147,7 +151,7 @@ export default class Gallery extends EditorElement {
       this.currentItem > 0 &&
       this.currentItem < this.numberOfChildren
     ) {
-      this.editor.move(this, "before", this.currentItem, this.currentItem - 1);
+      this.modifyDocument(editor => editor.move(this, "before", this.currentItem, this.currentItem - 1));
       this.currentItem -= 1;
     }
     if (
@@ -155,14 +159,16 @@ export default class Gallery extends EditorElement {
       this.currentItem !== this.numberOfChildren - 1
     ) {
       if (this.currentItem < this.numberOfChildren - 1) {
-        this.editor.move(
-          this,
-          "before",
-          this.currentItem,
-          this.currentItem + 2
-        );
+        this.modifyDocument( editor =>
+            editor.move(
+                this,
+                "before",
+                this.currentItem,
+                this.currentItem + 2
+            )
+        )
       } else {
-        this.editor.move(this, "end", this.currentItem);
+        this.modifyDocument(editor => editor.move(this, "end", this.currentItem));
       }
       this.currentItem += 1;
     }
@@ -189,4 +195,3 @@ export default class Gallery extends EditorElement {
     this.currentItem = index;
   }
 }
-

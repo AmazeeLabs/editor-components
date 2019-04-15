@@ -48,4 +48,18 @@ storiesOf("Container", module)
       ${Editor.templates.text}
     </ck-container>
     `
+  )
+  .add(
+    "minimum items",
+    () => `
+    <ck-container ck-min="1" ck-contains="text image">
+    </ck-container>
+    `
+  )
+  .add(
+    "range of items",
+    () => `
+    <ck-container ck-min="1" ck-max="3" ck-contains="text image">
+    </ck-container>
+    `
   );

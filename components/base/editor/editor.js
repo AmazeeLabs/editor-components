@@ -138,13 +138,21 @@ Editor.dummySetup = story => {
     added: () => added,
     removed: () => removed
   };
-  Placeholder.availableSections = [
-    { id: "text", label: "Text", icon: "text" },
-    { id: "image", label: "Image", icon: "image" },
-    { id: "gallery", label: "Gallery", icon: "carousel" },
-    { id: "columns", label: "Columns", icon: "misc" }
-  ];
+
   return story();
 };
+
+global.addEventListener(
+  "ck-editor:available-sections",
+  event => {
+    event.respond([
+      { id: "text", label: "Text", icon: "text" },
+      { id: "image", label: "Image", icon: "image" },
+      { id: "gallery", label: "Gallery", icon: "carousel" },
+      { id: "columns", label: "Columns", icon: "misc" }
+    ]);
+  },
+  { capture: true }
+);
 
 global.customElements.define("ck-editor", Editor);

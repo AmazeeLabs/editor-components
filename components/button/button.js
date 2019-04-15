@@ -33,13 +33,17 @@ export default class Button extends EditorElement {
   }
 
   selectLink() {
-    this.dispatchUIEvent("select-link", { target: this.target }, target => {
+    this.requestInformation("select-link", { target: this.target }, target => {
       if (target !== null) {
-        this.editor.attributes(this, {
-          "link-target": target
-        });
+        this.modifyDocument(editor =>
+          editor.attributes(this, {
+            "link-target": target
+          })
+        );
       } else {
-        this.editor.removeAttribute(this, "link-target");
+        this.modifyDocument(editor =>
+          editor.removeAttribute(this, "link-target")
+        );
       }
     });
   }

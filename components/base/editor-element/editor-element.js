@@ -7,8 +7,12 @@ function createEvent(detail) {
 }
 
 class EditorProxy {
+  /**
+   * @param element
+   */
   constructor(element) {
     this.element = element;
+    this.operations = [];
   }
 
   /**
@@ -153,9 +157,13 @@ class EditorProxy {
 /**
  * Event type to communicate with an external user interface.
  */
-class EditorUIEvent extends CustomEvent {
+class RequestInformationEvent extends CustomEvent {
   constructor(type, payload, callback) {
-    super(`editor-ui:${type}`, { detail: payload });
+    super(`ck-editor:${type}`, {
+      detail: payload,
+      bubbles: true,
+      composed: true
+    });
     this.callback = callback;
   }
 
@@ -181,7 +189,6 @@ export default class EditorElement extends LitElement {
   constructor() {
     super();
     this.inEditor = false;
-    this.editor = new EditorProxy(this);
   }
 
   /**
@@ -193,16 +200,33 @@ export default class EditorElement extends LitElement {
   }
 
   /**
-   * Dispatch a UI event.
+   * Change the editors document model.
    *
-   * @param type
-   *   The UI request type.
-   * @param detail
-   *   Additional data.
+   * Pass in a callback that will receive an EditorProxy object that
+   * contains methods to modify the document.
+   *
    * @param callback
-   *   Callback that is invoked when the UI returns.
    */
-  dispatchUIEvent(type, detail, callback) {
-    this.dispatchEvent(new EditorUIEvent(type, detail, callback));
+  modifyDocument(callback) {
+    const editorProxy = new EditorProxy(this);
+    callback(editorProxy);
+    createEvent({
+      operation: "batch",
+      operations: editorProxy.operations
+    });
+  }
+
+  /**
+   * Request information from outside systems.
+   *
+   * @param type String
+   *   The type of information required.
+   * @param detail Object
+   *   Arbitrary additional information.
+   * @param callback
+   *   Callback that is invoked when information is returned.
+   */
+  requestInformation(type, detail, callback) {
+    this.dispatchEvent(new RequestInformationEvent(type, detail, callback));
   }
 }

@@ -1,14 +1,14 @@
 import { html, svg } from "lit-element";
-import styles from "./placeholder.css";
+import styles from "!raw-loader!./placeholder.css";
 
-import closeIcon from "./icons/close.svg";
-import carouselIcon from "./icons/carousel.svg";
-import formattedTextIcon from "./icons/formatted-text.svg";
-import imageIcon from "./icons/image.svg";
-import miscIcon from "./icons/misc.svg";
-import textIcon from "./icons/text.svg";
-import textMediaIcon from "./icons/text-media.svg";
-import videoIcon from "./icons/video.svg";
+import closeIcon from "!raw-loader!./icons/close.svg";
+import carouselIcon from "!raw-loader!./icons/carousel.svg";
+import formattedTextIcon from "!raw-loader!./icons/formatted-text.svg";
+import imageIcon from "!raw-loader!./icons/image.svg";
+import miscIcon from "!raw-loader!./icons/misc.svg";
+import textIcon from "!raw-loader!./icons/text.svg";
+import textMediaIcon from "!raw-loader!./icons/text-media.svg";
+import videoIcon from "!raw-loader!./icons/video.svg";
 import EditorElement from "../editor-element/editor-element";
 
 const icons = {
@@ -40,6 +40,7 @@ export default class Placeholder extends EditorElement {
       isOpen: { type: Boolean },
       isExpanded: { type: Boolean },
       sections: { type: String },
+      availableSections: { type: Array },
       labelOpen: { type: String },
       labelExpand: { type: String }
     };
@@ -52,16 +53,20 @@ export default class Placeholder extends EditorElement {
     this.labelOpen = "Add";
     this.labelExpand = "Insert";
     this.sections = [];
+    this.availableSections = [];
     this.isOpen = false;
     this.isExpanded = false;
   }
 
   connectedCallback() {
     super.connectedCallback();
+    this.requestInformation("available-sections", {}, sections => {
+      this.availableSections = sections;
+    });
   }
 
   getSections() {
-    return Placeholder.availableSections.filter(section =>
+    return this.availableSections.filter(section =>
       this.sections.split(" ").includes(section.id)
     );
   }
@@ -153,7 +158,7 @@ export default class Placeholder extends EditorElement {
   }
 
   clickSectionHandler(event, sectionId) {
-    this.editor.replace(sectionId, this);
+    this.modifyDocument(editor => editor.replace(sectionId, this));
     this.isExpanded = false;
   }
 }

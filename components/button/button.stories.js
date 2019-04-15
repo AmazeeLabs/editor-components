@@ -18,7 +18,7 @@ storiesOf("Button", module)
       button.style.borderRadius = "1.5em";
       button.setAttribute("contenteditable", true);
       document.addEventListener(
-        "editor-ui:select-link",
+        "ck-editor:select-link",
         event => {
           if (event.detail.target) {
             event.respond(null);

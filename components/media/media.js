@@ -1,5 +1,5 @@
 import { html, svg } from "lit-element";
-import styles from "./media.css";
+import styles from "!raw-loader!./media.css";
 import EditorElement from "../base/editor-element/editor-element";
 
 const iconSelect = svg`
@@ -44,7 +44,7 @@ export default class Media extends EditorElement {
 
   renderPreview() {
     this.loaderIsVisible = true;
-    this.dispatchUIEvent(
+    this.requestInformation(
       "media-preview",
       {
         type: this.mediaType,
@@ -113,7 +113,7 @@ export default class Media extends EditorElement {
   }
 
   selectHandler() {
-    this.dispatchUIEvent(
+    this.requestInformation(
       "media-select",
       {
         type: this.mediaType,
@@ -126,7 +126,7 @@ export default class Media extends EditorElement {
   }
 
   uploadHandler() {
-    this.dispatchUIEvent(
+    this.requestInformation(
       "media-upload",
       {
         type: this.mediaType,
@@ -139,7 +139,7 @@ export default class Media extends EditorElement {
   }
 
   editHandler() {
-    this.dispatchUIEvent(
+    this.requestInformation(
       "media-edit",
       {
         type: this.mediaType,

@@ -64,7 +64,7 @@ export default class TextConflict extends EditorElement {
   selectOptionHandler(event) {
     this.resolved = true;
     this.isResolving = false;
-    this.editor.swap(event.detail, this);
+    this.modifyDocument(editor => editor.swap(event.detail, this));
   }
 }
 

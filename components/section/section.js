@@ -1,5 +1,6 @@
 import { css } from "lit-element";
 import { html, svg } from "lit-html";
+import global from "global";
 import EditorElement from "../base/editor-element/editor-element";
 
 const iconUp = svg`
@@ -88,17 +89,17 @@ export default class Section extends EditorElement {
 
   handleAccept() {
     if (this.added) {
-      this.editor.removeAttribute(this, "added");
+      this.modifyDocument(editor => editor.removeAttribute(this, "added"));
     } else {
-      this.editor.remove(this);
+      this.modifyDocument(editor => editor.remove(this));
     }
   }
 
   handleDecline() {
     if (this.removed) {
-      this.editor.removeAttribute(this, "removed");
+      this.modifyDocument(editor => editor.removeAttribute(this, "removed"));
     } else {
-      this.editor.remove(this);
+      this.modifyDocument(editor => editor.remove(this));
     }
   }
 
@@ -132,12 +133,14 @@ export default class Section extends EditorElement {
         global.window.scrollY +
         this.parentElement.children[this.containerIndex - 1].offsetTop -
         this.offsetTop;
-      window.scrollTo(0, diff);
-      this.editor.move(
-        this.parentElement,
-        "before",
-        this.containerIndex,
-        this.containerIndex - 1
+      global.scrollTo(0, diff);
+      this.modifyDocument(editor =>
+        editor.move(
+          this.parentElement,
+          "before",
+          this.containerIndex,
+          this.containerIndex - 1
+        )
       );
     }
   }
@@ -145,31 +148,35 @@ export default class Section extends EditorElement {
   downHandler() {
     if (!this.containerLast) {
       const diff =
-        global.window.scrollY +
+        global.scrollY +
         (this.containerIndex < this.containerItems - 2
           ? this.parentElement.children[this.containerIndex + 2].offsetTop -
             this.parentElement.children[this.containerIndex + 1].offsetTop
           : this.parentElement.children[this.containerIndex + 1].offsetHeight);
-      window.scrollTo(0, diff);
-      this.editor.move(
-        this.parentElement,
-        "after",
-        this.containerIndex,
-        this.containerIndex + 1
+      global.scrollTo(0, diff);
+      this.modifyDocument(editor =>
+        editor.move(
+          this.parentElement,
+          "after",
+          this.containerIndex,
+          this.containerIndex + 1
+        )
       );
     }
   }
 
   removeHandler() {
-    this.editor.remove(this);
+    this.modifyDocument(editor => editor.remove(this));
   }
 
   insertHandler(event) {
-    this.editor.insert(
-      event.detail.section,
-      this.parentElement,
-      "before",
-      this.containerIndex
+    this.modifyDocument(editor =>
+      editor.insert(
+        event.detail.section,
+        this.parentElement,
+        "before",
+        this.containerIndex
+      )
     );
   }
 
@@ -196,7 +203,8 @@ export default class Section extends EditorElement {
       <div class="${this.isHovered ? "hovered" : ""}">
         ${this.inContainer
           ? html`
-              ${this.containerItems < this.containerMax || this.containerMax === 0
+              ${this.containerItems < this.containerMax ||
+              this.containerMax === 0
                 ? html`
                     <ck-placeholder
                       collapsed="true"

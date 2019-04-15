@@ -44,7 +44,7 @@ export default class MediaConflict extends EditorElement {
   }
 
   selectOptionHandler(event) {
-    this.editor.swap(event.detail, this);
+    this.modifyDocument(editor => editor.swap(event.detail, this));
   }
 
   touchStartHandler(e) {

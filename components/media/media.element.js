@@ -11,7 +11,7 @@ export default (preload = false) => {
   media.setAttribute("ck-edit", true);
 
   document.addEventListener(
-    "editor-ui:media-select",
+    "ck-editor:media-select",
     event => {
       event.respond(randomUuid());
     },
@@ -19,7 +19,7 @@ export default (preload = false) => {
   );
 
   document.addEventListener(
-    "editor-ui:media-upload",
+    "ck-editor:media-upload",
     event => {
       event.respond(randomUuid());
     },
@@ -27,7 +27,7 @@ export default (preload = false) => {
   );
 
   document.addEventListener(
-    "editor-ui:media-edit",
+    "ck-editor:media-edit",
     event => {
       event.respond(randomUuid());
     },
@@ -35,7 +35,7 @@ export default (preload = false) => {
   );
 
   document.addEventListener(
-    "editor-ui:media-preview",
+    "ck-editor:media-preview",
     event => {
       window.setTimeout(() => {
         event.respond(

@@ -1,7 +1,7 @@
 import { LitElement, html, svg } from "lit-element";
 import { render } from "lit-html";
-import styles from "./tabs.css";
-import modalStyles from "./modal.css";
+import styles from "!raw-loader!./tabs.css";
+import modalStyles from "!raw-loader!./modal.css";
 import editIcon from "./icons/pencil.svg";
 import EditorElement from "../base/editor-element/editor-element";
 
@@ -96,7 +96,9 @@ export default class Tabs extends EditorElement {
   }
 
   appendHandler(event) {
-    this.editor.insert(event.detail.section, this, "end");
+    this.modifyDocument(editor =>
+      editor.insert(event.detail.section, this, "end")
+    );
   }
 
   render() {
@@ -158,7 +160,9 @@ export default class Tabs extends EditorElement {
 
   deleteItem() {
     if (this.items.length >= 2) {
-      this.editor.remove(this.children[this.currentTab]);
+      this.modifyDocument(editor =>
+        editor.remove(this.children[this.currentTab])
+      );
       if (this.currentTab === this.items.length - 1) {
         this.currentTab -= 1;
       }
@@ -177,10 +181,12 @@ export default class Tabs extends EditorElement {
   }
 
   updateItem(item) {
-    this.editor.attributes(this.children[item.index], {
-      "data-tab-title": item.title,
-      "data-default-tab": item.default
-    });
+    this.modifyDocument(editor =>
+      editor.attributes(this.children[item.index], {
+        "data-tab-title": item.title,
+        "data-default-tab": item.default
+      })
+    );
     if (item.default) {
       Array.from(this.children)
         .filter(
@@ -189,7 +195,9 @@ export default class Tabs extends EditorElement {
             child !== this.children[item.index]
         )
         .forEach(child =>
-          this.editor.attributes(child, { "data-default-tab": "false" })
+          this.modifyDocument(editor =>
+            editor.attributes(child, { "data-default-tab": "false" })
+          )
         );
     }
   }
