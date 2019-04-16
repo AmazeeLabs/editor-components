@@ -7,7 +7,7 @@ export default class Container extends EditorElement {
       sections: { type: String, attribute: "ck-contains" },
       numberOfChildren: { type: Number },
       max: { type: Number, attribute: "ck-max" },
-      min: { type: Number, attribute: "ck-min" },
+      min: { type: Number, attribute: "ck-min" }
     };
   }
 
@@ -32,7 +32,9 @@ export default class Container extends EditorElement {
   }
 
   processChildren() {
-    this.numberOfChildren = this.children.length;
+    this.numberOfChildren = Array.from(this.children).filter(
+      child => child.nodeName !== "BR"
+    ).length;
 
     if (!this.max) {
       this.max = 0;
@@ -51,7 +53,7 @@ export default class Container extends EditorElement {
               containerSections: this.sections,
               containerIndex: index,
               containerMax: this.max,
-              containerItems: this.children.length || 0
+              containerItems: this.numberOfChildren || 0
             }
           })
         );

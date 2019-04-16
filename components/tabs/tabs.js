@@ -43,27 +43,33 @@ export default class Tabs extends EditorElement {
 
     this.processItems();
 
-    this.numberOfChildren = this.children.length;
-    if (this.children.length > 0) {
+    this.numberOfChildren = Array.from(this.children).filter(
+      node => node.nodeName !== "BR"
+    ).length;
+    if (this.numberOfChildren > 0) {
       this.currentTab = 0;
     }
   }
 
   processItems() {
-    this.items = Array.from(this.children).map((child, index) => {
-      return {
-        title:
-          (child.dataset.titleAttribute
-            ? child.getAttribute(child.dataset.titleAttribute)
-            : null) ||
-          child.dataset.tabTitle ||
-          "Untitled Tab",
-        default: child.dataset.defaultTab,
-        index
-      };
-    });
+    this.items = Array.from(this.children)
+      .filter(child => child.nodeName !== "BR")
+      .map((child, index) => {
+        return {
+          title:
+            (child.dataset.titleAttribute
+              ? child.getAttribute(child.dataset.titleAttribute)
+              : null) ||
+            child.dataset.tabTitle ||
+            "Untitled Tab",
+          default: child.dataset.defaultTab,
+          index
+        };
+      });
     this.setTabsItem(this.currentTab);
-    this.numberOfChildren = this.children.length;
+    this.numberOfChildren = Array.from(this.children).filter(
+      node => node.nodeName !== "BR"
+    ).length;
   }
 
   openModal() {

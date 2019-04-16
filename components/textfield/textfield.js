@@ -170,4 +170,3 @@ export default class TextField extends LitElement {
 // Static flag if textfield errors should be highlighted immediately.
 // If set to false, errors are highlighted after focus is lost for the first time.
 TextField.initializeWithErrors = false;
-

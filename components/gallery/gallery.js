@@ -28,19 +28,27 @@ export default class Gallery extends EditorElement {
 
     const slots = this.shadowRoot;
     slots.addEventListener("slotchange", () => {
-      this.numberOfChildren = this.children.length;
-      this.items = Array.from(this.children).map((child, index) => ({
+      this.numberOfChildren = Array.from(this.children).filter(
+        child => child.nodeName !== "BR"
+      ).length;
+      this.items = Array.from(this.children)
+        .filter(child => child.nodeName !== "BR")
+        .map((child, index) => ({
+          title: index + 1,
+          index
+        }));
+    });
+
+    this.numberOfChildren = Array.from(this.children).filter(
+      child => child.nodeName !== "BR"
+    ).length;
+    this.maxItems = this.maxItems || 0;
+    this.items = Array.from(this.children)
+      .filter(child => child.nodeName !== "BR")
+      .map((child, index) => ({
         title: index + 1,
         index
       }));
-    });
-
-    this.numberOfChildren = this.children.length;
-    this.maxItems = this.maxItems || 0;
-    this.items = Array.from(this.children).map((child, index) => ({
-      title: index + 1,
-      index
-    }));
     this.setGalleryItem(this.currentItem);
   }
 
@@ -151,24 +159,20 @@ export default class Gallery extends EditorElement {
       this.currentItem > 0 &&
       this.currentItem < this.numberOfChildren
     ) {
-      this.modifyDocument(editor => editor.move(this, "before", this.currentItem, this.currentItem - 1));
+      this.modifyDocument(editor =>
+        editor.move(this, "before", this.currentItem, this.currentItem - 1)
+      );
       this.currentItem -= 1;
     }
-    if (
-      position === "right" &&
-      this.currentItem !== this.numberOfChildren - 1
-    ) {
-      if (this.currentItem < this.numberOfChildren - 1) {
-        this.modifyDocument( editor =>
-            editor.move(
-                this,
-                "before",
-                this.currentItem,
-                this.currentItem + 2
-            )
-        )
+    if (position === "right" && this.currentItem < this.numberOfChildren - 1) {
+      if (this.currentItem < this.numberOfChildren - 2) {
+        this.modifyDocument(editor =>
+          editor.move(this, "before", this.currentItem, this.currentItem + 2)
+        );
       } else {
-        this.modifyDocument(editor => editor.move(this, "end", this.currentItem));
+        this.modifyDocument(editor =>
+          editor.move(this, "end", this.currentItem)
+        );
       }
       this.currentItem += 1;
     }

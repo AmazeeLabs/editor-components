@@ -196,7 +196,8 @@ export default class EditorElement extends LitElement {
    */
   connectedCallback() {
     super.connectedCallback();
-    this.inEditor = !!this.closest(".ck");
+    // TODO: Properly detect when not in an editor instance.
+    this.inEditor = true;
   }
 
   /**

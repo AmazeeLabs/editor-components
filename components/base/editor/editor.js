@@ -1,7 +1,6 @@
 import global from "global";
 import { LitElement, html } from "lit-element";
 import { eventType } from "./operations";
-import Placeholder from "../placeholder/placeholder";
 
 import text from "!raw-loader!./templates/text.html";
 import added from "!raw-loader!./templates/added.html";

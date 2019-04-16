@@ -120,7 +120,11 @@ export default class Media extends EditorElement {
         uuid: this.mediaUuid
       },
       uuid => {
-        this.mediaUuid = uuid;
+        this.modifyDocument(editor => {
+          editor.attributes(this, {
+            "data-media-uuid": uuid
+          });
+        });
       }
     );
   }
