@@ -78,7 +78,8 @@ export default class Gallery extends EditorElement {
           <div class="ck-gallery__pager">
             <div class="ck-gallery__dots">
               ${this.items.map(item => this.button(item))}
-              ${this.numberOfChildren < this.maxItems || this.maxItems === 0
+              ${this.inEditor &&
+              (this.numberOfChildren < this.maxItems || this.maxItems === 0)
                 ? html`
                     <span
                       @click="${() => this.addItem()}"
@@ -93,43 +94,48 @@ export default class Gallery extends EditorElement {
                 : null}
             </div>
           </div>
-          <div class="ck-gallery__actions">
-            <span>Edit active element</span>
-            <div class="ck-gallery__icons">
-              <div
-                @click="${() => this.moveItem("left")}"
-                data-tooltip="Move element to the left"
-                class="ck-gallery__icon ck-gallery__icon--arrow-left ${this
-                  .currentItem === 0 || this.currentItem === this.items.length
-                  ? "disabled"
-                  : ""}"
-              >
-                ${svg([leftIcon])}
-              </div>
-              <div
-                @click="${() => this.moveItem("right")}"
-                data-tooltip="Move element to the right"
-                class="ck-gallery__icon ck-gallery__icon--arrow-right ${this
-                  .currentItem >=
-                this.items.length - 1
-                  ? "disabled"
-                  : ""}"
-              >
-                ${svg([rightIcon])}
-              </div>
-              <div
-                @click="${() => this.deleteItem()}"
-                data-tooltip="Delete slide"
-                class="ck-gallery__icon ck-gallery__icon--arrow-trash ${this
-                  .items.length === 0 ||
-                this.currentItem === this.numberOfChildren
-                  ? "disabled"
-                  : ""}"
-              >
-                ${svg([trashIcon])}
-              </div>
-            </div>
-          </div>
+          ${this.inEditor
+            ? html`
+                <div class="ck-gallery__actions">
+                  <span>Edit active element</span>
+                  <div class="ck-gallery__icons">
+                    <div
+                      @click="${() => this.moveItem("left")}"
+                      data-tooltip="Move element to the left"
+                      class="ck-gallery__icon ck-gallery__icon--arrow-left ${this
+                        .currentItem === 0 ||
+                      this.currentItem === this.items.length
+                        ? "disabled"
+                        : ""}"
+                    >
+                      ${svg([leftIcon])}
+                    </div>
+                    <div
+                      @click="${() => this.moveItem("right")}"
+                      data-tooltip="Move element to the right"
+                      class="ck-gallery__icon ck-gallery__icon--arrow-right ${this
+                        .currentItem >=
+                      this.items.length - 1
+                        ? "disabled"
+                        : ""}"
+                    >
+                      ${svg([rightIcon])}
+                    </div>
+                    <div
+                      @click="${() => this.deleteItem()}"
+                      data-tooltip="Delete slide"
+                      class="ck-gallery__icon ck-gallery__icon--arrow-trash ${this
+                        .items.length === 0 ||
+                      this.currentItem === this.numberOfChildren
+                        ? "disabled"
+                        : ""}"
+                    >
+                      ${svg([trashIcon])}
+                    </div>
+                  </div>
+                </div>
+              `
+            : null}
         </div>
       </div>
     `;

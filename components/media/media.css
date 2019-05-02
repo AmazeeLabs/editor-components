@@ -41,8 +41,8 @@ img {
   45deg,
   var(--color-white),
   var(--color-white) 30px,
-  var(--color-black-05) 30px,
-  var(--color-black-05) 60px
+  var(--color-grey-light) 30px,
+  var(--color-grey-light) 60px
   );
 }
 

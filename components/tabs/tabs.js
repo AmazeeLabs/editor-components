@@ -122,10 +122,14 @@ export default class Tabs extends EditorElement {
         <div class="ck-tabs__header">
           <ul class="ck-tabs__header-tab-list">
             ${this.items.map(item => this.tabTitle(item))}
-            <li
-              @click="${() => this.addItem()}"
-              class="ck-tabs__header-tab-add"
-            ></li>
+            ${this.inEditor
+              ? html`
+                  <li
+                    @click="${() => this.addItem()}"
+                    class="ck-tabs__header-tab-add"
+                  ></li>
+                `
+              : null}
           </ul>
         </div>
         <div class="ck-tabs__content">
@@ -154,12 +158,16 @@ export default class Tabs extends EditorElement {
         ${item.default === "true" ? "default" : ""}"
       >
         ${item.title}
-        <span
-          @click="${() => this.openModal(item)}"
-          class="ck-tabs__header-icon"
-        >
-          ${svg([editIcon])}
-        </span>
+        ${this.inEditor
+          ? html`
+              <span
+                @click="${() => this.openModal(item)}"
+                class="ck-tabs__header-icon"
+              >
+                ${svg([editIcon])}
+              </span>
+            `
+          : null}
       </li>
     `;
   }

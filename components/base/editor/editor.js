@@ -115,7 +115,7 @@ Editor.templates = {};
 
 Editor.decorator = story => {
   const editor = document.createElement("ck-editor");
-  editor.classList.add("ck");
+  editor.classList.add("ck-editor");
   const content = story();
   if (content instanceof Object) {
     editor.appendChild(content);

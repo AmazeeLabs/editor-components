@@ -11,9 +11,6 @@
   --font-size-text: 16px;
   --baseline: 8px;
   --baseline2: 16px;
-  font-family: var(--font-family, sans-serif);
-  font-style: initial;
-  font-weight: initial;
   position: relative;
   display: block;
   outline: none;
@@ -28,6 +25,9 @@
 }
 
 .ck-tooltip {
+  font-family: var(--font-family, sans-serif);
+  font-style: initial;
+  font-weight: initial;
   position: absolute;
   top: 0;
   left: 0;

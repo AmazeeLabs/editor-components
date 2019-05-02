@@ -195,9 +195,8 @@ export default class EditorElement extends LitElement {
    * @inheritDoc
    */
   connectedCallback() {
+    this.inEditor = !!this.closest(".ck-editor");
     super.connectedCallback();
-    // TODO: Properly detect when not in an editor instance.
-    this.inEditor = true;
   }
 
   /**

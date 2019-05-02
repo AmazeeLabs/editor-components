@@ -51,13 +51,19 @@ export default class Button extends EditorElement {
 
 Button.styles = css`
   :host {
+    display: inline-block;
     --icon-size: 2em;
     --icon-color: black;
     --background-color: #ffbb15;
+    background: var(--background-color);
+    border-radius: 3em;
+    font-weight: bold;
   }
 
   .button {
     display: flex;
+    align-items: center;
+    padding: 0 1em;
   }
 
   .button__content {
@@ -67,14 +73,18 @@ Button.styles = css`
   .button button {
     width: var(--icon-size);
     border: none;
+    padding: 0;
     background: none;
     flex-grow: 0;
     cursor: pointer;
     transition: transform 0.5s ease;
     outline: none;
+    margin-left: 0.5em;
   }
 
   .button svg {
+    padding: 0;
+    display: block;
     fill: var(--icon-color);
     width: var(--icon-size);
   }

@@ -21,7 +21,7 @@ global.customElements.define("ck-test-element", TestEditorElement);
 storiesOf("Base/Editor element", module)
   .add(
     "In editor",
-    () => `<div class="ck"><ck-test-element></ck-test-element></div>`,
+    () => `<div class="ck-editor"><ck-test-element></ck-test-element></div>`,
     { notes }
   )
   .add("Not editor", () => `<ck-test-element></ck-test-element>`);

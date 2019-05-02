@@ -59,12 +59,15 @@ export default class Container extends EditorElement {
         );
       });
     } else {
-      const element = this.sections.split(" ").pop();
-      this.modifyDocument(editor => {
-        for (let i = this.numberOfChildren; i < this.min; i += 1) {
-          editor.insert(element, this, "end");
-        }
-      });
+      const options = this.sections.split(" ");
+      if (options.length === 1) {
+        const element = options[0];
+        this.modifyDocument(editor => {
+          for (let i = this.numberOfChildren; i < this.min; i += 1) {
+            editor.insert(element, this, "end");
+          }
+        });
+      }
     }
   }
 
