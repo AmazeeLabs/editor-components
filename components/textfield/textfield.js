@@ -57,7 +57,6 @@ export default class TextField extends EditorElement {
   }
 
   validate() {
-    if (!this.innerText) return;
     // MAX
     if (this.hasAttribute("ck-max")) this.maxValidation();
     // MIN
@@ -67,6 +66,28 @@ export default class TextField extends EditorElement {
       this.rangeValidation();
     // Pattern
     if (this.hasAttribute("ck-pattern")) this.patternValidation();
+  }
+
+  /**
+   * The ck-* attributes are not applied immediately, so we have to watch for updates and re-validate.
+   * @param properties
+   */
+  updated(properties) {
+    if (
+      !(
+        properties.has("minLength") ||
+        properties.has("maxLength") ||
+        properties.has("pattern")
+      )
+    ) {
+      return;
+    }
+    // Textfield errors immediately highlighted
+    this.requestInformation("show-errors", {}, showErrors => {
+      if (showErrors) {
+        this.validate();
+      }
+    });
   }
 
   maxValidation() {
