@@ -125,6 +125,17 @@ Editor.decorator = story => {
   return editor;
 };
 
+Editor.showErrors = story => {
+  document.addEventListener(
+    "ck-editor:show-errors",
+    event => {
+      event.respond(true);
+    },
+    { capture: true }
+  );
+  return story();
+};
+
 Editor.dummySetup = story => {
   Editor.templates = {
     text,

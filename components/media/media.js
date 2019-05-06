@@ -34,12 +34,20 @@ export default class Media extends EditorElement {
       enableUpload: { attribute: "ck-upload", type: Boolean },
       enableEdit: { attribute: "ck-edit", type: Boolean },
       buttonPosition: { attribute: "ck-button-position", type: String },
-      preview: String
+      preview: String,
+      error: Boolean
     };
   }
 
   connectedCallback() {
     super.connectedCallback();
+
+    // Textfield errors immediately highlighted
+    this.requestInformation("show-errors", {}, showErrors => {
+      if (showErrors) {
+        this.error = !this.mediaUuid;
+      }
+    });
   }
 
   renderPreview() {
@@ -61,6 +69,7 @@ export default class Media extends EditorElement {
   updated(properties) {
     this.previewPane = this.shadowRoot.querySelector(".ck-media__preview");
     if (properties.has("mediaUuid") && this.mediaUuid) {
+      this.error = !this.mediaUuid;
       this.renderPreview();
     }
 
@@ -74,7 +83,7 @@ export default class Media extends EditorElement {
       <style>
         ${styles}
       </style>
-      <div class="ck-media">
+      <div class="ck-media ${this.error ? "error" : "no-error"}">
         <div
           class="ck-media__preview ${this.preview ? "visible" : "hidden"}"
         ></div>

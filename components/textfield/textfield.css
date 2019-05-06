@@ -18,6 +18,12 @@
 
 .ck-textfield {
   position: relative;
+  margin-top: 40px;
+}
+.ck-textfield:before, .ck-textfield:after {
+  content: '';
+  display: table;
+  clear: both;
 }
 
 .ck-textfield.error {

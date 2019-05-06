@@ -1,7 +1,8 @@
 import { LitElement, html, css } from "lit-element";
 import styles from "!raw-loader!./textfield.css";
+import EditorElement from "../base/editor-element/editor-element";
 
-export default class TextField extends LitElement {
+export default class TextField extends EditorElement {
   static get properties() {
     return {
       pattern: { attribute: "ck-pattern", type: String },
@@ -17,7 +18,6 @@ export default class TextField extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-
 
     this.querySelectorAll(["[contenteditable]"]).forEach(el => {
       const observer = new MutationObserver(this.validate);
@@ -41,8 +41,12 @@ export default class TextField extends LitElement {
       }
     });
 
-    // textfield errors immediately highlighted
-    if (TextField.initializeWithErrors) this.validate();
+    // Textfield errors immediately highlighted
+    this.requestInformation("show-errors", {}, showErrors => {
+      if (showErrors) {
+        this.validate();
+      }
+    });
   }
 
   handleMax() {
