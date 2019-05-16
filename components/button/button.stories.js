@@ -3,6 +3,27 @@ import buttonNotes from "./button.md";
 import "./index";
 import Editor from "../base/editor/editor";
 
+/**
+ * Helper function to add ck-editor:select-link event handler.
+ *
+ * @todo: consider converting to a decorator.
+ *
+ * @param document
+ */
+function addSelectLinkEventHandler(document) {
+  document.addEventListener(
+    "ck-editor:select-link",
+    event => {
+      if (event.detail.target) {
+        event.respond(null);
+      } else {
+        event.respond("http://drupal.org");
+      }
+    },
+    { capture: true }
+  );
+}
+
 storiesOf("Button", module)
   .addDecorator(Editor.decorator)
   .add(
@@ -17,18 +38,22 @@ storiesOf("Button", module)
       button.style.setProperty("--icon-color", "white");
       button.style.borderRadius = "1.5em";
       button.setAttribute("contenteditable", true);
-      document.addEventListener(
-        "ck-editor:select-link",
-        event => {
-          if (event.detail.target) {
-            event.respond(null);
-          } else {
-            event.respond("http://drupal.org");
-          }
-        },
-        { capture: true }
-      );
+      addSelectLinkEventHandler(document);
       return button;
+    },
+    {
+      notes: { markdown: buttonNotes }
+    }
+  );
+
+storiesOf("Button", module)
+  .addDecorator(Editor.decorator)
+  .addDecorator(Editor.showErrors)
+  .add(
+    "Errors",
+    () => {
+      addSelectLinkEventHandler(document);
+      return `<ck-button contenteditable="true"><p>Please enter either A) text and link or B) no text and no link!</p></ck-textfield>`;
     },
     {
       notes: { markdown: buttonNotes }
