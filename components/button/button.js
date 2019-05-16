@@ -15,11 +15,20 @@ export default class Button extends EditorElement {
     };
   }
 
+  hasError() {
+    return this.error;
+  }
+
   validate() {
     const target = this.target && !!this.target.toString().trim();
     const innerText = !!this.innerText.trim().length;
     // @todo: should we validate target to be a valid URL/fragment.
     this.error = !((target && innerText) || (!target && !innerText));
+    if (this.error) {
+      this.emitElementValidationErrorEvent(
+        "You must provide a link target and a link text or leave both empty."
+      );
+    }
   }
 
   setupMutationObserver() {

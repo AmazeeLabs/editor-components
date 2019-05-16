@@ -49,7 +49,8 @@ export default class Section extends EditorElement {
       containerMax: { type: Number },
       containerItems: { type: Number },
       containerSections: { type: String },
-      isHovered: { type: Boolean }
+      isHovered: { type: Boolean },
+      error: { type: Boolean }
     };
   }
 
@@ -81,6 +82,21 @@ export default class Section extends EditorElement {
     // this.addEventListener("mouseout", event => {
     //   this.isHovered = false;
     // });
+
+    this.addEventListener("ck-editor:element-validation-error", event => {
+      this.error = true;
+    });
+
+    this.addEventListener(
+      "ck-editor:element-validation-error-resolved",
+      event => {
+        this.error = false;
+      }
+    );
+  }
+
+  hasError() {
+    return this.error;
   }
 
   connectedCallback() {

@@ -7,6 +7,7 @@ import added from "!raw-loader!./templates/added.html";
 import removed from "!raw-loader!./templates/removed.html";
 import gallery from "!raw-loader!./templates/gallery.html";
 import image from "!raw-loader!./templates/image.html";
+import media from "!raw-loader!./templates/media.html";
 import columns from "!raw-loader!./templates/columns.html";
 
 export default class Editor extends LitElement {
@@ -139,6 +140,7 @@ Editor.showErrors = story => {
 Editor.dummySetup = story => {
   Editor.templates = {
     text,
+    media,
     image: () =>
       image
         .replace("%width", 800)
@@ -159,6 +161,7 @@ global.addEventListener(
       { id: "text", label: "Text", icon: "text" },
       { id: "image", label: "Image", icon: "image" },
       { id: "gallery", label: "Gallery", icon: "carousel" },
+      { id: "media", label: "Media", icon: "image" },
       { id: "columns", label: "Columns", icon: "misc" }
     ]);
   },

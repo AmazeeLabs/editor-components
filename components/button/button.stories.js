@@ -10,7 +10,7 @@ import Editor from "../base/editor/editor";
  *
  * @param document
  */
-function addSelectLinkEventHandler(document) {
+function addEventHandlers(document) {
   document.addEventListener(
     "ck-editor:select-link",
     event => {
@@ -22,6 +22,9 @@ function addSelectLinkEventHandler(document) {
     },
     { capture: true }
   );
+  document.addEventListener("ck-editor:element-validation-error", event => {
+    console.log("ck-editor:element-validation-error", event);
+  });
 }
 
 storiesOf("Button", module)
@@ -38,7 +41,7 @@ storiesOf("Button", module)
       button.style.setProperty("--icon-color", "white");
       button.style.borderRadius = "1.5em";
       button.setAttribute("contenteditable", true);
-      addSelectLinkEventHandler(document);
+      addEventHandlers(document);
       return button;
     },
     {
@@ -52,7 +55,7 @@ storiesOf("Button", module)
   .add(
     "Errors",
     () => {
-      addSelectLinkEventHandler(document);
+      addEventHandlers(document);
       return `<ck-button contenteditable="true"><p>Please enter either A) text and link or B) no text and no link!</p></ck-textfield>`;
     },
     {

@@ -66,6 +66,13 @@ export default class TextField extends EditorElement {
       this.rangeValidation();
     // Pattern
     if (this.hasAttribute("ck-pattern")) this.patternValidation();
+
+    if (this.hasPatternError) {
+      this.emitElementValidationErrorEvent(this.errorMessage, "pattern_error");
+    }
+    if (this.hasLengthError) {
+      this.emitElementValidationErrorEvent(this.errorMessage, "length_error");
+    }
   }
 
   /**

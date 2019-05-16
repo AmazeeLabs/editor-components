@@ -1,5 +1,6 @@
 import { storiesOf } from "@storybook/html";
 import "../../gallery/gallery";
+import "../../media/media";
 import "../placeholder/placeholder";
 import "!style-loader!css-loader!./editor.css";
 import page from "!raw-loader!./templates/page.html";

@@ -15,6 +15,7 @@ const icons = {
   close: closeIcon,
   formatted_text: formattedTextIcon,
   carousel: carouselIcon,
+  media: imageIcon,
   image: imageIcon,
   misc: miscIcon,
   text: textIcon,
