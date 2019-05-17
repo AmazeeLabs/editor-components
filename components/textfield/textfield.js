@@ -21,7 +21,7 @@ export default class TextField extends EditorElement {
 
     this.querySelectorAll(["[contenteditable]"]).forEach(el => {
       /* global MutationObserver */
-      const observer = new MutationObserver(this.validate);
+      const observer = new MutationObserver(this.validate.bind(this));
       observer.observe(el, {
         childList: true,
         subtree: true,
