@@ -16,6 +16,10 @@ export default class TextField extends EditorElement {
     };
   }
 
+  hasError() {
+    return this.hasLengthError || this.hasPatternError;
+  }
+
   connectedCallback() {
     super.connectedCallback();
 
@@ -34,12 +38,7 @@ export default class TextField extends EditorElement {
         this.hasHelper = false;
       });
 
-      if (this.maxLength && !this.minLength) {
-        el.addEventListener("input", this.handleMax.bind(this));
-      }
-      if (this.maxLength && this.minLength) {
-        el.addEventListener("input", this.rangeValidation.bind(this));
-      }
+      el.addEventListener("input", this.validate.bind(this));
     });
 
     // Textfield errors immediately highlighted
@@ -50,26 +49,33 @@ export default class TextField extends EditorElement {
     });
   }
 
-  handleMax() {
-    this.helper = `${this.maxLength -
-      this.innerText.length} letters remaining.`;
-    this.setHelper();
-    this.maxValidation();
-  }
-
   validate() {
     const hadPatternError = this.hasPatternError;
     const hadLengthError = this.hasLengthError;
 
     // MAX
-    if (this.hasAttribute("ck-max")) this.maxValidation();
+    if (this.maxLength) {
+      this.maxValidation();
+    }
     // MIN
-    if (this.hasAttribute("ck-min")) this.minValidation();
+    if (this.minLength) {
+      this.minValidation();
+    }
     // Range
-    if (this.hasAttribute("ck-max") && this.hasAttribute("ck-min"))
+    if (this.maxLength && this.minLength) {
       this.rangeValidation();
+    }
     // Pattern
-    if (this.hasAttribute("ck-pattern")) this.patternValidation();
+    if (this.pattern) {
+      this.patternValidation();
+    }
+
+    // Adjust message of the helper.
+    if (this.maxLength && !this.minLength) {
+      this.helper = `${this.maxLength -
+        this.innerText.length} letters remaining.`;
+      this.setHelper();
+    }
 
     if (!hadPatternError && this.hasPatternError) {
       this.emitElementValidationErrorEvent(this.errorMessage, "pattern_error");
