@@ -23,33 +23,58 @@ export default class Gallery extends EditorElement {
     this.currentItem = 0;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-
-    const slots = this.shadowRoot;
-    slots.addEventListener("slotchange", () => {
-      this.numberOfChildren = Array.from(this.children).filter(
-        child => child.nodeName !== "BR"
-      ).length;
-      this.items = Array.from(this.children)
-        .filter(child => child.nodeName !== "BR")
-        .map((child, index) => ({
-          title: index + 1,
-          index
-        }));
+  validate() {
+    Array.from(this.children).forEach(element => {
+      if (element instanceof EditorElement) {
+        element.validate();
+      }
     });
+  }
 
-    this.numberOfChildren = Array.from(this.children).filter(
-      child => child.nodeName !== "BR"
-    ).length;
-    this.maxItems = this.maxItems || 0;
-    this.items = Array.from(this.children)
+  hasError() {
+    return (
+      this.items.filter(item => {
+        return item.error;
+      }).length > 0
+    );
+  }
+
+  getItems() {
+    return Array.from(this.children)
       .filter(child => child.nodeName !== "BR")
       .map((child, index) => ({
+        element: child,
+        error: child instanceof EditorElement && child.hasError(),
         title: index + 1,
         index
       }));
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    const slots = this.shadowRoot;
+    slots.addEventListener("slotchange", () => {
+      this.items = this.getItems();
+      this.numberOfChildren = this.items.length;
+    });
+
+    this.maxItems = this.maxItems || 0;
+    this.items = this.getItems();
+    this.numberOfChildren = this.items.length;
     this.setGalleryItem(this.currentItem);
+
+    // Listen to validation errors and error resolution.
+    this.addEventListener("ck-editor:element-validation-error", () => {
+      // Update the items.
+      this.items = this.getItems();
+      // @todo: _stop_ propagating the error event and encapsulate it a "group element error event"?
+    });
+
+    this.addEventListener("ck-editor:element-validation-error-resolved", () => {
+      // Update the items.
+      this.items = this.getItems();
+      // @todo: _stop_ propagating the error event and encapsulate it a "group element error event"?
+    });
   }
 
   render() {
@@ -58,7 +83,7 @@ export default class Gallery extends EditorElement {
         ${styles}
       </style>
 
-      <div class="ck-gallery">
+      <div class="ck-gallery ${this.hasError() ? "error" : ""}">
         <div
           class="ck-gallery__rail"
           style="transform: translateX(${this.currentItem * -100}%)"
@@ -190,7 +215,7 @@ export default class Gallery extends EditorElement {
         @click="${() => this.setGalleryItem(item.index)}"
         class="ck-gallery__dot-item ${this.currentItem === item.index
           ? "active"
-          : ""}"
+          : ""} ${item.error ? "error" : ""}"
         >${item.title}</span
       >
     `;

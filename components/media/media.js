@@ -39,13 +39,27 @@ export default class Media extends EditorElement {
     };
   }
 
+  validate() {
+    const hadError = this.error;
+
+    this.error = !this.mediaUuid;
+    if (!hadError && this.error) {
+      this.emitElementValidationErrorEvent(
+        "Media is required",
+        "media_required"
+      );
+    } else if (hadError && !this.error) {
+      this.emitElementValidationErrorResolvedEvent();
+    }
+  }
+
   connectedCallback() {
     super.connectedCallback();
 
     // Textfield errors immediately highlighted
     this.requestInformation("show-errors", {}, showErrors => {
       if (showErrors) {
-        this.error = !this.mediaUuid;
+        this.validate();
       }
     });
   }
@@ -69,7 +83,7 @@ export default class Media extends EditorElement {
   updated(properties) {
     this.previewPane = this.shadowRoot.querySelector(".ck-media__preview");
     if (properties.has("mediaUuid") && this.mediaUuid) {
-      this.error = !this.mediaUuid;
+      this.validate();
       this.renderPreview();
     }
 

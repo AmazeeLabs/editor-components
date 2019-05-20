@@ -10,18 +10,72 @@ const iconLink = svg`
 export default class Button extends EditorElement {
   static get properties() {
     return {
-      target: { type: String, attribute: "link-target" }
+      target: { type: String, attribute: "link-target" },
+      error: Boolean
     };
   }
 
-  constructor() {
-    super();
-    this.target = null;
+  hasError() {
+    return this.error;
+  }
+
+  validate() {
+    const hadError = this.error;
+
+    const target = this.target && !!this.target.toString().trim().length;
+    const innerText = !!this.innerText.trim().length;
+    // @todo: should we validate target to be a valid URL/fragment.
+    this.error = !((target && innerText) || (!target && !innerText));
+    if (!hadError && this.error) {
+      this.emitElementValidationErrorEvent(
+        "You must provide a link target and a link text or leave both empty."
+      );
+    } else if (hadError && !this.error) {
+      this.emitElementValidationErrorResolvedEvent();
+    }
+  }
+
+  setupMutationObserver() {
+    /* global MutationObserver */
+    this.observer = new MutationObserver(this.validate.bind(this));
+    this.observer.observe(this, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.setupMutationObserver();
+
+    // Textfield errors immediately highlighted
+    this.requestInformation("show-errors", {}, showErrors => {
+      if (showErrors) {
+        this.validate();
+      }
+    });
+  }
+
+  disconnectedCallback() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  updated(properties) {
+    if (properties.has("target")) {
+      this.validate();
+    }
   }
 
   render() {
     return html`
-      <div class="button ${this.target ? "linked" : "not-linked"}">
+      <div
+        class="button ${this.target ? "linked" : "not-linked"} ${this.error
+          ? "error"
+          : ""}"
+      >
         <div class="button__content">
           <slot></slot>
         </div>
@@ -54,6 +108,7 @@ Button.styles = css`
     display: inline-block;
     --icon-size: 2em;
     --icon-color: black;
+    --color-red: #d32323;
     --background-color: #ffbb15;
     background: var(--background-color);
     border-radius: 3em;
@@ -91,5 +146,9 @@ Button.styles = css`
 
   .button.not-linked svg {
     opacity: 0.5;
+  }
+
+  .button.error {
+    outline: 1px solid var(--color-red);
   }
 `;

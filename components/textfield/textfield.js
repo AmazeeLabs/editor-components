@@ -20,7 +20,8 @@ export default class TextField extends EditorElement {
     super.connectedCallback();
 
     this.querySelectorAll(["[contenteditable]"]).forEach(el => {
-      const observer = new MutationObserver(this.validate);
+      /* global MutationObserver */
+      const observer = new MutationObserver(this.validate.bind(this));
       observer.observe(el, {
         childList: true,
         subtree: true,
@@ -57,6 +58,9 @@ export default class TextField extends EditorElement {
   }
 
   validate() {
+    const hadPatternError = this.hasPatternError;
+    const hadLengthError = this.hasLengthError;
+
     // MAX
     if (this.hasAttribute("ck-max")) this.maxValidation();
     // MIN
@@ -66,6 +70,18 @@ export default class TextField extends EditorElement {
       this.rangeValidation();
     // Pattern
     if (this.hasAttribute("ck-pattern")) this.patternValidation();
+
+    if (!hadPatternError && this.hasPatternError) {
+      this.emitElementValidationErrorEvent(this.errorMessage, "pattern_error");
+    } else if (hadPatternError && !this.hasPatternError) {
+      this.emitElementValidationErrorResolvedEvent();
+    }
+
+    if (!hadLengthError && this.hasLengthError) {
+      this.emitElementValidationErrorEvent(this.errorMessage, "length_error");
+    } else if (hadLengthError && !this.hasLengthError) {
+      this.emitElementValidationErrorResolvedEvent();
+    }
   }
 
   /**

@@ -155,6 +155,44 @@ class EditorProxy {
 }
 
 /**
+ * Element validation error class
+ */
+export class ElementValidationError extends Error {
+  constructor(sourceElement, message, code, payload) {
+    super(message);
+    this.code = code || null;
+    this.sourceElement = sourceElement || null;
+    this.payload = payload || {};
+  }
+}
+
+/**
+ * Event type to trigger ck-editor validation event.
+ */
+export class ElementValidationErrorEvent extends CustomEvent {
+  constructor(error) {
+    super(`ck-editor:element-validation-error`, {
+      detail: error,
+      bubbles: true,
+      composed: true
+    });
+  }
+}
+
+/**
+ * Event type to trigger ck-editor validation event.
+ */
+export class ElementValidationErrorResolvedEvent extends CustomEvent {
+  constructor(sourceElement) {
+    super(`ck-editor:element-validation-error-resolved`, {
+      detail: sourceElement,
+      bubbles: true,
+      composed: true
+    });
+  }
+}
+
+/**
  * Event type to communicate with an external user interface.
  */
 class RequestInformationEvent extends CustomEvent {
@@ -228,5 +266,57 @@ export default class EditorElement extends LitElement {
    */
   requestInformation(type, detail, callback) {
     this.dispatchEvent(new RequestInformationEvent(type, detail, callback));
+  }
+
+  /**
+   * Trigger an element validation and emit validation events.
+   *
+   * @todo: provide
+   */
+  validate() {}
+
+  /**
+   * Return true if an element does not validate.
+   *
+   * @returns Boolean
+   */
+  hasError() {}
+
+  /**
+   * Instantiates an ElementValidationError.
+   *
+   * @param message
+   * @param code
+   * @param payload
+   * @returns {ElementValidationError}
+   */
+  createElementValidationError(message, code, payload) {
+    // @todo: make sure that the call stack is better and doesn't end up "here" instead of in the calling location.
+    return new ElementValidationError(this, message, code, payload);
+  }
+
+  /**
+   * Emits an element validation error.
+   *
+   * @param message
+   * @param code
+   * @param payload
+   * @returns {boolean}
+   */
+  emitElementValidationErrorEvent(message, code, payload) {
+    return this.dispatchEvent(
+      new ElementValidationErrorEvent(
+        this.createElementValidationError(message, code, payload)
+      )
+    );
+  }
+
+  /**
+   * Emits an element validation error resolution event.
+   *
+   * @returns {boolean}
+   */
+  emitElementValidationErrorResolvedEvent() {
+    return this.dispatchEvent(new ElementValidationErrorResolvedEvent(this));
   }
 }
