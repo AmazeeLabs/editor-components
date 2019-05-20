@@ -3,6 +3,7 @@ import { LitElement, html } from "lit-element";
 import { eventType } from "./operations";
 
 import text from "!raw-loader!./templates/text.html";
+import textfield from "!raw-loader!./templates/textfield.html";
 import added from "!raw-loader!./templates/added.html";
 import removed from "!raw-loader!./templates/removed.html";
 import gallery from "!raw-loader!./templates/gallery.html";
@@ -140,6 +141,7 @@ Editor.showErrors = story => {
 Editor.dummySetup = story => {
   Editor.templates = {
     text,
+    textfield,
     media,
     image: () =>
       image
@@ -159,6 +161,7 @@ global.addEventListener(
   event => {
     event.respond([
       { id: "text", label: "Text", icon: "text" },
+      { id: "textfield", label: "Textfield", icon: "text" },
       { id: "image", label: "Image", icon: "image" },
       { id: "gallery", label: "Gallery", icon: "carousel" },
       { id: "media", label: "Media", icon: "image" },
