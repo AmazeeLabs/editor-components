@@ -1,0 +1,116 @@
+:host {
+  --color-red: #d32323;
+  --color-blue: #004adc;
+  --color-black: #222330;
+  --color-black-80: rgba(0, 0, 0, 0.8);
+  --color-black-60: rgba(0, 0, 0, 0.6);
+  --color-black-30: rgba(0, 0, 0, 0.3);
+  --color-black-10: rgba(0, 0, 0, 0.1);
+  --color-black-05: rgba(0, 0, 0, 0.05);
+  --color-spinner: rgba(0, 0, 0, 0.4);
+  --color-grey-light: #CCC;
+  --color-white: #FFF;
+  --align-buttons: left;
+  --height-ratio: 50%;
+  font-family: var(--font-family, sans-serif);
+  --button-padding: 5px;
+}
+
+::slotted(*) {
+  margin: 0;
+  padding: 0;
+}
+
+.ck-collapse__header {
+  border-bottom: 1px solid var(--color-black-10);
+  display: flex;
+}
+
+.ck-collapse.open .ck-collapse__header {
+  border-color:  var(--color-blue);
+}
+
+.ck-collapse__title {
+  padding: 15px 20px;
+  flex: 1;
+}
+
+.ck-collapse__action {
+  position: relative;
+  width: 50px;
+  cursor: pointer;
+}
+
+.ck-collapse__action::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-70%) rotate(45deg);
+  right: 20px;
+  border: solid var(--color-blue);
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transition: transform 0.35s ease;
+}
+
+.ck-collapse.open .ck-collapse__action::after {
+  transform: translateY(-30%) rotate(-135deg);
+}
+
+.ck-collapse__body {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  padding: 0;
+  transition: max-height 0.2s, padding-top 0.3s, padding-bottom 0.3s,  opacity 0.3s;
+}
+
+.ck-collapse.open .ck-collapse__body {
+  max-height: 1000px;
+  opacity: 1;
+  visibility: visible;
+  border: 1px solid var(--color-black-10);
+  border-top: 0;
+  padding: 20px;
+}
+
+
+.ck-collapse__icons {
+  width: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  border-left: 1px solid var(--color-black-10);
+}
+
+.ck-collapse__icon {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  transition: background-color 0.35s ease;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ck-collapse__icon:hover {
+  background-color: #f0f0f0;
+}
+
+.ck-collapse__icon > * {
+  width: 14px;
+  height: 14px;
+}
+
+.ck-collapse__icon--arrow-up {
+  transform: rotate(90deg);
+}
+
+.ck-collapse__icon--arrow-down {
+  transform: rotate(270deg);
+}
