@@ -10,10 +10,7 @@
   --color-spinner: rgba(0, 0, 0, 0.4);
   --color-grey-light: #CCC;
   --color-white: #FFF;
-  --align-buttons: left;
-  --height-ratio: 50%;
   font-family: var(--font-family, sans-serif);
-  --button-padding: 5px;
 }
 
 ::slotted(*) {
@@ -113,4 +110,8 @@
 
 .ck-collapse__icon--arrow-down {
   transform: rotate(270deg);
+}
+
+.disabled {
+  opacity: 0.3;
 }
