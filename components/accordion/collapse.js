@@ -42,6 +42,17 @@ export default class Collapse extends EditorElement {
 
           <div class="ck-collapse__action" @click=${this.toggleCollapse}></div>
 
+          <div class="ck-collapse__icons">
+            <div class="ck-collapse__icon ck-collapse__icon--arrow-up">
+              ${svg([arrowIcon])}
+            </div>
+            <div class="ck-collapse__icon ck-collapse__icon--arrow-down">
+              ${svg([arrowIcon])}
+            </div>
+            <div class="ck-collapse__icon ck-collapse__icon--trash">
+              ${svg([trashIcon])}
+            </div>
+          </div>
         </div>
         <div class="ck-collapse__body">
           <slot></slot>
