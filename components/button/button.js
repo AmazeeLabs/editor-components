@@ -89,12 +89,18 @@ export default class Button extends EditorElement {
   selectLink() {
     const attributes = {};
     Object.keys(this.attributes).each(key => {
-      attributes[this.attributes[key].name] = this.attributes[key].value;
+      if (this.hasAttribute(this.attributes[key].name)) {
+        attributes[this.attributes[key].name] = this.attributes[key].value;
+      }
     });
 
     this.requestInformation("select-link", attributes, link => {
       if (link.href !== null) {
-        this.modifyDocument(editor => editor.attributes(this, link));
+        this.modifyDocument(editor => {
+          const linkAttributes = link;
+          linkAttributes["link-target"] = link.href;
+          editor.attributes(this, link);
+        });
       } else {
         this.modifyDocument(editor =>
           editor.removeAttribute(this, "link-target")
