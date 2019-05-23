@@ -88,7 +88,7 @@ export default class Button extends EditorElement {
 
   selectLink() {
     const attributes = {};
-    Object.keys(this.attributes).each(key => {
+    Object.keys(this.attributes).forEach(key => {
       if (this.hasAttribute(this.attributes[key].name)) {
         attributes[this.attributes[key].name] = this.attributes[key].value;
       }
@@ -99,7 +99,7 @@ export default class Button extends EditorElement {
         this.modifyDocument(editor => {
           const linkAttributes = link;
           linkAttributes["link-target"] = link.href;
-          editor.attributes(this, link);
+          editor.attributes(this, linkAttributes);
         });
       } else {
         this.modifyDocument(editor =>
@@ -116,15 +116,16 @@ Button.styles = css`
     --icon-size: 2em;
     --icon-color: black;
     --color-red: #d32323;
-    --background-color: #ffbb15;
-    background: var(--background-color);
-    border-radius: 3em;
-    font-weight: bold;
+    --button-background-color: #ffbb15;
+    --button-border-radius: 3em;
   }
 
   .button {
     display: flex;
     align-items: center;
+    font-weight: bold;
+    background: var(--button-background-color);
+    border-radius: var(--button-border-radius);
     padding: 0 1em;
   }
 
@@ -156,6 +157,6 @@ Button.styles = css`
   }
 
   .button.error {
-    outline: 1px solid var(--color-red);
+    box-shadow: 0 0 0 5px var(--color-red);
   }
 `;
