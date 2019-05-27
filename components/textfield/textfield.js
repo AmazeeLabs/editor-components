@@ -115,7 +115,7 @@ export default class TextField extends EditorElement {
   maxValidation() {
     if (this.innerText.length > this.maxLength && !this.minLength) {
       if (!this.errorMessage) {
-        this.errorMessage = `Please enter no more than 
+        this.errorMessage = `Please enter no more than
           ${this.maxLength} letters.`;
       }
       this.hasLengthError = true;
@@ -126,9 +126,9 @@ export default class TextField extends EditorElement {
   }
 
   minValidation() {
-    if (this.innerText.length < this.minLength) {
+    if (this.getInnerText().length < this.minLength) {
       if (!this.errorMessage) {
-        this.errorMessage = `Please enter at least 
+        this.errorMessage = `Please enter at least
           ${this.minLength} letters.`;
       }
       this.hasLengthError = true;
@@ -170,6 +170,11 @@ export default class TextField extends EditorElement {
         this.hasHelper = false;
       }
     }
+  }
+
+  getInnerText() {
+    // Remove whitespace.
+    return this.innerText.replace(/[\n\r]+|[\s]{2,}/g, "");
   }
 
   render() {
