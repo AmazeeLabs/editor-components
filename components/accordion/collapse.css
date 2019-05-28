@@ -36,6 +36,7 @@
   position: relative;
   width: 50px;
   cursor: pointer;
+  margin-right: 132px;
 }
 
 .ck-collapse__action::after {
