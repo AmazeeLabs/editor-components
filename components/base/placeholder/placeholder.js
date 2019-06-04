@@ -8,6 +8,7 @@ import imageIcon from "!raw-loader!./icons/image.svg";
 import miscIcon from "!raw-loader!./icons/misc.svg";
 import textIcon from "!raw-loader!./icons/text.svg";
 import textMediaIcon from "!raw-loader!./icons/text-media.svg";
+import twoColumnsIcon from "!raw-loader!./icons/two-columns.svg";
 import videoIcon from "!raw-loader!./icons/video.svg";
 import EditorElement from "../editor-element/editor-element";
 
@@ -20,6 +21,7 @@ const icons = {
   misc: miscIcon,
   text: textIcon,
   text_media: textMediaIcon,
+  two_columns: twoColumnsIcon,
   video: videoIcon
 };
 
