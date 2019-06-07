@@ -16,6 +16,7 @@
   --gallery-position-right: auto;
   --gallery-position-bottom: 40px;
   --gallery-transform: translate(-50%, 0);
+  --gallery-padding-top: 0;
 }
 
 .ck-gallery {
@@ -24,6 +25,7 @@
   display: inline-block;
   margin: auto;
   overflow: hidden;
+  padding-top: var(--gallery-padding-top);
 }
 
 .ck-gallery.error .ck-gallery__controls {
