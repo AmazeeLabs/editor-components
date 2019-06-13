@@ -28,6 +28,14 @@
   padding-top: var(--gallery-padding-top);
 }
 
+.ck-gallery.below {
+  padding-bottom: 6em;
+}
+
+.ck-gallery.above {
+  padding-top: 6em;
+}
+
 .ck-gallery.error .ck-gallery__controls {
   border: 1px solid var(--color-red);
 }
@@ -65,6 +73,19 @@
   align-items: flex-end;
   padding: 10px 20px;
   border-radius: 10px;
+}
+
+.ck-gallery__controls.below {
+  bottom: 1.5em;
+  top: auto;
+}
+
+.ck-gallery__controls.above {
+  top: 0;
+}
+
+.ck-gallery__controls.top {
+  top: 0;
 }
 
 .ck-gallery__actions {
