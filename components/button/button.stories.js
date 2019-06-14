@@ -2,6 +2,7 @@ import { storiesOf } from "@storybook/html";
 import buttonNotes from "./button.md";
 import "./index";
 import Editor from "../base/editor/editor";
+import "../text_conflict/index";
 
 /**
  * Helper function to add ck-editor:select-link event handler.
@@ -14,7 +15,7 @@ function addEventHandlers(document) {
   document.addEventListener(
     "ck-editor:select-link",
     event => {
-      if (event.detail['link-target']) {
+      if (event.detail["link-target"]) {
         event.respond({
           href: null,
           "data-foo": "baz"
@@ -63,7 +64,24 @@ storiesOf("Button", module)
     "Errors",
     () => {
       addEventHandlers(document);
-      return `<ck-button contenteditable="true"><p>Please enter either A) text and link or B) no text and no link!</p></ck-textfield>`;
+      return `<ck-button contenteditable="true"><p>Please enter either A) text and link or B) no text and no link!</p></ck-button>`;
+    },
+    {
+      notes: { markdown: buttonNotes }
+    }
+  );
+
+storiesOf("Button Conflict", module)
+  .addDecorator(Editor.decorator)
+  .addDecorator(Editor.showErrors)
+  .add(
+    "Conflict",
+    () => {
+      addEventHandlers(document);
+      return `<ck-button contenteditable="true" class="c-card-cta-main__text" itemprop="cta" itemtype="button" left="{&quot;class&quot;:&quot;c-card-cta-main__text&quot;,&quot;itemprop&quot;:&quot;cta&quot;,&quot;itemtype&quot;:&quot;button&quot;,&quot;link-target&quot;:&quot;\/node\/3&quot;}" link-target="/node/3" source="{&quot;class&quot;:&quot;c-card-cta-main__text&quot;,&quot;itemprop&quot;:&quot;cta&quot;,&quot;itemtype&quot;:&quot;button&quot;,&quot;link-target&quot;:&quot;\/node\/2&quot;}">
+  <span class="ck-car-cta-main__text" itemprop="text">fasdfdsafsdafsdf</span>
+</ck-button>
+`;
     },
     {
       notes: { markdown: buttonNotes }
