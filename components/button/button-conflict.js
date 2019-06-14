@@ -102,13 +102,13 @@ export default class ButtonConflict extends Button {
 
   resolved(label) {
     const result = JSON.parse(this.getAttribute(label));
-    this.removeAttribute("left");
-    this.removeAttribute("right");
-    this.removeAttribute("source");
     this.modifyDocument(editor => {
       editor.attributes(this, {
         "link-target": result["link-target"]
       });
+      editor.removeAttribute(this, "left");
+      editor.removeAttribute(this, "right");
+      editor.removeAttribute(this, "source");
     });
     this.isResolving = false;
     this.optionsElements = [];
