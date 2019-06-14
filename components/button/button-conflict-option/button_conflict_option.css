@@ -1,6 +1,7 @@
 :host {
   --color-grey-light: #ccc;
   --color-grey-dark: #515151;
+  background: white;
 }
 .option {
   display: flex;
