@@ -9,12 +9,6 @@ export default class TextConflictOption extends LitElement {
     };
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    // TODO: Keep span markup, but drop block elements.
-    this.content = this.innerText;
-  }
-
   render() {
     return html`
       <style>
@@ -24,7 +18,7 @@ export default class TextConflictOption extends LitElement {
         <span class="option__label"
           >${TextConflictOption.labels[this.from]}</span
         >
-        <span class="option__content">${this.content}</span>
+        <span class="option__content"><slot></slot></span>
       </div>
     `;
   }
@@ -44,4 +38,3 @@ TextConflictOption.labels = {
   source: "Source version",
   empty: "Clear"
 };
-

@@ -21,7 +21,6 @@
 
 .option > span.option__label {
   width: 150px;
-  color: var(--color-grey-dark);
   padding: 25px 10px;
   font-size: 14px;
 }
