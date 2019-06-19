@@ -1,0 +1,40 @@
+:host {
+  --color-grey-light: #ccc;
+  --color-grey-dark: #515151;
+  background: white;
+}
+.option {
+  display: flex;
+  border-bottom: 1px solid var(--color-grey-light);
+  cursor: pointer;
+  align-items: center;
+}
+
+.option:hover {
+  background-color: #f6f6f6;
+  transition: background-color .35s linear 0s;
+}
+
+.option > span {
+  padding: 5px;
+  display: inline-block;
+}
+
+.option > span.option__label {
+  width: 150px;
+  color: var(--color-grey-dark);
+  padding: 25px 10px;
+  font-size: 14px;
+}
+.option > span.option__content {
+  padding: 0 20px;
+  text-align: left;
+}
+::slotted(.option__info) {
+  padding: 5px;
+  color: var(--color-grey-dark);
+  display: block;
+  width: 200px;
+  font-size: 14px;
+  font-weight: normal;
+}
