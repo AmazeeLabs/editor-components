@@ -33,7 +33,7 @@ export default class MediaConflictOption extends LitElement {
       setTimeout(() => {
         this.shadowRoot.querySelector(
           ".media-conflict-option"
-        ).style.minWidth = `${this.offsetWidth*2}px`;
+        ).style.minWidth = `${this.offsetWidth * 2}px`;
       }, 100);
     }
   }
@@ -46,10 +46,3 @@ export default class MediaConflictOption extends LitElement {
     );
   }
 }
-
-MediaConflictOption.labels = {
-  left: "Left version",
-  right: "Right version",
-  source: "Source version",
-  empty: "Clear"
-};

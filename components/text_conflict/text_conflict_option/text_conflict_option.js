@@ -15,9 +15,7 @@ export default class TextConflictOption extends LitElement {
         ${styles}
       </style>
       <div class="option" @click="${this.optionSelected}">
-        <span class="option__label"
-          >${TextConflictOption.labels[this.from]}</span
-        >
+        <span class="option__label">${this.from}</span>
         <span class="option__content"><slot></slot></span>
       </div>
     `;
@@ -31,10 +29,3 @@ export default class TextConflictOption extends LitElement {
     );
   }
 }
-
-TextConflictOption.labels = {
-  left: "Left version",
-  right: "Right version",
-  source: "Source version",
-  empty: "Clear"
-};
