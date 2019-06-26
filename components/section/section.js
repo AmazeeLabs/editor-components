@@ -50,7 +50,8 @@ export default class Section extends EditorElement {
       containerItems: { type: Number },
       containerSections: { type: String },
       isHovered: { type: Boolean },
-      error: { type: Boolean }
+      error: { type: Boolean },
+      replacePlaceholder: { type: String }
     };
   }
 
@@ -63,6 +64,7 @@ export default class Section extends EditorElement {
     this.containerIndex = 0;
     this.containerItems = 0;
     this.containerSections = false;
+    this.replacePlaceholder = ``;
 
     this.addEventListener("containerUpdate", event => {
       event.stopImmediatePropagation();
@@ -196,6 +198,31 @@ export default class Section extends EditorElement {
     );
   }
 
+  replaceHandler(e) {
+    if (this.replacePlaceholder) {
+      this.replacePlaceholder = ``;
+    } else {
+      this.replacePlaceholder = html`
+        <ck-placeholder
+          @ckEditorOperation="${event => this.replaceElementHandler(event)}"
+          sections="${this.containerSections}"
+        ></ck-placeholder>
+      `;
+    }
+  }
+
+  replaceElementHandler(event) {
+    this.modifyDocument(editor =>
+      editor.insert(
+        event.detail.section,
+        this.parentElement,
+        "before",
+        this.containerIndex
+      )
+    );
+    this.modifyDocument(editor => editor.remove(this));
+  }
+
   render() {
     const upButton = html`
       <button
@@ -236,6 +263,12 @@ export default class Section extends EditorElement {
                       ${this.containerFirst ? null : upButton}
                       ${this.containerLast ? null : downButton}
                       <button
+                        class="replace"
+                        @click="${() => this.replaceHandler()}"
+                      >
+                        ${iconDelete}
+                      </button>
+                      <button
                         class="remove"
                         @click="${() => this.removeHandler()}"
                       >
@@ -244,6 +277,9 @@ export default class Section extends EditorElement {
                       <button class="configure disabled">
                         ${iconConfigure}
                       </button>
+                    </div>
+                    <div class="replace-controls">
+                      ${this.replacePlaceholder}
                     </div>
                   `}
             `
@@ -364,6 +400,16 @@ Section.styles = css`
     transition: opacity 0.2s ease;
   }
 
+  .replace-controls {
+    z-index: 2;
+    position: absolute;
+    right: 0;
+    top: 76px;
+    display: flex;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
   /* TODO: Decide if we need a hovered class or :hover is enough. */
   :hover .item {
     outline-style: solid;
@@ -372,7 +418,8 @@ Section.styles = css`
   }
 
   /* TODO: Decide if we need a hovered class or :hover is enough. */
-  :hover .controls {
+  :hover .controls,
+  :hover .replace-controls {
     opacity: 1;
   }
 
