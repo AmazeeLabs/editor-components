@@ -44,7 +44,10 @@ export default class TextConflict extends EditorElement {
       </style>
       <div class="text-conflict">
         <span
-          class="text-conflict__label ${!this.resolved ? "resolve" : ""}"
+          class="text-conflict__label ${!this.resolved ? "resolve" : ""} ${this
+            .isResolving
+            ? "invisible"
+            : ""}"
           @click=${this.clickResolvingHandler}
           >${this.label}</span
         >

@@ -8,6 +8,7 @@ import imageIcon from "!raw-loader!./icons/image.svg";
 import miscIcon from "!raw-loader!./icons/misc.svg";
 import textIcon from "!raw-loader!./icons/text.svg";
 import textMediaIcon from "!raw-loader!./icons/text-media.svg";
+import twoColumnsIcon from "!raw-loader!./icons/two-columns.svg";
 import videoIcon from "!raw-loader!./icons/video.svg";
 import AccordionIcon from "!raw-loader!./icons/accordion.svg";
 import ButtonListIcon from "!raw-loader!./icons/button-list.svg";
@@ -24,6 +25,7 @@ const icons = {
   text_media: textMediaIcon,
   accordion: AccordionIcon,
   button_list: ButtonListIcon,
+  two_columns: twoColumnsIcon,
   video: videoIcon
 };
 

@@ -13,7 +13,8 @@ export default class Gallery extends EditorElement {
       currentItem: { type: Number, attribute: "ck-current-item" },
       numberOfChildren: { type: Number },
       maxItems: { type: Number, attribute: "ck-max" },
-      sections: { type: String, attribute: "ck-contains" }
+      sections: { type: String, attribute: "ck-contains" },
+      controlsPosition: { type: String, attribute: "ck-controls-position" }
     };
   }
 
@@ -83,7 +84,7 @@ export default class Gallery extends EditorElement {
         ${styles}
       </style>
 
-      <div class="ck-gallery ${this.hasError() ? "error" : ""}">
+      <div class="ck-gallery ${this.hasError() ? "error" : ""} ${this.controlsPosition}">
         <div
           class="ck-gallery__rail"
           style="transform: translateX(${this.currentItem * -100}%)"
@@ -99,7 +100,7 @@ export default class Gallery extends EditorElement {
             : null}
         </div>
 
-        <div class="ck-gallery__controls">
+        <div class="ck-gallery__controls ${this.controlsPosition}">
           <div class="ck-gallery__pager">
             <div class="ck-gallery__dots">
               ${this.items.map(item => this.button(item))}
