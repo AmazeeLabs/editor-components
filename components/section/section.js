@@ -31,6 +31,13 @@ const iconConfigure = svg`
 </svg>
 `;
 
+const iconReplace = svg`
+<svg data-name="icon more vertical" x xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <path
+      d="M3,17.25V21H6.75L17.81,9.94,14.06,6.19ZM20.71,7.04a1,1,0,0,0,0-1.41L18.37,3.29a1,1,0,0,0-1.41,0L15.13,5.12l3.75,3.75,1.83-1.83Z" fill="#fff"/>
+</svg>
+`;
+
 /**
  * Root element for section templates.
  *
@@ -266,7 +273,7 @@ export default class Section extends EditorElement {
                         class="replace"
                         @click="${() => this.replaceHandler()}"
                       >
-                        ${iconDelete}
+                        ${iconReplace}
                       </button>
                       <button
                         class="remove"
