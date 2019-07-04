@@ -14,6 +14,12 @@ const iconEdit = svg`
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
 `;
 
+const iconReset = svg`
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <path d="M6,19a2.006,2.006,0,0,0,2,2h8a2.006,2.006,0,0,0,2-2V7H6ZM8,9h8V19H8Zm7.5-5-1-1h-5l-1,1H5V6H19V4Z"/>
+</svg>
+`;
+
 const mediaLoader = html`
   <div class="ck-media__loader">
     <div class="ck-media__spinner">
@@ -33,6 +39,7 @@ export default class Media extends EditorElement {
       mediaDisplay: { attribute: "data-media-display", type: String },
       enableUpload: { attribute: "ck-upload", type: Boolean },
       enableEdit: { attribute: "ck-edit", type: Boolean },
+      enableReset: { type: Boolean },
       buttonPosition: { attribute: "ck-button-position", type: String },
       preview: String,
       error: Boolean
@@ -62,6 +69,7 @@ export default class Media extends EditorElement {
         this.validate();
       }
     });
+    this.enableReset = !this.getAttribute("ck-validation") && !!this.mediaUuid;
   }
 
   renderPreview() {
@@ -90,6 +98,8 @@ export default class Media extends EditorElement {
     if (properties.has("preview") && this.preview) {
       this.previewPane.innerHTML = this.preview;
     }
+
+    this.enableReset = !this.getAttribute("ck-validation") && !!this.mediaUuid;
   }
 
   render() {
@@ -125,6 +135,13 @@ export default class Media extends EditorElement {
                   ? html`
                       <button class="edit" @click=${this.editHandler}>
                         ${iconEdit}
+                      </button>
+                    `
+                  : null}
+                ${this.enableReset
+                  ? html`
+                      <button class="reset" @click=${this.resetHandler}>
+                        ${iconReset}
                       </button>
                     `
                   : null}
@@ -180,5 +197,15 @@ export default class Media extends EditorElement {
         this.renderPreview();
       }
     );
+  }
+
+  resetHandler() {
+    this.modifyDocument(editor => {
+      editor.attributes(this, {
+        "data-media-uuid": ""
+      });
+      this.mediaUuid = "";
+      this.preview = "";
+    });
   }
 }
