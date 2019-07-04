@@ -46,10 +46,3 @@ export default class MediaConflictOption extends LitElement {
     );
   }
 }
-
-MediaConflictOption.labels = {
-  left: "Left version",
-  right: "Right version",
-  source: "Source version",
-  empty: "Clear"
-};
