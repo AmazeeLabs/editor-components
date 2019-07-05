@@ -138,8 +138,9 @@ ButtonConflict.styles = css`
     position: relative;
   }
   .conflict-options {
-    top: 0;
-    position: absolute;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
     max-width: 400px;
     background: white;
     box-shadow: 0px 0px 5px var(--color-grey-light);
