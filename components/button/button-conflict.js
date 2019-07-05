@@ -13,8 +13,20 @@ export default class ButtonConflict extends Button {
     return {
       target: { type: String, attribute: "link-target" },
       error: Boolean,
-      optionsElements: { type: String }
+      optionsElements: { type: String },
+      isResolving: { type: Boolean }
     };
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    // Click outside handler.
+    document.addEventListener("click", e => {
+      if (!this.contains(e.target) && this.isResolving) {
+        this.isResolving = false;
+      }
+    });
   }
 
   resolveConflict() {
@@ -68,10 +80,13 @@ export default class ButtonConflict extends Button {
         <div class="button__content">
           <slot></slot>
         </div>
-        <button @click="${this.inEditor ? selectFunction : () => {}}">
+        <button
+          @click="${this.inEditor ? selectFunction : () => {}}"
+          class="icon ${this.hasConflict() ? "red" : ""}"
+        >
           ${iconLink}
         </button>
-        ${this.hasConflict && this.isResolving
+        ${this.hasConflict() && this.isResolving
           ? html`
               <div class="conflict-options">
                 ${this.optionsElements.map(
@@ -132,5 +147,8 @@ ButtonConflict.styles = css`
   }
   .option_info {
     paddin: 10px;
+  }
+  .icon.red svg path {
+    fill: red;
   }
 `;
