@@ -36,20 +36,22 @@ export default class ButtonConflict extends Button {
     const source = JSON.parse(this.getAttribute("source"));
     const options = [];
     if (left) {
-      options.push(ButtonConflict.getItemInfo(left));
+      options.push(ButtonConflict.getItemInfo(left, "left"));
     }
     if (right) {
-      options.push(ButtonConflict.getItemInfo(right));
+      options.push(ButtonConflict.getItemInfo(right, "right"));
     }
     if (source) {
-      options.push(ButtonConflict.getItemInfo(source));
+      options.push(ButtonConflict.getItemInfo(source, "source"));
     }
 
     this.optionsElements = options;
   }
 
-  static getItemInfo(item) {
+  static getItemInfo(item, version) {
+    console.log(item);
     return {
+      version,
       label: item.label,
       href: item["link-target"],
       title: item.title,
@@ -93,7 +95,7 @@ export default class ButtonConflict extends Button {
                   item => html`
                     <ck-button-option
                       from=${item.label}
-                      @click=${() => this.resolved(item.label)}
+                      @click=${() => this.resolved(item.version)}
                     >
                       <div class="option__info"><b>URL:</b> ${item.href}</div>
                       <div class="option__info">
@@ -115,8 +117,8 @@ export default class ButtonConflict extends Button {
     `;
   }
 
-  resolved(label) {
-    const result = JSON.parse(this.getAttribute(label));
+  resolved(version) {
+    const result = JSON.parse(this.getAttribute(version));
     this.modifyDocument(editor => {
       editor.attributes(this, {
         "link-target": result["link-target"]
