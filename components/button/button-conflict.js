@@ -36,21 +36,21 @@ export default class ButtonConflict extends Button {
     const source = JSON.parse(this.getAttribute("source"));
     const options = [];
     if (left) {
-      options.push(ButtonConflict.getItemInfo(left, "left"));
+      options.push(ButtonConflict.getItemInfo(left));
     }
     if (right) {
-      options.push(ButtonConflict.getItemInfo(right, "right"));
+      options.push(ButtonConflict.getItemInfo(right));
     }
     if (source) {
-      options.push(ButtonConflict.getItemInfo(source, "source"));
+      options.push(ButtonConflict.getItemInfo(source));
     }
 
     this.optionsElements = options;
   }
 
-  static getItemInfo(item, label) {
+  static getItemInfo(item) {
     return {
-      label,
+      label: item.label,
       href: item["link-target"],
       title: item.title,
       target: item.target,
