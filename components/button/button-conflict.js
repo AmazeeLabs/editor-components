@@ -79,7 +79,7 @@ export default class ButtonConflict extends Button {
       <div
         class="button ${this.target ? "linked" : "not-linked"} ${this.error
           ? "error"
-          : ""} ${this.hasConflict() ? "test" : ""}"
+          : ""}"
       >
         <div class="button__content">
           <slot></slot>
@@ -142,9 +142,10 @@ ButtonConflict.styles = css`
     position: relative;
   }
   .conflict-options {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 9999;
     max-width: 400px;
     background: white;
     box-shadow: 0px 0px 5px var(--color-grey-light);
