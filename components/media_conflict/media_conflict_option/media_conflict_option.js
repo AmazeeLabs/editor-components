@@ -30,11 +30,11 @@ export default class MediaConflictOption extends LitElement {
   firstUpdated() {
     if (this.position === "left") {
       this.style.width = "50%";
-      setTimeout(() => {
+      /*setTimeout(() => {
         this.shadowRoot.querySelector(
           ".media-conflict-option"
         ).style.minWidth = `${this.offsetWidth * 2}px`;
-      }, 100);
+      }, 100);*/
     }
   }
 
