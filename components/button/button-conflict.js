@@ -14,7 +14,10 @@ export default class ButtonConflict extends Button {
       target: { type: String, attribute: "link-target" },
       error: Boolean,
       optionsElements: { type: String },
-      isResolving: { type: Boolean }
+      isResolving: { type: Boolean },
+      right: { type: String },
+      left: { type: String },
+      source: { type: String }
     };
   }
 
@@ -123,9 +126,11 @@ export default class ButtonConflict extends Button {
       editor.attributes(this, {
         "link-target": result["link-target"]
       });
-      editor.removeAttribute(this, "left");
-      editor.removeAttribute(this, "right");
-      editor.removeAttribute(this, "source");
+      editor.setAttributes({
+        left: null,
+        right: null,
+        source: null
+      });
     });
     this.isResolving = false;
     this.optionsElements = [];
