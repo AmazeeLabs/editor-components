@@ -52,7 +52,6 @@ export default class ButtonConflict extends Button {
   }
 
   static getItemInfo(item, version) {
-    console.log(item);
     return {
       version,
       label: item.label,
@@ -126,7 +125,7 @@ export default class ButtonConflict extends Button {
       editor.attributes(this, {
         "link-target": result["link-target"]
       });
-      editor.setAttributes({
+      editor.attributes(this, {
         left: null,
         right: null,
         source: null
