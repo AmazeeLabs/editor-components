@@ -13,8 +13,23 @@ export default class ButtonConflict extends Button {
     return {
       target: { type: String, attribute: "link-target" },
       error: Boolean,
-      optionsElements: { type: String }
+      optionsElements: { type: String },
+      isResolving: { type: Boolean },
+      right: { type: String },
+      left: { type: String },
+      source: { type: String }
     };
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    // Click outside handler.
+    document.addEventListener("click", e => {
+      if (!this.contains(e.target) && this.isResolving) {
+        this.isResolving = false;
+      }
+    });
   }
 
   resolveConflict() {
@@ -36,9 +51,10 @@ export default class ButtonConflict extends Button {
     this.optionsElements = options;
   }
 
-  static getItemInfo(item, label) {
+  static getItemInfo(item, version) {
     return {
-      label,
+      version,
+      label: item.label,
       href: item["link-target"],
       title: item.title,
       target: item.target,
@@ -63,22 +79,25 @@ export default class ButtonConflict extends Button {
       <div
         class="button ${this.target ? "linked" : "not-linked"} ${this.error
           ? "error"
-          : ""} ${this.hasConflict() ? "test" : ""}"
+          : ""}"
       >
         <div class="button__content">
           <slot></slot>
         </div>
-        <button @click="${this.inEditor ? selectFunction : () => {}}">
+        <button
+          @click="${this.inEditor ? selectFunction : () => {}}"
+          class="icon ${this.hasConflict() ? "red" : ""}"
+        >
           ${iconLink}
         </button>
-        ${this.hasConflict && this.isResolving
+        ${this.hasConflict() && this.isResolving
           ? html`
               <div class="conflict-options">
                 ${this.optionsElements.map(
                   item => html`
                     <ck-button-option
                       from=${item.label}
-                      @click=${() => this.resolved(item.label)}
+                      @click=${() => this.resolved(item.version)}
                     >
                       <div class="option__info"><b>URL:</b> ${item.href}</div>
                       <div class="option__info">
@@ -100,15 +119,17 @@ export default class ButtonConflict extends Button {
     `;
   }
 
-  resolved(label) {
-    const result = JSON.parse(this.getAttribute(label));
+  resolved(version) {
+    const result = JSON.parse(this.getAttribute(version));
     this.modifyDocument(editor => {
       editor.attributes(this, {
         "link-target": result["link-target"]
       });
-      editor.removeAttribute(this, "left");
-      editor.removeAttribute(this, "right");
-      editor.removeAttribute(this, "source");
+      editor.attributes(this, {
+        left: null,
+        right: null,
+        source: null
+      });
     });
     this.isResolving = false;
     this.optionsElements = [];
@@ -121,8 +142,11 @@ ButtonConflict.styles = css`
     position: relative;
   }
   .conflict-options {
-    top: 0;
-    position: absolute;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
     max-width: 400px;
     background: white;
     box-shadow: 0px 0px 5px var(--color-grey-light);
@@ -132,5 +156,8 @@ ButtonConflict.styles = css`
   }
   .option_info {
     paddin: 10px;
+  }
+  .icon.red svg path {
+    fill: red;
   }
 `;

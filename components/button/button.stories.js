@@ -78,7 +78,10 @@ storiesOf("Button Conflict", module)
     "Conflict",
     () => {
       addEventHandlers(document);
-      return `<ck-button contenteditable="true" class="c-card-cta-main__text" itemprop="cta" itemtype="button" left="{&quot;class&quot;:&quot;c-card-cta-main__text&quot;,&quot;itemprop&quot;:&quot;cta&quot;,&quot;itemtype&quot;:&quot;button&quot;,&quot;link-target&quot;:&quot;\/node\/3&quot;}" link-target="/node/3" source="{&quot;class&quot;:&quot;c-card-cta-main__text&quot;,&quot;itemprop&quot;:&quot;cta&quot;,&quot;itemtype&quot;:&quot;button&quot;,&quot;link-target&quot;:&quot;\/node\/2&quot;}">
+      return `<ck-button contenteditable="true" class="c-card-cta-main__text" itemprop="cta" itemtype="button"
+      left="{&quot;label&quot;:&quot;left-version&quot;,&quot;class&quot;:&quot;c-card-cta-main__text&quot;,&quot;itemprop&quot;:&quot;cta&quot;,&quot;itemtype&quot;:&quot;button&quot;,&quot;link-target&quot;:&quot;/node/3&quot;}" link-target="/node/3"
+      source="{&quot;label&quot;:&quot;source-version&quot;,&quot;class&quot;:&quot;c-card-cta-main__text&quot;,&quot;itemprop&quot;:&quot;cta&quot;,&quot;itemtype&quot;:&quot;button&quot;,&quot;link-target&quot;:&quot;/node/2&quot;}"
+      right="{&quot;label&quot;:&quot;right-version&quot;,&quot;class&quot;:&quot;c-card-cta-main__text&quot;,&quot;itemprop&quot;:&quot;cta&quot;,&quot;itemtype&quot;:&quot;button&quot;,&quot;link-target&quot;:&quot;/node/2&quot;}">
   <span class="ck-car-cta-main__text" itemprop="text">fasdfdsafsdafsdf</span>
 </ck-button>
 `;

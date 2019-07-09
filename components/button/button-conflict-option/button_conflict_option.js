@@ -22,9 +22,7 @@ export default class ButtonConflictOption extends LitElement {
         ${styles}
       </style>
       <div class="option" @click="${this.optionSelected}">
-        <span class="option__label"
-          >${ButtonConflictOption.labels[this.from]}</span
-        >
+        <span class="option__label">${this.from}</span>
         <span class="option__content"><slot></slot></span>
       </div>
     `;
