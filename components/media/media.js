@@ -41,6 +41,7 @@ export default class Media extends EditorElement {
       enableEdit: { attribute: "ck-edit", type: Boolean },
       enableReset: { type: Boolean },
       buttonPosition: { attribute: "ck-button-position", type: String },
+      hasValidation: { attribute: "ck-validation", type: String },
       preview: String,
       error: Boolean
     };
@@ -69,7 +70,7 @@ export default class Media extends EditorElement {
         this.validate();
       }
     });
-    this.enableReset = !this.getAttribute("ck-validation") && !!this.mediaUuid;
+    this.enableReset = !this.hasValidation && !!this.mediaUuid;
   }
 
   renderPreview() {
@@ -99,7 +100,7 @@ export default class Media extends EditorElement {
       this.previewPane.innerHTML = this.preview;
     }
 
-    this.enableReset = !this.getAttribute("ck-validation") && !!this.mediaUuid;
+    this.enableReset = !this.hasValidation && !!this.mediaUuid;
   }
 
   render() {
@@ -107,7 +108,7 @@ export default class Media extends EditorElement {
       <style>
         ${styles}
       </style>
-      <div class="ck-media ${this.error ? "error" : "no-error"}">
+      <div class="ck-media ${this.error && this.hasValidation ? "error" : "no-error"}">
         <div
           class="ck-media__preview ${this.preview ? "visible" : "hidden"}"
         ></div>
