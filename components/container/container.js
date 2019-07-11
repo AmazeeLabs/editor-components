@@ -7,7 +7,8 @@ export default class Container extends EditorElement {
       sections: { type: String, attribute: "ck-contains" },
       numberOfChildren: { type: Number },
       max: { type: Number, attribute: "ck-max" },
-      min: { type: Number, attribute: "ck-min" }
+      min: { type: Number, attribute: "ck-min" },
+      closed: { type: Boolean, attribute: "ck-closed" },
     };
   }
 
@@ -20,6 +21,7 @@ export default class Container extends EditorElement {
       childList: true,
       subtree: false
     });
+    this.closed = false;
   }
 
   firstUpdated() {
@@ -79,7 +81,7 @@ export default class Container extends EditorElement {
           ? html`
               <ck-placeholder
                 @ckEditorOperation="${this.appendHandler}"
-                closed="true"
+                ?closed="${!this.closed}"
                 sections="${this.sections}"
               >
               </ck-placeholder>

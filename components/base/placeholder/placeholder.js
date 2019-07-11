@@ -43,7 +43,7 @@ export default class Placeholder extends EditorElement {
   static get properties() {
     return {
       collapsed: { type: Boolean },
-      closed: { type: Boolean },
+      closed: { type: Boolean, attribute: "closed" },
       isOpen: { type: Boolean },
       isExpanded: { type: Boolean },
       sections: { type: String },
